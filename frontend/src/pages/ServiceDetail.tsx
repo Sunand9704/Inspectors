@@ -1,8 +1,8 @@
 import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { SectionDto } from '@/utils/api';
+import { SectionDto, getPageWithSections } from '@/utils/api';
 import { useTranslation } from '@/contexts/TranslationContext';
 
 // Props interface for ServiceDetail
@@ -237,7 +237,28 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
   const serviceRoute = serviceInfo?.route || '/services';
   
   // Get section data from props or location state
-  const section = sectionData || location.state?.sectionData;
+  const initialSection = sectionData || (location.state as any)?.sectionData || null;
+  const [section, setSection] = useState<SectionDto | null>(initialSection);
+
+  // Fallback fetch: when opened via /services/:slug, load 'services' page and find the section
+  useEffect(() => {
+    const toSlug = (text: string) => String(text).toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
+    let isMounted = true;
+    const load = async () => {
+      if (section || !slug) return;
+      try {
+        const page = await getPageWithSections('services', undefined, currentLanguage);
+        const match = (page.sections || []).find((s) =>
+          s.sectionId === slug || toSlug(s.title) === String(slug).toLowerCase()
+        );
+        if (isMounted) setSection(match || null);
+      } catch {
+        if (isMounted) setSection(null);
+      }
+    };
+    load();
+    return () => { isMounted = false; };
+  }, [slug, currentLanguage, section]);
 
   // Redirect to parent page when language changes
   useEffect(() => {

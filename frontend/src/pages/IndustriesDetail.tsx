@@ -73,10 +73,63 @@ export default function IndustriesDetail() {
     );
   }
 
-  const paragraphs = (section.bodyText || '')
-    .split(/\n{2,}/)
-    .map(p => p.trim())
-    .filter(Boolean);
+  // Reuse the same lightweight parser used by ServiceDetail for consistent styling
+  function parseContentToBlocks(raw: string): Array<{ type: string; content: JSX.Element }> {
+    const lines = (raw || '').replace(/\r\n/g, '\n').split('\n');
+    const blocks: Array<{ type: string; content: JSX.Element }> = [];
+    let paragraphBuffer: string[] = [];
+
+    const flushParagraph = () => {
+      if (paragraphBuffer.length > 0) {
+        const text = paragraphBuffer.join(' ').trim();
+        if (text) {
+          blocks.push({
+            type: 'p',
+            content: (
+              <div key={`p-${blocks.length}`} className="prose prose-lg prose-slate max-w-none mb-4 text-muted-foreground leading-relaxed">
+                <p className="text-base md:text-lg leading-6 text-gray-700 dark:text-gray-300">{text}</p>
+              </div>
+            )
+          });
+        }
+        paragraphBuffer = [];
+      }
+    };
+
+    const startNewBlock = () => {
+      flushParagraph();
+    };
+
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        startNewBlock();
+        return;
+      }
+      // Headings: #, ##, ###
+      const hMatch = trimmed.match(/^(#{1,3})\s+(.*)$/);
+      if (hMatch) {
+        startNewBlock();
+        const level = hMatch[1].length;
+        const text = hMatch[2].trim();
+        const Tag = (level === 1 ? 'h1' : level === 2 ? 'h2' : 'h3') as keyof JSX.IntrinsicElements;
+        const sizeClass = level === 1 ? 'text-3xl md:text-4xl' : level === 2 ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl';
+        blocks.push({
+          type: level === 1 ? 'h1' : level === 2 ? 'h2' : 'h3',
+          content: (
+            <Tag key={`h-${blocks.length}`} className={`${sizeClass} font-semibold text-gray-900 dark:text-gray-100 mt-6 mb-3`}>
+              {text}
+            </Tag>
+          )
+        });
+        return;
+      }
+      paragraphBuffer.push(trimmed);
+    });
+
+    startNewBlock();
+    return blocks;
+  }
 
   return (
     <div>
@@ -98,87 +151,45 @@ export default function IndustriesDetail() {
 
       <section className="section pt-0">
         <div className="container-responsive max-w-5xl mx-auto">
-          {/* Enhanced heading with better visual hierarchy */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-              {section.title}
-            </h1>
-            <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary/60 mx-auto rounded-full"></div>
-          </div>
+          {(() => {
+            const blocks = parseContentToBlocks(section.bodyText || '');
+            const imageUrls = section.images || [];
 
-          {/* Layout: top image | middle content | bottom image */}
-          {section.images && section.images.length >= 2 ? (
-            <div className="flex flex-col gap-8">
-              {/* Images without borders or rounded corners */}
-              <div className="overflow-hidden">
-                <img
-                  src={section.images[0]}
-                  alt={`${section.title} 1`}
-                  className="w-full h-64 md:h-80 object-cover rounded-2xl"
-                />
-              </div>
-
-              {/* Enhanced content styling */}
-              <div className="space-y-6 md:px-4">
-                {paragraphs.map((p, idx) => {
-                  // Check if paragraph contains a heading pattern
-                  const isHeading = p.length < 100 && (p.includes(':') || p.includes('Focus') || p.includes('Benefits') || p.includes('Industry'));
-                  
-                  if (isHeading) {
-                    return (
-                      <h2 key={idx} className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 mt-8 first:mt-0">
-                        {p}
-                      </h2>
-                    );
-                  }
-                  
-                  return (
-                    <p key={idx} className="text-lg leading-8 text-gray-700 dark:text-gray-300 text-justify">
-                      {p}
-                    </p>
-                  );
-                })}
-              </div>
-
-              {/* Reduced second image size - no border/radius */}
-              <div className="overflow-hidden">
-                <img
-                  src={section.images[1]}
-                  alt={`${section.title} 2`}
-                  className="w-full h-64 md:h-80 object-cover rounded-2xl"
-                />
-              </div>
-            </div>
-          ) : (
-            <>
-              {section.images && section.images.length === 1 && (
-                <div className="overflow-hidden mb-10">
-                  <img src={section.images[0]} alt={section.title} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+            if (imageUrls.length >= 2) {
+              return (
+                <div className="flex flex-col gap-8">
+                  <div className="overflow-hidden">
+                    <img src={imageUrls[0]} alt={`${section.title} 1`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                  </div>
+                  <div className="space-y-4 md:px-4">
+                    {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
+                  </div>
+                  <div className="overflow-hidden">
+                    <img src={imageUrls[1]} alt={`${section.title} 2`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                  </div>
                 </div>
-              )}
-              {/* Enhanced content styling for single image layout */}
-              <div className="space-y-6">
-                {paragraphs.map((p, idx) => {
-                  // Check if paragraph contains a heading pattern
-                  const isHeading = p.length < 100 && (p.includes(':') || p.includes('Focus') || p.includes('Benefits') || p.includes('Industry'));
-                  
-                  if (isHeading) {
-                    return (
-                      <h2 key={idx} className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4 mt-8 first:mt-0">
-                        {p}
-                      </h2>
-                    );
-                  }
-                  
-                  return (
-                    <p key={idx} className="text-lg leading-8 text-gray-700 dark:text-gray-300 text-justify">
-                      {p}
-                    </p>
-                  );
-                })}
+              );
+            }
+
+            if (imageUrls.length === 1) {
+              return (
+                <div className="flex flex-col gap-8">
+                  <div className="overflow-hidden">
+                    <img src={imageUrls[0]} alt={section.title} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                  </div>
+                  <div className="space-y-4">
+                    {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
+                  </div>
+                </div>
+              );
+            }
+
+            return (
+              <div className="space-y-4">
+                {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
               </div>
-            </>
-          )}
+            );
+          })()}
         </div>
       </section>
     </div>
