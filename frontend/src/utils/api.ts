@@ -19,11 +19,20 @@ apiClient.interceptors.request.use((config) => {
     params: config.params,
     data: config.data,
   });
+  // performance timing start
+  (config as any).metadata = { startTime: (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now() };
   return config;
 });
 
 apiClient.interceptors.response.use(
   (response) => {
+    const start = (response.config as any).metadata?.startTime as number | undefined;
+    const end = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+    const duration = typeof start === 'number' ? (end - start) : undefined;
+    if (typeof duration === 'number') {
+      // eslint-disable-next-line no-console
+      console.log(`Frontend request to ${response.config.url} took ${duration.toFixed(1)} ms`);
+    }
     // eslint-disable-next-line no-console
     console.log('[API][RESPONSE]', {
       url: response.config.url,
@@ -33,6 +42,14 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
+    const cfg = error.config || {};
+    const start = (cfg as any).metadata?.startTime as number | undefined;
+    const end = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+    const duration = typeof start === 'number' ? (end - start) : undefined;
+    if (typeof duration === 'number') {
+      // eslint-disable-next-line no-console
+      console.log(`Frontend request to ${cfg.url} failed after ${duration.toFixed(1)} ms`);
+    }
     // eslint-disable-next-line no-console
     console.error('[API][ERROR]', {
       url: error.config?.url,
