@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { getPageWithSections, SectionDto } from '@/utils/api';
 import { useTranslation } from '@/contexts/TranslationContext';
 
-export default function CBMMonitoring() {
+export default function InspectorsMonitoring() {
   const navigate = useNavigate();
   const { currentLanguage } = useTranslation();
   const [sections, setSections] = useState<SectionDto[]>([]);
@@ -20,23 +20,23 @@ export default function CBMMonitoring() {
     let isMounted = true;
     const load = async () => {
       try {
-        console.log('Loading CBM sections for language:', currentLanguage);
+        console.log('Loading INSPECTORS sections for language:', currentLanguage);
         setLoading(true);
         setError(null);
-        const page = await getPageWithSections('cbm', undefined, currentLanguage);
+        const page = await getPageWithSections('inspectors', undefined, currentLanguage);
         console.log('Received page data:', page);
         if (isMounted) {
           setSections(page.sections || []);
           setPageData(page);
         }
       } catch (e) {
-        console.error('Error loading CBM sections:', e);
+        console.error('Error loading INSPECTORS sections:', e);
         console.error('Error details:', {
           message: e instanceof Error ? e.message : 'Unknown error',
           stack: e instanceof Error ? e.stack : undefined,
           response: (e as any)?.response?.data
         });
-        if (isMounted) setError('Failed to load CBM sections');
+        if (isMounted) setError('Failed to load INSPECTORS sections');
       } finally {
         if (isMounted) setLoading(false);
       }

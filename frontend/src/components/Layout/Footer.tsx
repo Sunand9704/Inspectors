@@ -25,7 +25,7 @@ export function Footer() {
             <div className="lg:col-span-1">
               <Link to="/services" className="inline-block mb-6">
                 <div className="text-2xl font-bold text-white">
-                  {translations?.footer.company || 'CBM'}
+                  {translations?.footer.company || 'INSPECTORS'}
                 </div>
               </Link>
               <p className="text-tuv-gray-400 mb-6 leading-relaxed">
@@ -116,7 +116,7 @@ export function Footer() {
                       ))
                     ) : (
                       <>
-                        <p>CBM America</p>
+                        <p>INSPECTORS America</p>
                         <p>10040 Mesa Rim Road</p>
                         <p>San Diego, CA 92121</p>
                       </>
@@ -132,7 +132,7 @@ export function Footer() {
                 <div className="flex items-center space-x-3">
                   <Mail className="h-5 w-5 text-tuv-gray-400" />
                   <span className="text-tuv-gray-400">
-                    {translations?.footer.contact.email || 'contact@cbm.com'}
+                    {translations?.footer.contact.email || 'contact@inspectors.com'}
                   </span>
                 </div>
               </div>
@@ -161,7 +161,7 @@ export function Footer() {
         <div className="border-t border-tuv-gray-700 py-6">
           <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
             <div className="text-tuv-gray-400 text-sm">
-              © 2024 CBM. All rights reserved.
+              © 2024 INSPECTORS. All rights reserved.
             </div>
             <div className="flex flex-wrap items-center space-x-6 text-sm">
               <Link to="#" className="text-tuv-gray-400 hover:text-white transition-colors">

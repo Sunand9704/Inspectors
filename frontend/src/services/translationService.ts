@@ -5,9 +5,8 @@ export interface StaticTranslations {
   navbar: {
     services: string;
     industries: string;
+    vacancies: string;
     about: string;
-    careers: string;
-    blog: string;
     contact: string;
     getQuote: string;
     contactUs: string;
