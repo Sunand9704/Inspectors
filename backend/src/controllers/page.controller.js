@@ -5,6 +5,21 @@ const Section = require('../models/Section');
 const { ApiError } = require('../utils/error');
 const { translateText } = require('../services/translation');
 
+// Simple in-memory cache for slug lookups (60s TTL)
+const slugCache = new Map(); // key -> { data, expiresAt }
+function getFromCache(key) {
+  const entry = slugCache.get(key);
+  if (!entry) return null;
+  if (Date.now() > entry.expiresAt) {
+    slugCache.delete(key);
+    return null;
+  }
+  return entry.data;
+}
+function setInCache(key, value, ttlMs = 60 * 1000) {
+  slugCache.set(key, { data: value, expiresAt: Date.now() + ttlMs });
+}
+
 async function createPage(req, res, next) {
   try {
     const { 
@@ -117,21 +132,40 @@ async function getPageBySlug(req, res, next) {
     const { populate = 'true', lang } = req.query;
     
     const normalizedSlug = String(slug || '').trim();
+    const normalizedLang = lang ? String(lang).toLowerCase() : undefined;
+
+    const cacheKey = `slug:${normalizedSlug}|lang:${normalizedLang || 'none'}|populate:${populate}`;
+    const cached = getFromCache(cacheKey);
+    if (cached) {
+      // eslint-disable-next-line no-console
+      console.log('Cache hit:', cacheKey);
+      return res.json({ success: true, data: cached });
+    }
+
+    const projection = populate === 'true'
+      ? { title: 1, description: 1, slug: 1, language: 1, isActive: 1, sections: 1, translations: 1, metadata: 1 }
+      : { title: 1, description: 1, slug: 1, language: 1, isActive: 1, translations: 1, metadata: 1 };
 
     let query = Page.findOne({ 
       slug: normalizedSlug, 
-      isActive: true 
-    });
+      isActive: true,
+      ...(normalizedLang ? { language: normalizedLang } : {})
+    }, projection).lean();
     
     if (populate === 'true') {
-      query = query.populate({
-        path: 'sections',
-        select: 'title bodyText images language pageNumber sectionId translations',
-        match: { isActive: true },
-        options: { 
-          sort: { pageNumber: 1 }
-        }
-      });
+      // Note: lean() with populate requires select fields on populate
+      query = Page.findOne({ 
+        slug: normalizedSlug, 
+        isActive: true,
+        ...(normalizedLang ? { language: normalizedLang } : {})
+      }, projection)
+        .populate({
+          path: 'sections',
+          select: 'title bodyText images language pageNumber sectionId translations',
+          match: { isActive: true },
+          options: { sort: { pageNumber: 1 } }
+        })
+        .lean();
     }
 
     let page = await query;
@@ -141,53 +175,42 @@ async function getPageBySlug(req, res, next) {
       const pattern = `^\\s*${escapeRegex(normalizedSlug)}\\s*$`;
       page = await Page.findOne({ 
         slug: { $regex: pattern, $options: 'i' }, 
-        isActive: true 
-      });
+        isActive: true,
+        ...(normalizedLang ? { language: normalizedLang } : {})
+      }, projection).lean();
     }
     if (!page) {
       throw new ApiError(404, 'Page not found');
     }
 
     // Handle language translation for page and sections
-    if (lang && lang !== 'en') {
-      // Translate page title and description
-      let pageFromDb = null;
-      if (page.translations) {
-        if (page.translations instanceof Map) {
-          pageFromDb = page.translations.get(lang);
-        } else if (typeof page.translations === 'object') {
-          pageFromDb = page.translations[lang];
-        }
-      }
-      
+    if (normalizedLang && normalizedLang !== 'en') {
+      // Translate page title and description from stored translations only
+      const translations = page.translations || {};
+      const pageFromDb = translations instanceof Map ? translations.get(normalizedLang) : translations[normalizedLang];
       if (pageFromDb && (pageFromDb.title || pageFromDb.description)) {
         page.title = pageFromDb.title || page.title;
         page.description = pageFromDb.description || page.description;
-        page.language = lang;
+        page.language = normalizedLang;
       }
 
       // Translate sections if populated
-      if (page.sections && page.sections.length > 0) {
+      if (populate === 'true' && Array.isArray(page.sections) && page.sections.length > 0) {
         for (const section of page.sections) {
-          // Handle both Map and Object formats for translations
-          let sectionFromDb = null;
-          if (section.translations) {
-            if (section.translations instanceof Map) {
-              sectionFromDb = section.translations.get(lang);
-            } else if (typeof section.translations === 'object') {
-              sectionFromDb = section.translations[lang];
-            }
-          }
-          
+          const sTrans = section.translations || {};
+          const sectionFromDb = sTrans instanceof Map ? sTrans.get(normalizedLang) : sTrans[normalizedLang];
           if (sectionFromDb && (sectionFromDb.title || sectionFromDb.bodyText)) {
             section.title = sectionFromDb.title || section.title;
             section.bodyText = sectionFromDb.bodyText || section.bodyText;
-            section.language = lang;
+            section.language = normalizedLang;
           }
         }
       }
     }
     
+    setInCache(cacheKey, page);
+    // eslint-disable-next-line no-console
+    console.log('Cache set:', cacheKey);
     res.json({ success: true, data: page });
   } catch (err) {
     next(err);

@@ -45,6 +45,7 @@ PageSchema.index({ language: 1, isActive: 1 });
 PageSchema.index({ createdAt: -1 });
 PageSchema.index({ title: 'text', description: 'text', category: 'text' });
 PageSchema.index({ slug: 1, isActive: 1 }); // For getPageBySlug queries
+PageSchema.index({ slug: 1, language: 1 }); // Compound index to optimize slug + language lookups
 PageSchema.index({ pageNumber: 1, isActive: 1 }); // For getPages sorting
 PageSchema.index({ isActive: 1, pageNumber: 1, createdAt: -1 }); // Compound index for getPages
 

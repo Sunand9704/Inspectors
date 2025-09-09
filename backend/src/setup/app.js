@@ -27,6 +27,17 @@ function createApp() {
   // Config
   app.set('trust proxy', 1);
 
+  // Global performance middleware
+  app.use((req, res, next) => {
+    const startTime = Date.now();
+    res.on('finish', () => {
+      const duration = Date.now() - startTime;
+      // eslint-disable-next-line no-console
+      console.log(`${req.method} ${req.originalUrl} took ${duration}ms`);
+    });
+    next();
+  });
+
   // Middlewares
   app.use(helmet());
   app.use(cors());
