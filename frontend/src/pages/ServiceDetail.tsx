@@ -240,14 +240,16 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
   const initialSection = sectionData || (location.state as any)?.sectionData || null;
   const [section, setSection] = useState<SectionDto | null>(initialSection);
 
-  // Fallback fetch: when opened via /services/:slug, load 'services' page and find the section
+  // Fallback fetch: when opened via /services/:slug, load the correct page (service type) and find the section
   useEffect(() => {
     const toSlug = (text: string) => String(text).toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
     let isMounted = true;
     const load = async () => {
       if (section || !slug) return;
       try {
-        const page = await getPageWithSections('services', undefined, currentLanguage);
+        // Determine which page to load: use the current service type if available; otherwise fallback to 'services'
+        const pageSlug = currentServiceType || 'services';
+        const page = await getPageWithSections(pageSlug, undefined, currentLanguage);
         const match = (page.sections || []).find((s) =>
           s.sectionId === slug || toSlug(s.title) === String(slug).toLowerCase()
         );
@@ -258,7 +260,7 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
     };
     load();
     return () => { isMounted = false; };
-  }, [slug, currentLanguage, section]);
+  }, [slug, currentLanguage, section, currentServiceType]);
 
   // Redirect to parent page when language changes
   useEffect(() => {
@@ -310,71 +312,45 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
         </div>
       </section>
 
-      {/* Content with images from section data */}
-      {(section?.bodyText || (section?.images && section.images.length > 0)) && (
+      {/* Content from database (text only). Images are shown in the gallery below to avoid mixing from other sources */}
+      {(section?.bodyText) && (
         <section className="section pt-0">
           <div className="container-responsive max-w-5xl mx-auto">
             {(() => {
               const content = section?.bodyText || '';
               const textBlocks = parseContentToBlocks(content);
-              const imageUrls = section?.images || [];
-
-              // If two or more images: top image, content, bottom image
-              if (imageUrls.length >= 2) {
-                return (
-                  <div className="flex flex-col gap-8">
-                    <div className="overflow-hidden">
-                      <img
-                        src={imageUrls[0]}
-                        alt={`${section?.title || 'Service'} 1`}
-                        className="w-full h-64 md:h-80 object-cover rounded-2xl"
-                      />
-                    </div>
-                    <div className="space-y-4 md:px-4">
-                      {textBlocks.map((block, idx) => (
-                        <div key={idx}>{block.content}</div>
-                      ))}
-                    </div>
-                    <div className="overflow-hidden">
-                      <img
-                        src={imageUrls[1]}
-                        alt={`${section?.title || 'Service'} 2`}
-                        className="w-full h-64 md:h-80 object-cover rounded-2xl"
-                      />
-                    </div>
-                  </div>
-                );
-              }
-
-              // If exactly one image: show image then content
-              if (imageUrls.length === 1) {
-                return (
-                  <div className="flex flex-col gap-8">
-                    <div className="overflow-hidden">
-                      <img
-                        src={imageUrls[0]}
-                        alt={section?.title || 'Service'}
-                        className="w-full h-64 md:h-80 object-cover rounded-2xl"
-                      />
-                    </div>
-                    <div className="space-y-4">
-                      {textBlocks.map((block, idx) => (
-                        <div key={idx}>{block.content}</div>
-                      ))}
-                    </div>
-                  </div>
-                );
-              }
-
-              // No images: just show content
               return (
-                <div className="space-y-4">
+                <div className="space-y-4 md:px-4">
                   {textBlocks.map((block, idx) => (
                     <div key={idx}>{block.content}</div>
                   ))}
                 </div>
               );
             })()}
+          </div>
+        </section>
+      )}
+
+      {/* Full image gallery + count from database */}
+      {section?.images && section.images.length > 0 && (
+        <section className="section pt-0">
+          <div className="container-responsive max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold">All images</h3>
+              <span className="text-sm text-muted-foreground">{section.images.length} image{section.images.length === 1 ? '' : 's'}</span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {section.images.map((url, idx) => (
+                <div key={`${url}-${idx}`} className="overflow-hidden rounded-lg">
+                  <img
+                    src={url}
+                    alt={`${section.title || 'Service'} image ${idx + 1}`}
+                    className="w-full h-40 object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       )}

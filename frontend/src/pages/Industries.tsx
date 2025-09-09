@@ -155,13 +155,13 @@ export default function Industries() {
               <Card
                 key={s._id}
                 className="overflow-hidden group hover:shadow-tuv-md transition-all cursor-pointer"
-                onClick={() => navigate(`/industries/${s.sectionId || toSlug(s.title)}`, { state: { section: s } })}
+                onClick={() => navigate(`/industries/${toSlug(s.sectionId || s.title)}` as string, { state: { section: s } })}
                 role="link"
                 tabIndex={0}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    navigate(`/industries/${s.sectionId || toSlug(s.title)}`, { state: { section: s } });
+                    navigate(`/industries/${toSlug(s.sectionId || s.title)}` as string, { state: { section: s } });
                   }
                 }}
               >

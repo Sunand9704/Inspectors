@@ -33,7 +33,8 @@ export default function IndustriesDetail() {
         const p = await getPageWithSections('industries', undefined, currentLanguage);
         if (!isMounted) return;
         setPage(p);
-        const target = p.sections?.find(s => s.sectionId === slug || s.title?.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-') === slug) || null;
+        const sanitize = (v: string) => v?.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
+        const target = p.sections?.find(s => sanitize(s.sectionId || s.title) === sanitize(String(slug))) || null;
         setSection(target);
       } catch (e) {
         // ignore
@@ -192,6 +193,30 @@ export default function IndustriesDetail() {
           })()}
         </div>
       </section>
+
+      {/* Full image gallery + count from database (mirror Services) */}
+      {section.images && section.images.length > 0 && (
+        <section className="section pt-0">
+          <div className="container-responsive max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold">All images</h3>
+              <span className="text-sm text-muted-foreground">{section.images.length} image{section.images.length === 1 ? '' : 's'}</span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {section.images.map((url, idx) => (
+                <div key={`${url}-${idx}`} className="overflow-hidden rounded-lg">
+                  <img
+                    src={url}
+                    alt={`${section.title} image ${idx + 1}`}
+                    className="w-full h-40 object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
