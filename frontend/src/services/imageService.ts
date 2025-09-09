@@ -21,153 +21,7 @@ export interface ImageResponse {
 }
 
 class ImageService {
-  // Fallback Cloudinary URLs for Testing services
-  private fallbackTestingImages: { [key: string]: CloudinaryImage[] } = {
-    'visual-testing': [
-    {
-      url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755871450/cbm/testing/visual-testing/cbm/testing/visual-testing/image52.jpg',
-      public_id: 'cbm/testing/visual-testing/cbm/testing/visual-testing/image52',
-      width: 686,
-      height: 386,
-      format: 'jpg',
-      created_at: '2025-08-22T14:04:10Z',
-      tags: ['testing', 'visual-testing', 'cbm']
-    },
-    {
-      url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755871452/cbm/testing/visual-testing/cbm/testing/visual-testing/image53.jpg',
-      public_id: 'cbm/testing/visual-testing/cbm/testing/visual-testing/image53',
-      width: 733,
-      height: 470,
-      format: 'jpg',
-      created_at: '2025-08-22T14:04:12Z',
-      tags: ['testing', 'visual-testing', 'cbm']
-    },
-    {
-      url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755871455/cbm/testing/visual-testing/cbm/testing/visual-testing/image54.jpg',
-      public_id: 'cbm/testing/visual-testing/cbm/testing/visual-testing/image54',
-      width: 748,
-      height: 420,
-      format: 'jpg',
-      created_at: '2025-08-22T14:04:15Z',
-      tags: ['testing', 'visual-testing', 'cbm']
-    }
-    ],
-    'drone-inspection': [
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879101/cbm/testing/drone-inspection/cbm/testing/drone-inspection/image58.jpg',
-        public_id: 'cbm/testing/drone-inspection/cbm/testing/drone-inspection/image58',
-        width: 715,
-        height: 502,
-        format: 'jpg',
-        created_at: '2025-08-22T15:51:41Z',
-        tags: ['testing', 'drone-inspection', 'cbm']
-      },
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879102/cbm/testing/drone-inspection/cbm/testing/drone-inspection/image59.jpg',
-        public_id: 'cbm/testing/drone-inspection/cbm/testing/drone-inspection/image59',
-        width: 743,
-        height: 431,
-        format: 'jpg',
-        created_at: '2025-08-22T15:51:42Z',
-        tags: ['testing', 'drone-inspection', 'cbm']
-      },
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879342/cbm/testing/drone-inspection/cbm/testing/drone-inspection/image60.jpg',
-        public_id: 'cbm/testing/drone-inspection/cbm/testing/drone-inspection/image60',
-        width: 4592,
-        height: 2584,
-        format: 'jpg',
-        created_at: '2025-08-22T15:55:42Z',
-        tags: ['testing', 'drone-inspection', 'cbm']
-      }
-    ],
-    'borescope-inspection': [
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879057/cbm/testing/borescope-inspection/cbm/testing/borescope-inspection/image55.jpg',
-        public_id: 'cbm/testing/borescope-inspection/cbm/testing/borescope-inspection/image55',
-        width: 458,
-        height: 204,
-        format: 'jpg',
-        created_at: '2025-08-22T15:50:57Z',
-        tags: ['testing', 'borescope-inspection', 'cbm']
-      },
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879072/cbm/testing/borescope-inspection/cbm/testing/borescope-inspection/image56.jpg',
-        public_id: 'cbm/testing/borescope-inspection/cbm/testing/borescope-inspection/image56',
-        width: 816,
-        height: 479,
-        format: 'jpg',
-        created_at: '2025-08-22T15:51:12Z',
-        tags: ['testing', 'borescope-inspection', 'cbm']
-      },
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879051/cbm/testing/borescope-inspection/cbm/testing/borescope-inspection/image57.jpg',
-        public_id: 'cbm/testing/borescope-inspection/cbm/testing/borescope-inspection/image57',
-        width: 660,
-        height: 440,
-        format: 'jpg',
-        created_at: '2025-08-22T15:50:51Z',
-        tags: ['testing', 'borescope-inspection', 'cbm']
-      }
-    ],
-    'ultrasonic-testing': [
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879436/cbm/testing/ultrasonic-testing/cbm/testing/ultrasonic-testing/image68.jpg',
-        public_id: 'cbm/testing/ultrasonic-testing/cbm/testing/ultrasonic-testing/image68',
-        width: 640,
-        height: 480,
-        format: 'jpg',
-        created_at: '2025-08-22T15:57:16Z',
-        tags: ['testing', 'ultrasonic-testing', 'cbm']
-      },
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879441/cbm/testing/ultrasonic-testing/cbm/testing/ultrasonic-testing/image69.jpg',
-        public_id: 'cbm/testing/ultrasonic-testing/cbm/testing/ultrasonic-testing/image69',
-        width: 744,
-        height: 450,
-        format: 'jpg',
-        created_at: '2025-08-22T15:57:21Z',
-        tags: ['testing', 'ultrasonic-testing', 'cbm']
-      },
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879441/cbm/testing/ultrasonic-testing/cbm/testing/ultrasonic-testing/image70.jpg',
-        public_id: 'cbm/testing/ultrasonic-testing/cbm/testing/ultrasonic-testing/image70',
-        width: 900,
-        height: 550,
-        format: 'jpg',
-        created_at: '2025-08-22T15:57:21Z',
-        tags: ['testing', 'ultrasonic-testing', 'cbm']
-      }
-    ],
-    'phased-array-ut': [
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879364/cbm/testing/phased-array-ut/cbm/testing/phased-array-ut/image61.jpg',
-        public_id: 'cbm/testing/phased-array-ut/cbm/testing/phased-array-ut/image61',
-        width: 900,
-        height: 335,
-        format: 'jpg',
-        created_at: '2025-08-22T15:56:04Z',
-        tags: ['testing', 'phased-array-ut', 'cbm']
-      },
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879417/cbm/testing/phased-array-ut/cbm/testing/phased-array-ut/image62.jpg',
-        public_id: 'cbm/testing/phased-array-ut/cbm/testing/phased-array-ut/image62',
-        width: 1071,
-        height: 714,
-        format: 'jpg',
-        created_at: '2025-08-22T15:56:57Z',
-        tags: ['testing', 'phased-array-ut', 'cbm']
-      },
-      {
-        url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879366/cbm/testing/phased-array-ut/cbm/testing/phased-array-ut/image63.jpg',
-        public_id: 'cbm/testing/phased-array-ut/cbm/testing/phased-array-ut/image63',
-        width: 789,
-        height: 444,
-        format: 'jpg',
-        created_at: '2025-08-22T15:56:06Z',
-        tags: ['testing', 'phased-array-ut', 'cbm']
-      }
-    ],
+  // No more static fallbacks; always request from backend
     'guided-wave-lrut': [
       {
         url: 'https://res.cloudinary.com/docyipoze/image/upload/v1755879506/cbm/testing/guided-wave-lrut/cbm/testing/guided-wave-lrut/image71.jpg',
@@ -1540,23 +1394,7 @@ class ImageService {
     }
   }
 
-  /**
-   * Get images for visual testing service
-   */
-  async getVisualTestingImages(): Promise<CloudinaryImage[]> {
-    try {
-      // Try to fetch from API first
-      const images = await this.getImages('testing', 'visual-testing');
-      if (images.length > 0) {
-        return images;
-      }
-    } catch (error) {
-      console.log('API not available, using fallback images');
-    }
-    
-    // Return fallback images if API is not available
-    return this.fallbackTestingImages['visual-testing'] || [];
-  }
+  // Removed helper-specific fallbacks
 
   /**
    * Get images for drone inspection service
@@ -1576,110 +1414,35 @@ class ImageService {
    * Get images for any testing sub-service
    */
   async getTestingImages(subService: string): Promise<CloudinaryImage[]> {
-    try {
-      // Try to fetch from API first
-      const images = await this.getImages('testing', subService);
-      if (images.length > 0) {
-        return images;
-      }
-    } catch (error) {
-      console.log(`API not available for ${subService}, trying fallback images`);
-    }
-    
-    // Return fallback images if available
-    if (this.fallbackTestingImages[subService]) {
-      return this.fallbackTestingImages[subService];
-    }
-    
-    return [];
+    return this.getImages('testing', subService);
   }
 
   /**
    * Get images for any CBM sub-service
    */
   async getCBMImages(subService: string): Promise<CloudinaryImage[]> {
-    try {
-      // Try to fetch from API first
-      const images = await this.getImages('cbm', subService);
-      if (images.length > 0) {
-        return images;
-      }
-    } catch (error) {
-      console.log(`API not available for CBM ${subService}, trying fallback images`);
-    }
-    
-    // Return fallback images if available
-    if (this.fallbackCBMImages[subService]) {
-      return this.fallbackCBMImages[subService];
-    }
-    
-    return [];
+    return this.getImages('cbm', subService);
   }
 
   /**
    * Get images for any inspection sub-service
    */
   async getInspectionImages(subService: string): Promise<CloudinaryImage[]> {
-    try {
-      // Try to fetch from API first
-      const images = await this.getImages('inspection', subService);
-      if (images.length > 0) {
-        return images;
-      }
-    } catch (error) {
-      console.log(`API not available for inspection ${subService}, trying fallback images`);
-    }
-    
-    // Return fallback images if available
-    if (this.fallbackInspectionImages[subService]) {
-      return this.fallbackInspectionImages[subService];
-    }
-    
-    return [];
+    return this.getImages('inspection', subService);
   }
 
   /**
    * Get images for any auditing sub-service
    */
   async getAuditingImages(subService: string): Promise<CloudinaryImage[]> {
-    try {
-      // Try to fetch from API first
-      const images = await this.getImages('auditing', subService);
-      if (images.length > 0) {
-        return images;
-      }
-    } catch (error) {
-      console.log(`API not available for auditing ${subService}, trying fallback images`);
-    }
-    
-    // Return fallback images if available
-    if (this.fallbackAuditingImages[subService]) {
-      return this.fallbackAuditingImages[subService];
-    }
-    
-    return [];
+    return this.getImages('auditing', subService);
   }
 
   /**
    * Get images for any verification-certification sub-service
    */
   async getVerificationCertificationImages(subService: string): Promise<CloudinaryImage[]> {
-    try {
-      // Try to fetch from API first
-      const images = await this.getImages('verification-certification', subService);
-      if (images.length > 0) {
-        return images;
-      }
-    } catch (error) {
-      console.log(`API not available for verification-certification ${subService}, trying fallback images`);
-    }
-    
-    // Return fallback images if available
-    if (this.fallbackVerificationCertificationImages[subService]) {
-      return this.fallbackVerificationCertificationImages[subService];
-    }
-    
-    return [];
+    return this.getImages('verification-certification', subService);
   }
 
 

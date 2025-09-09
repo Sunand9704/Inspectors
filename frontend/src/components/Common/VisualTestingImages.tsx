@@ -1,25 +1,13 @@
 import { useEffect, useState } from 'react';
-import { imageService, CloudinaryImage } from '@/services/imageService';
+import { CloudinaryImage } from '@/services/imageService';
 
 export default function VisualTestingImages() {
   const [images, setImages] = useState<CloudinaryImage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        setIsLoading(true);
-        const visualTestingImages = await imageService.getVisualTestingImages();
-        setImages(visualTestingImages);
-        console.log('Visual Testing Images loaded:', visualTestingImages);
-      } catch (error) {
-        console.error('Error fetching Visual Testing images:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchImages();
+    // Component retained for possible future use; currently no-op without old image service
+    setIsLoading(false);
   }, []);
 
   if (isLoading) {
