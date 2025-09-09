@@ -44,13 +44,15 @@ export function Navbar() {
   const getNavigationItems = () => {
     if (!translations) return [];
     
-    return [
+    const items = [
       { name: translations.navbar.services, href: '/services' },
       { name: translations.navbar.industries, href: '/industries' },
+      { name: 'Clients', href: '/clients' },
       { name: translations.navbar.vacancies, href: '/vacancies' },
       { name: translations.navbar.about, href: '/about' },
       { name: translations.navbar.contact, href: '/contact' },
     ];
+    return items;
   };
 
   const navigation = getNavigationItems();
