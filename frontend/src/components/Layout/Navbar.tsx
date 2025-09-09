@@ -47,9 +47,8 @@ export function Navbar() {
     return [
       { name: translations.navbar.services, href: '/services' },
       { name: translations.navbar.industries, href: '/industries' },
+      { name: translations.navbar.vacancies, href: '/vacancies' },
       { name: translations.navbar.about, href: '/about' },
-      { name: translations.navbar.careers, href: '/careers' },
-      { name: translations.navbar.blog || 'Blog', href: '/blog' },
       { name: translations.navbar.contact, href: '/contact' },
     ];
   };
@@ -69,7 +68,7 @@ export function Navbar() {
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>contact@cbm.com</span>
+                <span>contact@inspectors.com</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -128,7 +127,7 @@ export function Navbar() {
             {/* Logo */}
             <Link to="/services" className="flex items-center">
               <div className="text-2xl font-bold text-primary">
-                CBM
+                INSPECTORS
               </div>
             </Link>
 

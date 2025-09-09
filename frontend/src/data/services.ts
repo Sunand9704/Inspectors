@@ -29,10 +29,10 @@ export const services = [
   },
   {
     id: 2,
-    title: "Condition based Monitoring (CBM)",
+    title: "Condition based Monitoring (INSPECTORS)",
     description: "Predictive maintenance using analytics, sensors, and diagnostics to reduce downtime.",
     icon: Settings,
-    link: "/services/cbm",
+    link: "/services/inspectors",
     features: [
       "Vibration & acoustic analysis",
       "Thermography & oil analysis",
