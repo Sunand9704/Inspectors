@@ -1,8 +1,12 @@
 import axios from 'axios';
 const envBaseUrl = (import.meta as any)?.env?.VITE_API_BASE_URL as string | undefined;
 
-const apiBaseURL = envBaseUrl || 'http://localhost:8000';
+const apiBaseURL = "https://inspectors.onrender.com";
 // Use frontend env var if provided; otherwise default to local backend that points to your new DB
+const renderurl ="https://inspectors.onrender.com";
+const local = "http://localhost:8000";
+
+
 
 export const apiClient = axios.create({
   baseURL: apiBaseURL,
