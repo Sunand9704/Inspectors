@@ -2,6 +2,7 @@
 import { HeroSection } from '@/components/Common/HeroSection';
 import { VideoHero } from '@/components/Common/VideoHero';
 import { ServiceCard } from '@/components/Common/ServiceCard';
+import { ClientMarquee } from '@/components/Common/ClientMarquee';
 // No legacy industry stats; rely on translations if available
 import CountUp from '@/components/Common/CountUp';
 import { Button } from '@/components/ui/button';
@@ -120,6 +121,8 @@ export default function Services() {
         </div>
       </section>
 
+      <ClientMarquee />
+
       {/* All Services */}
       <section className="section" id="services">
         <div className="container-responsive">
@@ -145,6 +148,8 @@ export default function Services() {
         </div>
       </section>
 
+      {/* Client Marquee */}
+      <ClientMarquee />
      
     </div>
   );

@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import Careers from './pages/Careers';
 import Contacts from './pages/Contacts';
 import Blogs from './pages/Blogs';
+import Clients from './pages/Clients';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import RouteScrollTop from './route-scroll-top';
@@ -39,6 +40,16 @@ export default function App() {
             <ProtectedRoute>
               <Layout>
                 <Blogs />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/clients"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Clients />
               </Layout>
             </ProtectedRoute>
           }
