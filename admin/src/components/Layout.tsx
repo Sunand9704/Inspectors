@@ -12,6 +12,7 @@ export default function Layout({ children }: LayoutProps) {
     { path: '/careers', label: 'Careers', icon: '💼' },
     { path: '/contacts', label: 'Contacts', icon: '📞' },
     { path: '/blogs', label: 'Blogs', icon: '📝' },
+    { path: '/clients', label: 'Clients', icon: '🏢' },
   ];
 
   const logout = () => {
