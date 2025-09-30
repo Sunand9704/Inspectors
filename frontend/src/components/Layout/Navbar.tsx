@@ -17,6 +17,7 @@ const languages = [
   { code: 'pt', name: 'Português', flag: '🇵🇹' },
   { code: 'es', name: 'Español', flag: '🇪🇸' },
   { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+  { code: 'zh', name: '中文', flag: '🇨🇳' },
 ];
 
 export function Navbar() {
@@ -44,15 +45,14 @@ export function Navbar() {
   const getNavigationItems = () => {
     if (!translations) return [];
     
-    const items = [
+    return [
       { name: translations.navbar.services, href: '/services' },
       { name: translations.navbar.industries, href: '/industries' },
-      { name: 'Clients', href: '/clients' },
-      { name: translations.navbar.vacancies, href: '/vacancies' },
       { name: translations.navbar.about, href: '/about' },
+      { name: translations.navbar.careers, href: '/careers' },
+      { name: translations.navbar.blog || 'Blog', href: '/blog' },
       { name: translations.navbar.contact, href: '/contact' },
     ];
-    return items;
   };
 
   const navigation = getNavigationItems();
@@ -66,11 +66,11 @@ export function Navbar() {
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span>+1 (555) 123-4567</span>
+                <span>+44 7934 980214</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>contact@inspectors.com</span>
+                <span>Support@cbm360tiv.com</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -129,7 +129,7 @@ export function Navbar() {
             {/* Logo */}
             <Link to="/services" className="flex items-center">
               <div className="text-2xl font-bold text-primary">
-                INSPECTORS
+                CBM
               </div>
             </Link>
 
@@ -150,14 +150,14 @@ export function Navbar() {
 
             {/* CTA Button */}
             <div className="hidden lg:flex items-center space-x-4">
-              <Button variant="outline" size="sm" asChild>
+              {/* <Button variant="outline" size="sm" asChild>
                 <Link to="/contact">
                   {translations?.navbar.getQuote || 'Get Quote'}
                 </Link>
-              </Button>
+              </Button> */}
               <Button className="btn-primary" asChild>
-                <Link to="/contact">
-                  {translations?.navbar.contactUs || 'Contact Us'}
+                <Link to="/contact#contact-form">
+                  {translations?.navbar.contactUs || 'Get Quote'}
                 </Link>
               </Button>
             </div>
@@ -234,7 +234,7 @@ export function Navbar() {
                       </Link>
                     </Button>
                     <Button className="btn-primary" asChild>
-                      <Link to="/contact" onClick={() => setIsOpen(false)}>
+                      <Link to="/contact#contact-form" onClick={() => setIsOpen(false)}>
                         {translations?.navbar.contactUs || 'Contact Us'}
                       </Link>
                     </Button>
