@@ -312,48 +312,51 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
         </div>
       </section>
 
-      {/* Content from database (text only). Images are shown in the gallery below to avoid mixing from other sources */}
-      {(section?.bodyText) && (
-        <section className="section pt-0">
-          <div className="container-responsive max-w-5xl mx-auto">
-            {(() => {
-              const content = section?.bodyText || '';
-              const textBlocks = parseContentToBlocks(content);
+      {/* Content + images arranged like other detail pages */}
+      <section className="section pt-0">
+        <div className="container-responsive max-w-5xl mx-auto">
+          {(() => {
+            const content = section?.bodyText || '';
+            const blocks = parseContentToBlocks(content);
+            const imageUrls = Array.isArray(section?.images) ? section!.images : [];
+
+            if (imageUrls.length >= 2) {
               return (
-                <div className="space-y-4 md:px-4">
-                  {textBlocks.map((block, idx) => (
-                    <div key={idx}>{block.content}</div>
-                  ))}
+                <div className="flex flex-col gap-8">
+                  <div className="overflow-hidden">
+                    <img src={imageUrls[0]} alt={`${section?.title || 'Service'} 1`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                  </div>
+                  <div className="space-y-4 md:px-4">
+                    {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
+                  </div>
+                  <div className="overflow-hidden">
+                    <img src={imageUrls[1]} alt={`${section?.title || 'Service'} 2`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                  </div>
                 </div>
               );
-            })()}
-          </div>
-        </section>
-      )}
+            }
 
-      {/* Full image gallery + count from database */}
-      {section?.images && section.images.length > 0 && (
-        <section className="section pt-0">
-          <div className="container-responsive max-w-5xl mx-auto">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold">All images</h3>
-              <span className="text-sm text-muted-foreground">{section.images.length} image{section.images.length === 1 ? '' : 's'}</span>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {section.images.map((url, idx) => (
-                <div key={`${url}-${idx}`} className="overflow-hidden rounded-lg">
-                  <img
-                    src={url}
-                    alt={`${section.title || 'Service'} image ${idx + 1}`}
-                    className="w-full h-40 object-cover"
-                    loading="lazy"
-                  />
+            if (imageUrls.length === 1) {
+              return (
+                <div className="flex flex-col gap-8">
+                  <div className="overflow-hidden">
+                    <img src={imageUrls[0]} alt={section?.title || 'Service'} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                  </div>
+                  <div className="space-y-4 md:px-4">
+                    {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+              );
+            }
+
+            return (
+              <div className="space-y-4 md:px-4">
+                {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
+              </div>
+            );
+          })()}
+        </div>
+      </section>
 
     </div>
   );
