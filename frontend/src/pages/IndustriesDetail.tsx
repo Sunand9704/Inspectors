@@ -157,17 +157,33 @@ export default function IndustriesDetail() {
             const imageUrls = section.images || [];
 
             if (imageUrls.length >= 2) {
+              // Insert second image around the middle of the text blocks
+              const elements: JSX.Element[] = [];
+              const middleIndex = Math.max(0, Math.ceil(blocks.length / 2) - 1);
+              blocks.forEach((b, i) => {
+                elements.push(<div key={`blk-${i}`}>{b.content}</div>);
+                if (i === middleIndex) {
+                  elements.push(
+                    <div key="img-2" className="overflow-hidden mt-6">
+                      <img src={imageUrls[1]} alt={`${section.title} 2`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                    </div>
+                  );
+                }
+              });
+
               return (
                 <div className="flex flex-col gap-8">
                   <div className="overflow-hidden">
                     <img src={imageUrls[0]} alt={`${section.title} 1`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
                   </div>
                   <div className="space-y-4 md:px-4">
-                    {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
+                    {elements}
                   </div>
-                  <div className="overflow-hidden">
-                    <img src={imageUrls[1]} alt={`${section.title} 2`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
-                  </div>
+                  {imageUrls.length >= 3 && (
+                    <div className="overflow-hidden">
+                      <img src={imageUrls[2]} alt={`${section.title} 3`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                    </div>
+                  )}
                 </div>
               );
             }
@@ -194,32 +210,29 @@ export default function IndustriesDetail() {
         </div>
       </section>
 
-      {/* Full image gallery + count from database (mirror Services) */}
-      {section.images && section.images.length > 0 && (
+      {/* If there are images, show total count above a grid to clarify how many exist in cloud */}
+      {Array.isArray(section.images) && section.images.length > 0 && (
         <section className="section pt-0">
           <div className="container-responsive max-w-5xl mx-auto">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold">All images</h3>
-              <span className="text-sm text-muted-foreground">{section.images.length} image{section.images.length === 1 ? '' : 's'}</span>
+            <div className="flex justify-end mb-2">
+              <span className="text-xs text-muted-foreground">{section.images.length} image{section.images.length === 1 ? '' : 's'}</span>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {section.images.map((url, idx) => (
                 <div key={`${url}-${idx}`} className="overflow-hidden rounded-lg">
-                  <img
-                    src={url}
-                    alt={`${section.title} image ${idx + 1}`}
-                    className="w-full h-40 object-cover"
-                    loading="lazy"
-                  />
+                  <img src={url} alt={`${section.title} image ${idx + 1}`} className="w-full h-40 object-cover" loading="lazy" />
                 </div>
               ))}
             </div>
           </div>
         </section>
       )}
+
     </div>
   );
 }
+
+
 
 
 
