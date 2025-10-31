@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const mongoose = require('mongoose');
 
@@ -21,7 +21,7 @@ const SectionSchema = new mongoose.Schema(
     language: { type: String, enum: SupportedLanguages, default: 'en', index: true },
     pageNumber: { type: Number, index: true },
     sectionId: { type: String, index: true },
-    page: { type: String, index: true }, // Page slug (e.g., 'cbm', 'testing', 'inspection')
+    page: { type: String, index: true }, // Page slug (e.g., 'INSPECTORS', 'testing', 'inspection')
     isActive: { type: Boolean, default: true, index: true },
     translations: {
       // Pre-stored translations for static content
@@ -41,5 +41,6 @@ SectionSchema.index({ isActive: 1, pageNumber: 1 }); // For populate queries
 SectionSchema.index({ isActive: 1, page: 1 }); // For page-based section queries
 
 module.exports = mongoose.model('Section', SectionSchema);
+
 
 

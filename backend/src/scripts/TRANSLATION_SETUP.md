@@ -1,6 +1,6 @@
-# Translation Setup Guide
+﻿# Translation Setup Guide
 
-This guide will help you set up the production translation system for CBM.
+This guide will help you set up the production translation system for INSPECTORS.
 
 ## Prerequisites
 
@@ -77,20 +77,20 @@ Each section will have a `translations` object like this:
 ```javascript
 {
   "fr": {
-    "title": "Titre en français",
-    "bodyText": "Contenu en français..."
+    "title": "Titre en franÃ§ais",
+    "bodyText": "Contenu en franÃ§ais..."
   },
   "pt": {
-    "title": "Título em português",
-    "bodyText": "Conteúdo em português..."
+    "title": "TÃ­tulo em portuguÃªs",
+    "bodyText": "ConteÃºdo em portuguÃªs..."
   },
   "es": {
-    "title": "Título en español",
-    "bodyText": "Contenido en español..."
+    "title": "TÃ­tulo en espaÃ±ol",
+    "bodyText": "Contenido en espaÃ±ol..."
   },
   "ru": {
-    "title": "Заголовок на русском",
-    "bodyText": "Содержимое на русском..."
+    "title": "Ð—Ð°Ð³Ð¾Ð»Ð¾Ð²Ð¾Ðº Ð½Ð° Ñ€ÑƒÑÑÐºÐ¾Ð¼",
+    "bodyText": "Ð¡Ð¾Ð´ÐµÑ€Ð¶Ð¸Ð¼Ð¾Ðµ Ð½Ð° Ñ€ÑƒÑÑÐºÐ¾Ð¼..."
   }
 }
 ```
@@ -114,7 +114,8 @@ Google Cloud Translation API pricing:
 - First 500,000 characters per month: **FREE**
 - Additional characters: $20 per 1M characters
 
-For typical CBM content, you'll likely stay within the free tier.
+For typical INSPECTORS content, you'll likely stay within the free tier.
+
 
 
 

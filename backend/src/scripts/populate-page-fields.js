@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+﻿const mongoose = require('mongoose');
 require('dotenv').config();
 
 // Import models
@@ -6,7 +6,7 @@ const Section = require('./src/models/Section');
 const Page = require('./src/models/Page');
 
 // Configure MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/INSPECTORS';
 
 /**
  * Get all available pages and their sections from database
@@ -19,7 +19,7 @@ async function getAllPagesAndSections() {
     // Get all active pages from database
     const dbPages = await Page.find({ isActive: true }).populate('sections');
     
-    console.log(`📊 Found ${dbPages.length} active pages in database`);
+    console.log(`ðŸ“Š Found ${dbPages.length} active pages in database`);
     
     // Process each page
     for (const page of dbPages) {
@@ -33,18 +33,18 @@ async function getAllPagesAndSections() {
           sectionIds.push(...page.sections.map(section => section.sectionId));
         } else {
           // If sections are just IDs, we'll need to fetch them
-          console.log(`  ⚠️  Page ${pageSlug} has section IDs but not populated`);
+          console.log(`  âš ï¸  Page ${pageSlug} has section IDs but not populated`);
         }
       }
       
       pages[pageSlug] = sectionIds;
-      console.log(`  📄 ${pageSlug}: ${sectionIds.length} sections`);
+      console.log(`  ðŸ“„ ${pageSlug}: ${sectionIds.length} sections`);
     }
     
     return pages;
     
   } catch (error) {
-    console.error('❌ Error getting pages from database:', error.message);
+    console.error('âŒ Error getting pages from database:', error.message);
     throw error;
   }
 }
@@ -54,12 +54,12 @@ async function getAllPagesAndSections() {
  */
 async function populatePageFields() {
   try {
-    console.log('🚀 Starting page field population for all sections...\n');
+    console.log('ðŸš€ Starting page field population for all sections...\n');
     
     const pages = await getAllPagesAndSections();
-    console.log('📄 Available pages and their sections:');
+    console.log('ðŸ“„ Available pages and their sections:');
     Object.keys(pages).forEach(pageSlug => {
-      console.log(`  📁 ${pageSlug}: ${pages[pageSlug].length} sections`);
+      console.log(`  ðŸ“ ${pageSlug}: ${pages[pageSlug].length} sections`);
       pages[pageSlug].forEach(sectionId => {
         console.log(`    - ${sectionId}`);
       });
@@ -73,7 +73,7 @@ async function populatePageFields() {
 
     // Process each page
     for (const [pageSlug, sectionIds] of Object.entries(pages)) {
-      console.log(`🔄 Processing page: ${pageSlug}`);
+      console.log(`ðŸ”„ Processing page: ${pageSlug}`);
       
       for (const sectionId of sectionIds) {
         try {
@@ -81,7 +81,7 @@ async function populatePageFields() {
           const sections = await Section.find({ sectionId: sectionId });
           
           if (sections.length === 0) {
-            console.log(`  ⚠️  No sections found with sectionId: ${sectionId}`);
+            console.log(`  âš ï¸  No sections found with sectionId: ${sectionId}`);
             continue;
           }
 
@@ -91,7 +91,7 @@ async function populatePageFields() {
             try {
               // Check if page field already exists and is correct
               if (section.page === pageSlug) {
-                console.log(`  ✅ ${sectionId}: Already has correct page field (${pageSlug})`);
+                console.log(`  âœ… ${sectionId}: Already has correct page field (${pageSlug})`);
                 skippedSections++;
                 continue;
               }
@@ -103,21 +103,21 @@ async function populatePageFields() {
               );
 
               if (result.modifiedCount > 0) {
-                console.log(`  🔄 ${sectionId}: Updated page field to ${pageSlug}`);
+                console.log(`  ðŸ”„ ${sectionId}: Updated page field to ${pageSlug}`);
                 updatedSections++;
               } else {
-                console.log(`  ℹ️  ${sectionId}: No changes needed`);
+                console.log(`  â„¹ï¸  ${sectionId}: No changes needed`);
                 skippedSections++;
               }
 
             } catch (error) {
-              console.error(`  ❌ Error updating section ${sectionId}:`, error.message);
+              console.error(`  âŒ Error updating section ${sectionId}:`, error.message);
               errorSections++;
             }
           }
 
         } catch (error) {
-          console.error(`  ❌ Error processing sectionId ${sectionId}:`, error.message);
+          console.error(`  âŒ Error processing sectionId ${sectionId}:`, error.message);
           errorSections++;
         }
       }
@@ -125,16 +125,16 @@ async function populatePageFields() {
     }
 
     // Summary
-    console.log('📋 POPULATION SUMMARY:');
+    console.log('ðŸ“‹ POPULATION SUMMARY:');
     console.log('='.repeat(60));
-    console.log(`📊 Total sections processed: ${totalSections}`);
-    console.log(`✅ Updated sections: ${updatedSections}`);
-    console.log(`⏭️  Skipped sections: ${skippedSections}`);
-    console.log(`❌ Errors: ${errorSections}`);
+    console.log(`ðŸ“Š Total sections processed: ${totalSections}`);
+    console.log(`âœ… Updated sections: ${updatedSections}`);
+    console.log(`â­ï¸  Skipped sections: ${skippedSections}`);
+    console.log(`âŒ Errors: ${errorSections}`);
     console.log('='.repeat(60));
 
   } catch (error) {
-    console.error('❌ Fatal error during population:', error.message);
+    console.error('âŒ Fatal error during population:', error.message);
     process.exit(1);
   }
 }
@@ -144,34 +144,34 @@ async function populatePageFields() {
  */
 async function showDatabasePages() {
   try {
-    console.log('📊 All pages in database:\n');
+    console.log('ðŸ“Š All pages in database:\n');
     
     const pages = await Page.find({}, 'title slug language isActive pageNumber sections');
     
     if (pages.length === 0) {
-      console.log('❌ No pages found in database');
+      console.log('âŒ No pages found in database');
       return;
     }
 
     pages.forEach(page => {
-      console.log(`📄 ${page.title} (${page.slug})`);
+      console.log(`ðŸ“„ ${page.title} (${page.slug})`);
       console.log(`   Language: ${page.language}`);
       console.log(`   Page Number: ${page.pageNumber}`);
-      console.log(`   Active: ${page.isActive ? '✅' : '❌'}`);
+      console.log(`   Active: ${page.isActive ? 'âœ…' : 'âŒ'}`);
       console.log(`   Sections: ${page.sections ? page.sections.length : 0}`);
       console.log('');
     });
 
     // Summary
-    console.log('📋 PAGE SUMMARY:');
+    console.log('ðŸ“‹ PAGE SUMMARY:');
     console.log('='.repeat(60));
-    console.log(`📊 Total pages: ${pages.length}`);
-    console.log(`✅ Active pages: ${pages.filter(p => p.isActive).length}`);
-    console.log(`❌ Inactive pages: ${pages.filter(p => !p.isActive).length}`);
+    console.log(`ðŸ“Š Total pages: ${pages.length}`);
+    console.log(`âœ… Active pages: ${pages.filter(p => p.isActive).length}`);
+    console.log(`âŒ Inactive pages: ${pages.filter(p => !p.isActive).length}`);
     console.log('='.repeat(60));
 
   } catch (error) {
-    console.error('❌ Error showing database pages:', error.message);
+    console.error('âŒ Error showing database pages:', error.message);
   }
 }
 
@@ -180,7 +180,7 @@ async function showDatabasePages() {
  */
 async function showPageFieldStatus() {
   try {
-    console.log('📊 Current page field status for all sections:\n');
+    console.log('ðŸ“Š Current page field status for all sections:\n');
     
     const sections = await Section.find({}, 'sectionId title page language pageNumber');
     
@@ -201,11 +201,11 @@ async function showPageFieldStatus() {
 
     // Show sections with page field
     Object.keys(sectionsByPage).forEach(pageSlug => {
-      console.log(`📄 PAGE: ${pageSlug.toUpperCase()}`);
-      console.log('─'.repeat(50));
+      console.log(`ðŸ“„ PAGE: ${pageSlug.toUpperCase()}`);
+      console.log('â”€'.repeat(50));
       
       sectionsByPage[pageSlug].forEach(section => {
-        console.log(`  📁 ${section.sectionId}`);
+        console.log(`  ðŸ“ ${section.sectionId}`);
         console.log(`     Title: ${section.title}`);
         console.log(`     Language: ${section.language}`);
         console.log(`     Page Number: ${section.pageNumber}`);
@@ -216,11 +216,11 @@ async function showPageFieldStatus() {
 
     // Show sections without page field
     if (sectionsWithoutPage.length > 0) {
-      console.log('❌ SECTIONS WITHOUT PAGE FIELD:');
-      console.log('─'.repeat(50));
+      console.log('âŒ SECTIONS WITHOUT PAGE FIELD:');
+      console.log('â”€'.repeat(50));
       
       sectionsWithoutPage.forEach(section => {
-        console.log(`  📁 ${section.sectionId}`);
+        console.log(`  ðŸ“ ${section.sectionId}`);
         console.log(`     Title: ${section.title}`);
         console.log(`     Language: ${section.language}`);
         console.log(`     Page Number: ${section.pageNumber}`);
@@ -230,19 +230,19 @@ async function showPageFieldStatus() {
     }
 
     // Summary
-    console.log('📋 STATUS SUMMARY:');
+    console.log('ðŸ“‹ STATUS SUMMARY:');
     console.log('='.repeat(60));
-    console.log(`📊 Total sections: ${sections.length}`);
-    console.log(`✅ With page field: ${sections.length - sectionsWithoutPage.length}`);
-    console.log(`❌ Without page field: ${sectionsWithoutPage.length}`);
+    console.log(`ðŸ“Š Total sections: ${sections.length}`);
+    console.log(`âœ… With page field: ${sections.length - sectionsWithoutPage.length}`);
+    console.log(`âŒ Without page field: ${sectionsWithoutPage.length}`);
     
     Object.keys(sectionsByPage).forEach(pageSlug => {
-      console.log(`📄 ${pageSlug.toUpperCase()}: ${sectionsByPage[pageSlug].length} sections`);
+      console.log(`ðŸ“„ ${pageSlug.toUpperCase()}: ${sectionsByPage[pageSlug].length} sections`);
     });
     console.log('='.repeat(60));
 
   } catch (error) {
-    console.error('❌ Error showing page field status:', error.message);
+    console.error('âŒ Error showing page field status:', error.message);
   }
 }
 
@@ -251,18 +251,18 @@ async function showPageFieldStatus() {
  */
 async function resetPageFields() {
   try {
-    console.log('🔄 Resetting all page fields to null...\n');
+    console.log('ðŸ”„ Resetting all page fields to null...\n');
     
     const result = await Section.updateMany(
       {},
       { $unset: { page: "" } }
     );
 
-    console.log(`✅ Reset ${result.modifiedCount} sections`);
-    console.log('📊 All page fields have been cleared');
+    console.log(`âœ… Reset ${result.modifiedCount} sections`);
+    console.log('ðŸ“Š All page fields have been cleared');
 
   } catch (error) {
-    console.error('❌ Error resetting page fields:', error.message);
+    console.error('âŒ Error resetting page fields:', error.message);
   }
 }
 
@@ -270,9 +270,9 @@ async function resetPageFields() {
 async function main() {
   try {
     // Connect to MongoDB
-    console.log('🔌 Connecting to MongoDB...');
+    console.log('ðŸ”Œ Connecting to MongoDB...');
     await mongoose.connect(MONGODB_URI);
-    console.log('✅ Connected to MongoDB successfully\n');
+    console.log('âœ… Connected to MongoDB successfully\n');
 
     // Check command line arguments
     const args = process.argv.slice(2);
@@ -291,7 +291,7 @@ async function main() {
       await resetPageFields();
     } else if (args[0] === '--help' || args[0] === '-h') {
       // Show help
-      console.log('🆘 Page Field Population Script Help\n');
+      console.log('ðŸ†˜ Page Field Population Script Help\n');
       console.log('Usage:');
       console.log('  node populate-page-fields.js                    # Populate page fields for all sections');
       console.log('  node populate-page-fields.js --pages           # Show all pages in database');
@@ -304,16 +304,16 @@ async function main() {
       console.log('  node populate-page-fields.js --status');
       console.log('  node populate-page-fields.js --reset');
     } else {
-      console.log('❌ Unknown argument. Use --help for usage information.');
+      console.log('âŒ Unknown argument. Use --help for usage information.');
     }
 
   } catch (error) {
-    console.error('❌ Fatal error:', error.message);
+    console.error('âŒ Fatal error:', error.message);
   } finally {
     // Close MongoDB connection
     if (mongoose.connection.readyState === 1) {
       await mongoose.connection.close();
-      console.log('🔌 MongoDB connection closed');
+      console.log('ðŸ”Œ MongoDB connection closed');
     }
     process.exit(0);
   }
@@ -331,3 +331,4 @@ module.exports = {
   showDatabasePages,
   getAllPagesAndSections
 };
+

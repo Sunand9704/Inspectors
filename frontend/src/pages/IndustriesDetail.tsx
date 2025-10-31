@@ -75,9 +75,9 @@ export default function IndustriesDetail() {
   }
 
   // Reuse the same lightweight parser used by ServiceDetail for consistent styling
-  function parseContentToBlocks(raw: string): Array<{ type: string; content: JSX.Element }> {
+  function parseContentToBlocks(raw: string): Array<{ type: string; text: string; content: JSX.Element }> {
     const lines = (raw || '').replace(/\r\n/g, '\n').split('\n');
-    const blocks: Array<{ type: string; content: JSX.Element }> = [];
+    const blocks: Array<{ type: string; text: string; content: JSX.Element }> = [];
     let paragraphBuffer: string[] = [];
 
     const flushParagraph = () => {
@@ -86,6 +86,7 @@ export default function IndustriesDetail() {
         if (text) {
           blocks.push({
             type: 'p',
+            text,
             content: (
               <div key={`p-${blocks.length}`} className="prose prose-lg prose-slate max-w-none mb-4 text-muted-foreground leading-relaxed">
                 <p className="text-base md:text-lg leading-6 text-gray-700 dark:text-gray-300">{text}</p>
@@ -117,6 +118,7 @@ export default function IndustriesDetail() {
         const sizeClass = level === 1 ? 'text-3xl md:text-4xl' : level === 2 ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl';
         blocks.push({
           type: level === 1 ? 'h1' : level === 2 ? 'h2' : 'h3',
+          text,
           content: (
             <Tag key={`h-${blocks.length}`} className={`${sizeClass} font-semibold text-gray-900 dark:text-gray-100 mt-6 mb-3`}>
               {text}
@@ -156,77 +158,77 @@ export default function IndustriesDetail() {
             const blocks = parseContentToBlocks(section.bodyText || '');
             const imageUrls = section.images || [];
 
-            if (imageUrls.length >= 2) {
-              // Insert second image around the middle of the text blocks
-              const elements: JSX.Element[] = [];
-              const middleIndex = Math.max(0, Math.ceil(blocks.length / 2) - 1);
-              blocks.forEach((b, i) => {
-                elements.push(<div key={`blk-${i}`}>{b.content}</div>);
-                if (i === middleIndex) {
-                  elements.push(
-                    <div key="img-2" className="overflow-hidden mt-6">
-                      <img src={imageUrls[1]} alt={`${section.title} 2`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
-                    </div>
-                  );
-                }
-              });
+            const normalizedTitle = (section.title || '').trim().toLowerCase();
+            const contentBlocks = blocks.filter((block, index) => {
+              if (index === 0 && block.type.startsWith('h')) {
+                return block.text.trim().toLowerCase() !== normalizedTitle;
+              }
+              return true;
+            });
 
-              return (
-                <div className="flex flex-col gap-8">
-                  <div className="overflow-hidden">
-                    <img src={imageUrls[0]} alt={`${section.title} 1`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
-                  </div>
-                  <div className="space-y-4 md:px-4">
-                    {elements}
-                  </div>
-                  {imageUrls.length >= 3 && (
-                    <div className="overflow-hidden">
-                      <img src={imageUrls[2]} alt={`${section.title} 3`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
-                    </div>
-                  )}
+            const elements: JSX.Element[] = [];
+            const firstImage = imageUrls[0];
+            const secondImage = imageUrls[1];
+            const thirdImage = imageUrls[2];
+
+            let secondImageInserted = false;
+
+            if (contentBlocks.length === 0 && firstImage) {
+              elements.push(
+                <div key="img-1" className="overflow-hidden mt-6">
+                  <img src={firstImage} alt={`${section.title} 1`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
                 </div>
               );
             }
 
-            if (imageUrls.length === 1) {
-              return (
-                <div className="flex flex-col gap-8">
-                  <div className="overflow-hidden">
-                    <img src={imageUrls[0]} alt={section.title} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+            contentBlocks.forEach((block, index) => {
+              elements.push(<div key={`blk-${index}`}>{block.content}</div>);
+
+              if (index === 0 && firstImage) {
+                elements.push(
+                  <div key="img-1" className="overflow-hidden mt-6">
+                    <img src={firstImage} alt={`${section.title} 1`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
                   </div>
-                  <div className="space-y-4">
-                    {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
-                  </div>
+                );
+              }
+
+              if (!secondImageInserted && secondImage) {
+                const secondInsertIndex = Math.max(1, Math.ceil(contentBlocks.length / 2));
+                if (index >= secondInsertIndex) {
+                  elements.push(
+                    <div key="img-2" className="overflow-hidden mt-6">
+                      <img src={secondImage} alt={`${section.title} 2`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                    </div>
+                  );
+                  secondImageInserted = true;
+                }
+              }
+            });
+
+            if (secondImage && !secondImageInserted) {
+              elements.push(
+                <div key="img-2" className="overflow-hidden mt-6">
+                  <img src={secondImage} alt={`${section.title} 2`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                </div>
+              );
+            }
+
+            if (thirdImage) {
+              elements.push(
+                <div key="img-3" className="overflow-hidden mt-6">
+                  <img src={thirdImage} alt={`${section.title} 3`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
                 </div>
               );
             }
 
             return (
-              <div className="space-y-4">
-                {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
+              <div className="flex flex-col gap-6 md:px-2">
+                {elements}
               </div>
             );
           })()}
         </div>
       </section>
-
-      {/* If there are images, show total count above a grid to clarify how many exist in cloud */}
-      {Array.isArray(section.images) && section.images.length > 0 && (
-        <section className="section pt-0">
-          <div className="container-responsive max-w-5xl mx-auto">
-            <div className="flex justify-end mb-2">
-              <span className="text-xs text-muted-foreground">{section.images.length} image{section.images.length === 1 ? '' : 's'}</span>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {section.images.map((url, idx) => (
-                <div key={`${url}-${idx}`} className="overflow-hidden rounded-lg">
-                  <img src={url} alt={`${section.title} image ${idx + 1}`} className="w-full h-40 object-cover" loading="lazy" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
     </div>
   );

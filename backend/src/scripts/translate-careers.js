@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Production Translation Script for Career Data
  * 
  * This script translates English career listings to 4 languages (fr, pt, es, ru)
@@ -33,10 +33,10 @@ const TARGET_LANGUAGES = ['fr', 'pt', 'es', 'ru'];
 // Database connection
 async function connectDB() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://cbm360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster');
-    console.log('✅ Connected to MongoDB');
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://INSPECTORS360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster');
+    console.log('âœ… Connected to MongoDB');
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error.message);
+    console.error('âŒ MongoDB connection error:', error.message);
     process.exit(1);
   }
 }
@@ -50,24 +50,24 @@ function initializeTranslationClient() {
     
     if (process.env.GOOGLE_CLOUD_API_KEY) {
       config.key = process.env.GOOGLE_CLOUD_API_KEY;
-      console.log('✅ Using Google Cloud API Key for authentication');
+      console.log('âœ… Using Google Cloud API Key for authentication');
     } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
       config.keyFilename = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-      console.log('✅ Using Google Cloud service account key file');
+      console.log('âœ… Using Google Cloud service account key file');
     } else if (process.env.GOOGLE_CLOUD_PRIVATE_KEY) {
       config.credentials = {
         private_key: process.env.GOOGLE_CLOUD_PRIVATE_KEY,
         client_email: process.env.GOOGLE_CLOUD_CLIENT_EMAIL,
         client_id: process.env.GOOGLE_CLOUD_CLIENT_ID,
       };
-      console.log('✅ Using Google Cloud service account credentials');
+      console.log('âœ… Using Google Cloud service account credentials');
     } else {
       throw new Error('No Google Cloud credentials found');
     }
     
     return new Translate(config);
   } catch (error) {
-    console.error('❌ Error initializing Google Cloud Translation:', error.message);
+    console.error('âŒ Error initializing Google Cloud Translation:', error.message);
     process.exit(1);
   }
 }
@@ -78,16 +78,16 @@ function initializeTranslationClient() {
  */
 async function fetchActiveCareers() {
   try {
-    console.log('\n📋 Fetching active careers for translation');
+    console.log('\nðŸ“‹ Fetching active careers for translation');
     
     const careers = await Career.find({
       isActive: true
     }).sort({ postedAt: -1, createdAt: -1 });
     
-    console.log(`✅ Found ${careers.length} active careers`);
+    console.log(`âœ… Found ${careers.length} active careers`);
     
     if (careers.length === 0) {
-      console.log('⚠️  No active careers found');
+      console.log('âš ï¸  No active careers found');
       return [];
     }
     
@@ -98,7 +98,7 @@ async function fetchActiveCareers() {
     
     return careers;
   } catch (error) {
-    console.error('❌ Error fetching careers:', error.message);
+    console.error('âŒ Error fetching careers:', error.message);
     throw error;
   }
 }
@@ -120,7 +120,7 @@ async function translateText(translateClient, text, targetLanguage, sourceLangua
     });
     return translation;
   } catch (error) {
-    console.error(`❌ Translation error (${sourceLanguage} → ${targetLanguage}):`, error.message);
+    console.error(`âŒ Translation error (${sourceLanguage} â†’ ${targetLanguage}):`, error.message);
     throw error;
   }
 }
@@ -155,13 +155,13 @@ async function translateArray(translateClient, array, targetLanguage) {
  */
 async function translateCareer(career, translateClient) {
   try {
-    console.log(`\n🔄 Translating career: "${career.title}"`);
+    console.log(`\nðŸ”„ Translating career: "${career.title}"`);
     
     const translations = {};
     
     // Translate to each target language
     for (const lang of TARGET_LANGUAGES) {
-      console.log(`   📝 Translating to ${lang.toUpperCase()}...`);
+      console.log(`   ðŸ“ Translating to ${lang.toUpperCase()}...`);
       
       try {
         // Translate all text fields
@@ -202,13 +202,13 @@ async function translateCareer(career, translateClient) {
           tags: translatedTags
         };
         
-        console.log(`   ✅ ${lang.toUpperCase()}: "${translatedTitle}"`);
+        console.log(`   âœ… ${lang.toUpperCase()}: "${translatedTitle}"`);
         
         // Add delay to avoid rate limiting
         await new Promise(resolve => setTimeout(resolve, 500));
         
       } catch (error) {
-        console.error(`   ❌ Failed to translate to ${lang}:`, error.message);
+        console.error(`   âŒ Failed to translate to ${lang}:`, error.message);
         // Continue with other languages
       }
     }
@@ -216,11 +216,11 @@ async function translateCareer(career, translateClient) {
     // Update the career with translations
     career.translations = translations;
     
-    console.log(`✅ Completed translations for career: "${career.title}"`);
+    console.log(`âœ… Completed translations for career: "${career.title}"`);
     return career;
     
   } catch (error) {
-    console.error('❌ Error translating career:', error.message);
+    console.error('âŒ Error translating career:', error.message);
     throw error;
   }
 }
@@ -241,11 +241,11 @@ async function saveTranslatedCareer(career) {
       { new: true }
     );
     
-    console.log(`💾 Saved translations for career: "${career.title}"`);
+    console.log(`ðŸ’¾ Saved translations for career: "${career.title}"`);
     return updatedCareer;
     
   } catch (error) {
-    console.error('❌ Error saving career:', error.message);
+    console.error('âŒ Error saving career:', error.message);
     throw error;
   }
 }
@@ -254,7 +254,7 @@ async function saveTranslatedCareer(career) {
  * Translate all active careers
  */
 async function translateAllCareers() {
-  console.log('\n🚀 Starting translation for all active careers');
+  console.log('\nðŸš€ Starting translation for all active careers');
   console.log('==============================================');
   
   try {
@@ -265,7 +265,7 @@ async function translateAllCareers() {
     const careers = await fetchActiveCareers();
     
     if (careers.length === 0) {
-      console.log('⚠️  No careers to translate');
+      console.log('âš ï¸  No careers to translate');
       return;
     }
     
@@ -275,7 +275,7 @@ async function translateAllCareers() {
     
     for (let i = 0; i < careers.length; i++) {
       const career = careers[i];
-      console.log(`\n📋 Processing career ${i + 1}/${careers.length}: ${career.title}`);
+      console.log(`\nðŸ“‹ Processing career ${i + 1}/${careers.length}: ${career.title}`);
       
       try {
         // Translate the career
@@ -288,31 +288,31 @@ async function translateAllCareers() {
         
         // Add delay between careers to avoid rate limiting
         if (i < careers.length - 1) {
-          console.log('⏳ Waiting 2 seconds before next career...');
+          console.log('â³ Waiting 2 seconds before next career...');
           await new Promise(resolve => setTimeout(resolve, 2000));
         }
         
       } catch (error) {
-        console.error(`❌ Failed to process career "${career.title}":`, error.message);
+        console.error(`âŒ Failed to process career "${career.title}":`, error.message);
         errorCount++;
         // Continue with other careers
       }
     }
     
     // Display summary
-    console.log('\n📊 Translation Summary');
+    console.log('\nðŸ“Š Translation Summary');
     console.log('======================');
-    console.log(`✅ Successfully translated: ${successCount} careers`);
-    console.log(`❌ Failed translations: ${errorCount} careers`);
-    console.log(`📄 Total careers processed: ${careers.length}`);
+    console.log(`âœ… Successfully translated: ${successCount} careers`);
+    console.log(`âŒ Failed translations: ${errorCount} careers`);
+    console.log(`ðŸ“„ Total careers processed: ${careers.length}`);
     
     if (successCount > 0) {
-      console.log('\n🎉 Translation completed successfully!');
-      console.log('💡 Translations are now available in the database');
+      console.log('\nðŸŽ‰ Translation completed successfully!');
+      console.log('ðŸ’¡ Translations are now available in the database');
     }
     
   } catch (error) {
-    console.error('\n❌ Translation process failed:', error.message);
+    console.error('\nâŒ Translation process failed:', error.message);
     throw error;
   }
 }
@@ -321,7 +321,7 @@ async function translateAllCareers() {
  * List all active careers
  */
 async function listActiveCareers() {
-  console.log('\n📋 Active Careers');
+  console.log('\nðŸ“‹ Active Careers');
   console.log('=================');
   
   try {
@@ -330,7 +330,7 @@ async function listActiveCareers() {
     }).select('title department location level type postedAt').sort({ postedAt: -1 });
     
     if (careers.length === 0) {
-      console.log('⚠️  No active careers found');
+      console.log('âš ï¸  No active careers found');
       return;
     }
     
@@ -343,10 +343,10 @@ async function listActiveCareers() {
       console.log('');
     });
     
-    console.log(`✅ Found ${careers.length} active careers`);
+    console.log(`âœ… Found ${careers.length} active careers`);
     
   } catch (error) {
-    console.error('❌ Error listing careers:', error.message);
+    console.error('âŒ Error listing careers:', error.message);
     throw error;
   }
 }
@@ -355,7 +355,7 @@ async function listActiveCareers() {
  * Check translation status for all careers
  */
 async function checkTranslationStatus() {
-  console.log('\n🔍 Translation Status for All Careers');
+  console.log('\nðŸ” Translation Status for All Careers');
   console.log('=====================================');
   
   try {
@@ -364,11 +364,11 @@ async function checkTranslationStatus() {
     }).sort({ postedAt: -1 });
     
     if (careers.length === 0) {
-      console.log('⚠️  No active careers found');
+      console.log('âš ï¸  No active careers found');
       return;
     }
     
-    console.log(`\n📊 Translation Status:`);
+    console.log(`\nðŸ“Š Translation Status:`);
     console.log(`Total careers: ${careers.length}`);
     
     const statusCounts = {
@@ -383,26 +383,26 @@ async function checkTranslationStatus() {
       
       let status;
       if (translationCount === expectedCount) {
-        status = '✅ Fully translated';
+        status = 'âœ… Fully translated';
         statusCounts.fullyTranslated++;
       } else if (translationCount > 0) {
-        status = '⚠️  Partially translated';
+        status = 'âš ï¸  Partially translated';
         statusCounts.partiallyTranslated++;
       } else {
-        status = '❌ Not translated';
+        status = 'âŒ Not translated';
         statusCounts.notTranslated++;
       }
       
       console.log(`  ${index + 1}. ${career.title} - ${status} (${translationCount}/${expectedCount})`);
     });
     
-    console.log(`\n📈 Summary:`);
-    console.log(`  ✅ Fully translated: ${statusCounts.fullyTranslated}`);
-    console.log(`  ⚠️  Partially translated: ${statusCounts.partiallyTranslated}`);
-    console.log(`  ❌ Not translated: ${statusCounts.notTranslated}`);
+    console.log(`\nðŸ“ˆ Summary:`);
+    console.log(`  âœ… Fully translated: ${statusCounts.fullyTranslated}`);
+    console.log(`  âš ï¸  Partially translated: ${statusCounts.partiallyTranslated}`);
+    console.log(`  âŒ Not translated: ${statusCounts.notTranslated}`);
     
   } catch (error) {
-    console.error('❌ Error checking translation status:', error.message);
+    console.error('âŒ Error checking translation status:', error.message);
     throw error;
   }
 }
@@ -430,7 +430,7 @@ async function main() {
         break;
         
       default:
-        console.log('🚀 Career Translation Script');
+        console.log('ðŸš€ Career Translation Script');
         console.log('============================');
         console.log('\nUsage:');
         console.log('  node translate-careers.js translate  # Translate all active careers');
@@ -454,12 +454,12 @@ async function main() {
     }
     
   } catch (error) {
-    console.error('\n❌ Script failed:', error.message);
+    console.error('\nâŒ Script failed:', error.message);
     process.exit(1);
   } finally {
     // Close database connection
     await mongoose.connection.close();
-    console.log('\n🔌 Database connection closed');
+    console.log('\nðŸ”Œ Database connection closed');
   }
 }
 
@@ -476,3 +476,4 @@ module.exports = {
   translateCareer,
   saveTranslatedCareer
 };
+

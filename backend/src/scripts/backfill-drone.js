@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -6,7 +6,7 @@ require('dotenv').config();
 const Section = require('../models/Section');
 const Page = require('../models/Page');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/INSPECTORS';
 
 const PAGE_SLUG = 'testing';
 const SECTION_ID = 'drone-inspection';
@@ -17,16 +17,16 @@ const DATA = {
     {
       heading: 'Drone Inspection',
       content:
-        'From CBM 360 TIV - Known as Condition Based Monitoring 360° Technical Industrial Verification – Deliver advanced aerial and confined-space inspection services for Mining and Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power & Utility Infrastructure.\n\nDrone inspection provides a safe, cost-effective, and efficient way to visually examine hard-to-reach or hazardous areas without scaffolding, rope access, or shutdowns.'
+        'From INSPECTORS 360 TIV - Known as Condition Based Monitoring 360Â° Technical Industrial Verification â€“ Deliver advanced aerial and confined-space inspection services for Mining and Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power & Utility Infrastructure.\n\nDrone inspection provides a safe, cost-effective, and efficient way to visually examine hard-to-reach or hazardous areas without scaffolding, rope access, or shutdowns.'
     },
     {
-      heading: 'Why Choose Drone Inspection from CBM 360 TIV?',
+      heading: 'Why Choose Drone Inspection from INSPECTORS 360 TIV?',
       content: [
         'Safe access to confined, elevated, or hazardous environments',
         'Reduces need for scaffolding, cranes, or rope access',
         'High-resolution imaging and real-time video feed',
         'Faster inspections with minimal downtime',
-        'Data integration with CBM 360 TIV’s digital reporting systems'
+        'Data integration with INSPECTORS 360 TIVâ€™s digital reporting systems'
       ]
     },
     {
@@ -37,11 +37,11 @@ const DATA = {
     {
       heading: 'Applications Across Industries',
       content: [
-        'Mining & Metal Plants – Conveyor belts, stockpiles, crushers',
-        'Industrial Plants – Roofs, chimneys, structural steel, pipelines',
-        'Oil & Gas – Offshore rigs, flare stacks, tanks, risers',
-        'FPSO/FSO Vessels – Hulls, flare booms, cargo tanks',
-        'Power & Utilities – Transmission lines, wind turbines, boilers'
+        'Mining & Metal Plants â€“ Conveyor belts, stockpiles, crushers',
+        'Industrial Plants â€“ Roofs, chimneys, structural steel, pipelines',
+        'Oil & Gas â€“ Offshore rigs, flare stacks, tanks, risers',
+        'FPSO/FSO Vessels â€“ Hulls, flare booms, cargo tanks',
+        'Power & Utilities â€“ Transmission lines, wind turbines, boilers'
       ]
     },
     {
@@ -58,14 +58,14 @@ const DATA = {
       heading: 'Standards We Follow:',
       content: [
         'CAA/FAA Drone Regulations',
-        'ISO 21384-3:2019 – Unmanned aircraft systems',
+        'ISO 21384-3:2019 â€“ Unmanned aircraft systems',
         'API & ASME asset inspection guidelines'
       ]
     },
     {
       heading: 'Ready to Inspect with Drones?',
       content:
-        'Trust CBM 360 TIV’s Drone Inspection Services to enhance safety, reduce costs, and deliver detailed inspection insights.\n\nContact CBM 360 TIV today to schedule a drone inspection for your facilities.'
+        'Trust INSPECTORS 360 TIVâ€™s Drone Inspection Services to enhance safety, reduce costs, and deliver detailed inspection insights.\n\nContact INSPECTORS 360 TIV today to schedule a drone inspection for your facilities.'
     }
   ]
 };
@@ -121,19 +121,19 @@ async function linkSectionToPage(sectionId) {
 }
 
 async function main() {
-  console.log('🔌 Connecting to MongoDB...');
+  console.log('ðŸ”Œ Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI);
-  console.log('✅ Connected');
+  console.log('âœ… Connected');
   try {
     const sectionId = await upsertSection();
     await linkSectionToPage(sectionId);
-    console.log('✅ Drone inspection section upserted');
+    console.log('âœ… Drone inspection section upserted');
   } catch (e) {
-    console.error('❌ Error:', e.message);
+    console.error('âŒ Error:', e.message);
     process.exitCode = 1;
   } finally {
     await mongoose.connection.close();
-    console.log('🔌 Disconnected');
+    console.log('ðŸ”Œ Disconnected');
   }
 }
 
@@ -142,5 +142,6 @@ if (require.main === module) {
 }
 
 module.exports = { main };
+
 
 

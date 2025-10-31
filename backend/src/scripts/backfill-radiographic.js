@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -6,7 +6,7 @@ require('dotenv').config();
 const Section = require('../models/Section');
 const Page = require('../models/Page');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/INSPECTORS';
 
 const PAGE_SLUG = 'testing';
 const SECTION_ID = 'radiographic-testing';
@@ -17,10 +17,10 @@ const DATA = {
     {
       heading: 'Radiographic Testing (RT)',
       content:
-        'From CBM 360 TIV - Known as Condition Based Monitoring 360° Technical Industrial Verification – Deliver precise radiographic testing services for Mining and Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power & Utility Infrastructure.\n\nRadiographic Testing (RT) uses X-rays or gamma rays to produce images of the internal structure of materials, welds, and components. It reveals volumetric flaws such as porosity, inclusions, cracks, and lack of fusion, ensuring the integrity of critical assets.'
+        'From INSPECTORS 360 TIV - Known as Condition Based Monitoring 360Â° Technical Industrial Verification â€“ Deliver precise radiographic testing services for Mining and Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power & Utility Infrastructure.\n\nRadiographic Testing (RT) uses X-rays or gamma rays to produce images of the internal structure of materials, welds, and components. It reveals volumetric flaws such as porosity, inclusions, cracks, and lack of fusion, ensuring the integrity of critical assets.'
     },
     {
-      heading: 'Why Choose RT from CBM 360 TIV?',
+      heading: 'Why Choose RT from INSPECTORS 360 TIV?',
       content: [
         'Detects both surface and subsurface volumetric defects',
         'Provides permanent inspection records through radiographic film or digital images',
@@ -64,26 +64,26 @@ const DATA = {
     {
       heading: 'Trusted RT by Industry Experts',
       content:
-        'CBM 360 TIV\'s certified radiographers utilize advanced X-ray and gamma-ray systems, ensuring safe, efficient, and compliant inspections. Our RT services deliver high-quality radiographs with detailed interpretation reports.'
+        'INSPECTORS 360 TIV\'s certified radiographers utilize advanced X-ray and gamma-ray systems, ensuring safe, efficient, and compliant inspections. Our RT services deliver high-quality radiographs with detailed interpretation reports.'
     },
     {
       heading: 'Applications Across Industries',
       content: [
-        'Mining & Metals – Welded joints, crushers, and heavy equipment components',
-        'Industrial Plants – Boilers, heat exchangers, reactors',
-        'Oil & Gas – Pipelines, storage tanks, offshore structures',
-        'FPSO/FSO Vessels – Cargo tanks, structural welds, risers',
-        'Power & Utilities – Turbine components, boiler tubes, high-pressure systems'
+        'Mining & Metals â€“ Welded joints, crushers, and heavy equipment components',
+        'Industrial Plants â€“ Boilers, heat exchangers, reactors',
+        'Oil & Gas â€“ Pipelines, storage tanks, offshore structures',
+        'FPSO/FSO Vessels â€“ Cargo tanks, structural welds, risers',
+        'Power & Utilities â€“ Turbine components, boiler tubes, high-pressure systems'
       ]
     },
     {
       heading: 'Global Experience in All Major Sectors',
       content: [
-        'Mining & Metal Facilities – Weld inspections, conveyor structures, slurry pipelines',
-        'Industrial Manufacturing & Process Plants – Reactor vessels, pressure piping',
-        'Onshore/Offshore Oil & Gas Facilities – Subsea welds, risers, and flowlines',
-        'FPSO & FSO Vessels – Hull welds, storage tanks, deck piping',
-        'Power & Utility Plants – Steam piping, turbine housings, boiler welds'
+        'Mining & Metal Facilities â€“ Weld inspections, conveyor structures, slurry pipelines',
+        'Industrial Manufacturing & Process Plants â€“ Reactor vessels, pressure piping',
+        'Onshore/Offshore Oil & Gas Facilities â€“ Subsea welds, risers, and flowlines',
+        'FPSO & FSO Vessels â€“ Hull welds, storage tanks, deck piping',
+        'Power & Utility Plants â€“ Steam piping, turbine housings, boiler welds'
       ]
     },
     {
@@ -100,17 +100,17 @@ const DATA = {
     {
       heading: 'Standards We Follow:',
       content: [
-        'ASNT SNT-TC-1A – Personnel qualification and certification',
-        'ISO 17636 – Radiographic testing of welds',
-        'ASTM E1742 – Radiographic examination',
-        'ASME BPVC Section V – RT methods',
-        'API 1104 – Welding of pipelines and related facilities'
+        'ASNT SNT-TC-1A â€“ Personnel qualification and certification',
+        'ISO 17636 â€“ Radiographic testing of welds',
+        'ASTM E1742 â€“ Radiographic examination',
+        'ASME BPVC Section V â€“ RT methods',
+        'API 1104 â€“ Welding of pipelines and related facilities'
       ]
     },
     {
       heading: 'Ready to Inspect with RT?',
       content:
-        'Trust CBM 360 TIV\'s Radiographic Testing services to provide accurate, reliable, and standards-compliant inspection results.\n\nContact CBM 360 TIV today to schedule a radiographic inspection.'
+        'Trust INSPECTORS 360 TIV\'s Radiographic Testing services to provide accurate, reliable, and standards-compliant inspection results.\n\nContact INSPECTORS 360 TIV today to schedule a radiographic inspection.'
     }
   ]
 };
@@ -166,19 +166,19 @@ async function linkSectionToPage(sectionId) {
 }
 
 async function main() {
-  console.log('🔌 Connecting to MongoDB...');
+  console.log('ðŸ”Œ Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI);
-  console.log('✅ Connected');
+  console.log('âœ… Connected');
   try {
     const sectionId = await upsertSection();
     await linkSectionToPage(sectionId);
-    console.log('✅ Radiographic Testing section upserted');
+    console.log('âœ… Radiographic Testing section upserted');
   } catch (e) {
-    console.error('❌ Error:', e.message);
+    console.error('âŒ Error:', e.message);
     process.exitCode = 1;
   } finally {
     await mongoose.connection.close();
-    console.log('🔌 Disconnected');
+    console.log('ðŸ”Œ Disconnected');
   }
 }
 
@@ -187,3 +187,4 @@ if (require.main === module) {
 }
 
 module.exports = { main };
+

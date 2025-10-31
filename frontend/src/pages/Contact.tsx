@@ -1,4 +1,4 @@
-
+﻿
 import { HeroSection } from '@/components/Common/HeroSection';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -137,7 +137,7 @@ export default function Contact() {
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">Our Global Offices</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               With locations worldwide, we're always close to you. Find your nearest 
-              CBM office for local support and services.
+              INSPECTORS office for local support and services.
             </p>
           </div>
           
@@ -311,7 +311,7 @@ export default function Contact() {
                 <div className="flex items-start space-x-2">
                   <input type="checkbox" id="consent" className="mt-1" checked={form.consent} onChange={(e) => setForm((f) => ({ ...f, consent: e.target.checked }))} />
                   <Label htmlFor="consent" className="text-sm text-muted-foreground">
-                    I agree to CBM processing my personal data for the purpose of responding to my inquiry. 
+                    I agree to INSPECTORS processing my personal data for the purpose of responding to my inquiry. 
                     I understand I can withdraw consent at any time.
                   </Label>
                 </div>
@@ -355,7 +355,7 @@ export default function Contact() {
                     <p className="text-muted-foreground mb-2">
                       Send detailed inquiries and documentation
                     </p>
-                    <p className="font-medium text-primary">contact@cbm.com</p>
+                    <p className="font-medium text-primary">contact@INSPECTORS.com</p>
                     <p className="text-sm text-muted-foreground">Response within 24 hours</p>
                   </div>
                 </div>
@@ -401,3 +401,4 @@ export default function Contact() {
     </div>
   );
 }
+

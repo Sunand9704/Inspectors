@@ -1,4 +1,4 @@
-
+﻿
 'use strict';
 
 const mongoose = require('mongoose');
@@ -7,7 +7,7 @@ require('dotenv').config();
 const Section = require('../models/Section');
 const Page = require('../models/Page');
 
-const MONGODB_URI = "mongodb+srv://cbm360tiv_db_user:ghtVDlZZEZRwzGOW@cluster0.wizvkjv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0" || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = "mongodb+srv://INSPECTORS360tiv_db_user:ghtVDlZZEZRwzGOW@cluster0.wizvkjv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0" || 'mongodb://localhost:27017/INSPECTORS';
 
 const PAGE_SLUG = 'service';
 const SECTION_ID = 'Recruitment & Selection';
@@ -16,17 +16,17 @@ const RECRUITMENT_SELECTION = {
   service: 'Recruitment & Selection',
   sections: [
     {
-      heading: 'INSPECTORS 360 – Global Inspector Recruitment & Selection Services',
+      heading: 'INSPECTORS 360 â€“ Global Inspector Recruitment & Selection Services',
       content: 'At INSPECTORS 360 we specialize in providing highly qualified and experienced inspectors for the world\'s most demanding industries. Our recruitment and selection process ensures that every professional we place is equipped with the skills, certifications, and field experience to deliver exceptional inspection services, even in the most challenging environments.'
     },
     {
       heading: 'Our Approach',
-      content: 'We understand that inspection is more than just compliance—it\'s about ensuring safety, reliability, and operational excellence. That\'s why we connect clients with inspectors who not only meet international standards but also have hands-on expertise with state-of-the-art working equipment.'
+      content: 'We understand that inspection is more than just complianceâ€”it\'s about ensuring safety, reliability, and operational excellence. That\'s why we connect clients with inspectors who not only meet international standards but also have hands-on expertise with state-of-the-art working equipment.'
     },
     {
       heading: 'Industries We Serve',
       content: [
-        'Oil & Gas – Onshore and Offshore',
+        'Oil & Gas â€“ Onshore and Offshore',
         'FPSO / FSO Vessels',
         'Mining & Metals'
       ]
@@ -34,12 +34,12 @@ const RECRUITMENT_SELECTION = {
     {
       heading: 'Inspection Roles We Provide',
       content: [
-        'Import / Export Audit – Ensuring quality, compliance, and documentation for global trade.',
-        'Asset Integrity Audit (Topside) – Evaluating structural, mechanical, and operational integrity for offshore and industrial assets.',
-        'NDT/Mechanical Audit Inspectors – Assessing machinery, rotating equipment, and critical components for performance and safety.',
-        'Welding Inspectors – Certified experts for weld quality control, testing, and compliance with global welding codes.',
-        'Paint Inspectors – Coating and corrosion control specialists to ensure protective systems meet specifications.',
-        'Electrical & Instrumentation Inspectors – Verifying electrical systems, instrumentation, and automation for reliability and safety.'
+        'Import / Export Audit â€“ Ensuring quality, compliance, and documentation for global trade.',
+        'Asset Integrity Audit (Topside) â€“ Evaluating structural, mechanical, and operational integrity for offshore and industrial assets.',
+        'NDT/Mechanical Audit Inspectors â€“ Assessing machinery, rotating equipment, and critical components for performance and safety.',
+        'Welding Inspectors â€“ Certified experts for weld quality control, testing, and compliance with global welding codes.',
+        'Paint Inspectors â€“ Coating and corrosion control specialists to ensure protective systems meet specifications.',
+        'Electrical & Instrumentation Inspectors â€“ Verifying electrical systems, instrumentation, and automation for reliability and safety.'
       ]
     },
     {
@@ -73,7 +73,7 @@ function toMarkdown(data) {
 async function ensurePage() {
   let page = await Page.findOne({ slug: PAGE_SLUG });
   if (!page) {
-    page = await Page.create({ title: 'CBM', slug: PAGE_SLUG, language: 'en', isActive: true });
+    page = await Page.create({ title: 'INSPECTORS', slug: PAGE_SLUG, language: 'en', isActive: true });
   }
   return page;
 }
@@ -105,19 +105,19 @@ async function linkSectionToPage(sectionId) {
 }
 
 async function main() {
-  console.log('🔌 Connecting to MongoDB...');
+  console.log('ðŸ”Œ Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI);
-  console.log('✅ Connected');
+  console.log('âœ… Connected');
   try {
     const sectionId = await upsertSection();
     await linkSectionToPage(sectionId);
-    console.log(`✅ ${RECRUITMENT_SELECTION.service} section upserted`);
+    console.log(`âœ… ${RECRUITMENT_SELECTION.service} section upserted`);
   } catch (e) {
-    console.error('❌ Error:', e.message);
+    console.error('âŒ Error:', e.message);
     process.exitCode = 1;
   } finally {
     await mongoose.connection.close();
-    console.log('🔌 Disconnected');
+    console.log('ðŸ”Œ Disconnected');
   }
 }
 
@@ -126,5 +126,6 @@ if (require.main === module) {
 }
 
 module.exports = { main };
+
 
 

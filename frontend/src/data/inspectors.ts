@@ -1,4 +1,4 @@
-export type INSPECTORSItem = {
+﻿export type INSPECTORSItem = {
   slug: string;
   title: string;
   image: string;
@@ -27,7 +27,7 @@ export const inspectorsItems: INSPECTORSItem[] = [
   },
   {
     slug: 'remote-inspectors-iot-cloud',
-    title: 'Remote CBM via IoT Sensor & Cloud Monitoring',
+    title: 'Remote INSPECTORS via IoT Sensor & Cloud Monitoring',
     image: 'https://res.cloudinary.com/docyipoze/image/upload/v1756657759/inspectors/inspectors/remote-inspectors-iot-cloud/inspectors/inspectors/remote-inspectors-iot-cloud/cover-photo.jpg',
     description: 'Wireless sensors and dashboards for continuous asset health monitoring.',
     details: ['Edge devices and gateways', 'Alerting and analytics', 'Dashboards and reporting'],
@@ -51,5 +51,6 @@ export const inspectorsItems: INSPECTORSItem[] = [
 export function getInspectorsItemBySlug(slug: string): INSPECTORSItem | undefined {
   return inspectorsItems.find((i) => i.slug === slug);
 }
+
 
 

@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -6,7 +6,7 @@ require('dotenv').config();
 const Section = require('../models/Section');
 const Page = require('../models/Page');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/INSPECTORS';
 
 const PAGE_SLUG = 'testing';
 const SECTION_ID = 'ultrasonic-testing';
@@ -17,10 +17,10 @@ const DATA = {
     {
       heading: 'Ultrasonic Testing (UT)',
       content:
-        'From CBM 360 TIV - Known as Condition Based Monitoring 360° Technical Industrial Verification – Deliver precise ultrasonic testing solutions for Mining and Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power & Utility Infrastructure.\n\nUltrasonic Testing (UT) uses high-frequency sound waves to detect internal flaws, measure thickness, and evaluate material properties. It is widely applied to ensure weld quality, detect cracks, corrosion, laminations, and inclusions.'
+        'From INSPECTORS 360 TIV - Known as Condition Based Monitoring 360Â° Technical Industrial Verification â€“ Deliver precise ultrasonic testing solutions for Mining and Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power & Utility Infrastructure.\n\nUltrasonic Testing (UT) uses high-frequency sound waves to detect internal flaws, measure thickness, and evaluate material properties. It is widely applied to ensure weld quality, detect cracks, corrosion, laminations, and inclusions.'
     },
     {
-      heading: 'Why Choose UT from CBM 360 TIV?',
+      heading: 'Why Choose UT from INSPECTORS 360 TIV?',
       content: [
         'Detects both surface and subsurface defects',
         'Provides accurate flaw depth and size measurements',
@@ -54,31 +54,31 @@ const DATA = {
     {
       heading: 'Trusted UT by Industry Experts',
       content:
-        'CBM 360 TIV\'s certified inspectors use advanced UT equipment and techniques including straight-beam, angle-beam, and immersion testing, delivering reliable inspection results with detailed reporting.'
+        'INSPECTORS 360 TIV\'s certified inspectors use advanced UT equipment and techniques including straight-beam, angle-beam, and immersion testing, delivering reliable inspection results with detailed reporting.'
     },
     {
       heading: 'Applications Across Industries',
       content: [
-        'Mining & Metals – Crushers, pipelines, and weld integrity',
-        'Industrial Plants – Boilers, pressure vessels, reactors',
-        'Oil & Gas – Subsea structures, risers, storage tanks',
-        'FPSO/FSO Vessels – Hull integrity, cargo tanks',
-        'Power & Utilities – Turbine blades, boiler tubes, pipelines'
+        'Mining & Metals â€“ Crushers, pipelines, and weld integrity',
+        'Industrial Plants â€“ Boilers, pressure vessels, reactors',
+        'Oil & Gas â€“ Subsea structures, risers, storage tanks',
+        'FPSO/FSO Vessels â€“ Hull integrity, cargo tanks',
+        'Power & Utilities â€“ Turbine blades, boiler tubes, pipelines'
       ]
     },
     {
       heading: 'Standards We Follow:',
       content: [
-        'ASNT SNT-TC-1A – Personnel qualification and certification',
-        'ISO 16810 – General principles of ultrasonic testing',
-        'ISO 17640 – Ultrasonic testing of welds',
-        'ASME BPVC Section V – UT methods'
+        'ASNT SNT-TC-1A â€“ Personnel qualification and certification',
+        'ISO 16810 â€“ General principles of ultrasonic testing',
+        'ISO 17640 â€“ Ultrasonic testing of welds',
+        'ASME BPVC Section V â€“ UT methods'
       ]
     },
     {
       heading: 'Ready to Inspect with UT?',
       content:
-        'Trust CBM 360 TIV\'s Ultrasonic Testing services to enhance your asset integrity, reliability, and compliance.\n\nContact CBM 360 TIV today to schedule an ultrasonic inspection.'
+        'Trust INSPECTORS 360 TIV\'s Ultrasonic Testing services to enhance your asset integrity, reliability, and compliance.\n\nContact INSPECTORS 360 TIV today to schedule an ultrasonic inspection.'
     }
   ]
 };
@@ -134,19 +134,19 @@ async function linkSectionToPage(sectionId) {
 }
 
 async function main() {
-  console.log('🔌 Connecting to MongoDB...');
+  console.log('ðŸ”Œ Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI);
-  console.log('✅ Connected');
+  console.log('âœ… Connected');
   try {
     const sectionId = await upsertSection();
     await linkSectionToPage(sectionId);
-    console.log('✅ Ultrasonic testing section upserted');
+    console.log('âœ… Ultrasonic testing section upserted');
   } catch (e) {
-    console.error('❌ Error:', e.message);
+    console.error('âŒ Error:', e.message);
     process.exitCode = 1;
   } finally {
     await mongoose.connection.close();
-    console.log('🔌 Disconnected');
+    console.log('ðŸ”Œ Disconnected');
   }
 }
 
@@ -155,3 +155,4 @@ if (require.main === module) {
 }
 
 module.exports = { main };
+

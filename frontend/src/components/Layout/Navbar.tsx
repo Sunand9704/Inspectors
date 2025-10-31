@@ -1,4 +1,4 @@
-
+﻿
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Menu, X, Phone, Mail, Globe, ChevronDown } from 'lucide-react';
@@ -12,12 +12,12 @@ import {
 import { useTranslation } from '@/contexts/TranslationContext';
 
 const languages = [
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
-  { code: 'pt', name: 'Português', flag: '🇵🇹' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-  { code: 'zh', name: '中文', flag: '🇨🇳' },
+  { code: 'en', name: 'English', flag: 'ðŸ‡ºðŸ‡¸' },
+  { code: 'fr', name: 'FranÃ§ais', flag: 'ðŸ‡«ðŸ‡·' },
+  { code: 'pt', name: 'PortuguÃªs', flag: 'ðŸ‡µðŸ‡¹' },
+  { code: 'es', name: 'EspaÃ±ol', flag: 'ðŸ‡ªðŸ‡¸' },
+  { code: 'ru', name: 'Ð ÑƒÑÑÐºÐ¸Ð¹', flag: 'ðŸ‡·ðŸ‡º' },
+  { code: 'zh', name: 'ä¸­æ–‡', flag: 'ðŸ‡¨ðŸ‡³' },
 ];
 
 export function Navbar() {
@@ -70,7 +70,7 @@ export function Navbar() {
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>Support@cbm360tiv.com</span>
+                <span>Support@INSPECTORS360tiv.com</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -129,7 +129,7 @@ export function Navbar() {
             {/* Logo */}
             <Link to="/services" className="flex items-center">
               <div className="text-2xl font-bold text-primary">
-                CBM
+                INSPECTORS
               </div>
             </Link>
 
@@ -255,3 +255,4 @@ export function Navbar() {
     </>
   );
 }
+

@@ -1,4 +1,4 @@
-# Service Detail Pages Migration Guide
+﻿# Service Detail Pages Migration Guide
 
 ## Overview
 All individual service detail pages have been consolidated into a single, reusable `ServiceDetail` component to eliminate code duplication and simplify maintenance.
@@ -9,14 +9,14 @@ All individual service detail pages have been consolidated into a single, reusab
 - **File**: `frontend/src/pages/ServiceDetail.tsx`
 - **Purpose**: Single component that handles all service detail pages
 - **Parameters**: 
-  - `serviceType`: The type of service (e.g., 'testing', 'cbm', 'inspection', 'auditing', 'verification-certification')
+  - `serviceType`: The type of service (e.g., 'testing', 'INSPECTORS', 'inspection', 'auditing', 'verification-certification')
   - `slug`: The specific item slug
 
 ### 2. Updated Routing
 - **Before**: Individual routes for each service detail page
   ```tsx
   <Route path="/services/testing/:slug" element={<TestingDetail />} />
-  <Route path="/services/cbm/:slug" element={<CBMDetail />} />
+  <Route path="/services/INSPECTORS/:slug" element={<INSPECTORSDetail />} />
   <Route path="/services/inspection/:slug" element={<InspectionDetail />} />
   <Route path="/services/auditing/:slug" element={<AuditingDetail />} />
   <Route path="/services/verification-certification/:slug" element={<VerificationCertificationDetail />} />
@@ -59,10 +59,10 @@ const serviceConfigs: Record<string, ServiceConfig> = {
 
 ## Migration Steps Completed
 
-1. ✅ Created unified `ServiceDetail` component
-2. ✅ Updated `App.tsx` routing to use the new component
-3. ✅ Removed individual detail page imports
-4. ✅ Consolidated all service configurations
+1. âœ… Created unified `ServiceDetail` component
+2. âœ… Updated `App.tsx` routing to use the new component
+3. âœ… Removed individual detail page imports
+4. âœ… Consolidated all service configurations
 
 ## Files Modified
 
@@ -73,7 +73,7 @@ const serviceConfigs: Record<string, ServiceConfig> = {
 
 The following individual detail page files are no longer needed:
 - `frontend/src/pages/TestingDetail.tsx`
-- `frontend/src/pages/CBMDetail.tsx`
+- `frontend/src/pages/INSPECTORSDetail.tsx`
 - `frontend/src/pages/InspectionDetail.tsx`
 - `frontend/src/pages/AuditingDetail.tsx`
 - `frontend/src/pages/VerificationCertificationDetail.tsx`
@@ -90,7 +90,7 @@ To add a new service type:
 
 Test the following URLs to ensure they all work correctly:
 - `/services/testing/[any-slug]`
-- `/services/cbm/[any-slug]`
+- `/services/INSPECTORS/[any-slug]`
 - `/services/inspection/[any-slug]`
 - `/services/auditing/[any-slug]`
 - `/services/verification-certification/[any-slug]`
@@ -103,3 +103,4 @@ If issues arise, you can quickly rollback by:
 3. Restoring the individual routes
 
 The individual detail page files are still available and can be restored if needed.
+

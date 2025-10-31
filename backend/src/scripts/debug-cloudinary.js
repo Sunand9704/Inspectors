@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 
 require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
@@ -11,7 +11,7 @@ cloudinary.config({
 });
 
 async function debugCloudinary() {
-  console.log('🔍 Debugging Cloudinary Images...\n');
+  console.log('ðŸ” Debugging Cloudinary Images...\n');
 
   try {
     // Get all resources to see what's there
@@ -20,10 +20,10 @@ async function debugCloudinary() {
       max_results: 50
     });
 
-    console.log(`📊 Total images found: ${result.resources.length}\n`);
+    console.log(`ðŸ“Š Total images found: ${result.resources.length}\n`);
 
     if (result.resources.length > 0) {
-      console.log('📋 All images in Cloudinary:');
+      console.log('ðŸ“‹ All images in Cloudinary:');
       result.resources.forEach((resource, index) => {
         console.log(`${index + 1}. ${resource.public_id}`);
         console.log(`   URL: ${resource.secure_url}`);
@@ -33,22 +33,22 @@ async function debugCloudinary() {
         console.log('');
       });
     } else {
-      console.log('❌ No images found in Cloudinary');
+      console.log('âŒ No images found in Cloudinary');
     }
 
     // Try to get images with specific prefix
-    console.log('🔍 Trying to get images with cbm prefix...');
-    const cbmResult = await cloudinary.api.resources({
+    console.log('ðŸ” Trying to get images with INSPECTORS prefix...');
+    const INSPECTORSResult = await cloudinary.api.resources({
       type: 'upload',
-      prefix: 'cbm',
+      prefix: 'INSPECTORS',
       max_results: 50
     });
 
-    console.log(`📊 Images with 'cbm' prefix: ${cbmResult.resources.length}\n`);
+    console.log(`ðŸ“Š Images with 'INSPECTORS' prefix: ${INSPECTORSResult.resources.length}\n`);
 
-    if (cbmResult.resources.length > 0) {
-      console.log('📋 Images with cbm prefix:');
-      cbmResult.resources.forEach((resource, index) => {
+    if (INSPECTORSResult.resources.length > 0) {
+      console.log('ðŸ“‹ Images with INSPECTORS prefix:');
+      INSPECTORSResult.resources.forEach((resource, index) => {
         console.log(`${index + 1}. ${resource.public_id}`);
         console.log(`   URL: ${resource.secure_url}`);
         console.log('');
@@ -56,8 +56,9 @@ async function debugCloudinary() {
     }
 
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error('âŒ Error:', error.message);
   }
 }
 
 debugCloudinary().catch(console.error);
+

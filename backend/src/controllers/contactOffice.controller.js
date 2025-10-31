@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const ContactOffice = require('../models/ContactOffice');
 const { ApiError } = require('../utils/error');
@@ -32,7 +32,7 @@ async function createContactOffice(req, res, next) {
       try {
         const publicId = `${region.toLowerCase().replace(/\s+/g, '-')}-${country.toLowerCase().replace(/\s+/g, '-')}-${office_name.toLowerCase().replace(/\s+/g, '-')}`;
         const uploadResult = await cloudinaryService.uploadFromBuffer(req.file.buffer, {
-          folder: 'cbm/contact-offices',
+          folder: 'INSPECTORS/contact-offices',
           public_id: publicId,
           transformation: [
             { width: 400, height: 300, crop: 'fit', quality: 'auto' }
@@ -145,7 +145,7 @@ async function updateContactOffice(req, res, next) {
       try {
         const publicId = `${region.toLowerCase().replace(/\s+/g, '-')}-${country.toLowerCase().replace(/\s+/g, '-')}-${office_name.toLowerCase().replace(/\s+/g, '-')}`;
         const uploadResult = await cloudinaryService.uploadFromBuffer(req.file.buffer, {
-          folder: 'cbm/contact-offices',
+          folder: 'INSPECTORS/contact-offices',
           public_id: publicId,
           transformation: [
             { width: 400, height: 300, crop: 'fit', quality: 'auto' }
@@ -216,3 +216,4 @@ module.exports = {
   deleteContactOffice,
   getContactOfficesGrouped
 };
+

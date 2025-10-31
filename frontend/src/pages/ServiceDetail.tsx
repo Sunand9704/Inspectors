@@ -1,4 +1,4 @@
-import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
+﻿import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
@@ -65,10 +65,10 @@ function parseContentToBlocks(raw: string): Array<{ type: string; content: JSX.E
       return;
     }
 
-    // Bullets: -, *, •, – or numbered like 1.
-    if (/^(\-|\*|•|–)\s+/.test(trimmed)) {
+    // Bullets: -, *, â€¢, â€“ or numbered like 1.
+    if (/^(\-|\*|â€¢|â€“)\s+/.test(trimmed)) {
       flushParagraph();
-      const bulletContent = trimmed.replace(/^(\-|\*|•|–)\s+/, '');
+      const bulletContent = trimmed.replace(/^(\-|\*|â€¢|â€“)\s+/, '');
       
       // Check if bullet content starts with **text** pattern
       const boldMatch = bulletContent.match(/^\*\*(.*?)\*\*:?\s*(.*)$/);
@@ -209,9 +209,9 @@ const serviceTypeMap: Record<string, { displayName: string; route: string }> = {
     displayName: 'Inspection (I)',
     route: '/services/inspection'
   },
-  'cbm': {
-    displayName: 'Condition based Monitoring (CBM)',
-    route: '/services/cbm'
+  'INSPECTORS': {
+    displayName: 'Condition based Monitoring (INSPECTORS)',
+    route: '/services/INSPECTORS'
   },
   'auditing': {
     displayName: 'Auditing (A)',
@@ -361,3 +361,4 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
     </div>
   );
 }
+

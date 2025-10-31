@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -6,7 +6,7 @@ require('dotenv').config();
 const Section = require('../models/Section');
 const Page = require('../models/Page');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/INSPECTORS';
 
 const PAGE_SLUG = 'testing';
 const SECTION_ID = 'eddy-current-testing';
@@ -17,10 +17,10 @@ const DATA = {
     {
       heading: 'Eddy Current Testing',
       content:
-        'From CBM 360 TIV - Known as Condition Based Monitoring 360° Technical Industrial Verification – Ensure the integrity of conductive components with advanced Eddy Current Testing across Mining & Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power Utilities.\n\nEddy Current Testing (ET) is a highly sensitive electromagnetic NDT method used to detect surface and near-surface flaws in conductive materials. At CBM 360 TIV, we use this technology to inspect components without removing coatings or insulation, making it ideal for fast, cost-effective in-service inspection.'
+        'From INSPECTORS 360 TIV - Known as Condition Based Monitoring 360Â° Technical Industrial Verification â€“ Ensure the integrity of conductive components with advanced Eddy Current Testing across Mining & Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power Utilities.\n\nEddy Current Testing (ET) is a highly sensitive electromagnetic NDT method used to detect surface and near-surface flaws in conductive materials. At INSPECTORS 360 TIV, we use this technology to inspect components without removing coatings or insulation, making it ideal for fast, cost-effective in-service inspection.'
     },
     {
-      heading: 'Why Choose Eddy Current Testing from CBM 360 TIV?',
+      heading: 'Why Choose Eddy Current Testing from INSPECTORS 360 TIV?',
       content: [
         'Detect cracks, corrosion, and pitting in metal components without the need for surface preparation',
         'Evaluate coating thickness and conductivity changes',
@@ -34,23 +34,23 @@ const DATA = {
     {
       heading: 'Trusted Eddy Current Testing by Certified Experts',
       content:
-        'CBM 360 TIV provides Level II & III ET certified technicians with expertise in signal analysis, calibration, and real-time interpretation. Whether for routine asset management or shutdown inspections, our ET services deliver precision, speed, and confidence across sectors.'
+        'INSPECTORS 360 TIV provides Level II & III ET certified technicians with expertise in signal analysis, calibration, and real-time interpretation. Whether for routine asset management or shutdown inspections, our ET services deliver precision, speed, and confidence across sectors.'
     },
     {
       heading: 'Applications Across Key Industries',
       content: [
-        'Mining and Metal Plants – Inspect structural beams, wire ropes, metal panels, and equipment like crushers and hoists for fatigue cracks and localized corrosion.',
-        'Industrial Manufacturing & Processing Plants – Extensively to assess raw material integrity and in-process fabricated parts such as tubes, rods, and fasteners for inclusions, cracks, or laps.',
-        'Oil & Gas Fields (Onshore/Offshore) and Chemical Facilities – Examine piping systems, exchangers, and heat exchanger tubes for wall thinning, corrosion under insulation (CUI), or fatigue cracking without stripping coatings.',
-        'FPSO & FSO Vessels – Inspect hull welds, piping systems, and deck structures for stress corrosion cracking or pitting — including areas under non-conductive coatings.',
-        'Power & Utilities (Hydro, Thermal, Coal, Geo Thermal, and Gas) – Detect stress corrosion cracking, flow-accelerated corrosion (FAC), or micro cracks in turbine blades, generator windings, and boiler tubes.'
+        'Mining and Metal Plants â€“ Inspect structural beams, wire ropes, metal panels, and equipment like crushers and hoists for fatigue cracks and localized corrosion.',
+        'Industrial Manufacturing & Processing Plants â€“ Extensively to assess raw material integrity and in-process fabricated parts such as tubes, rods, and fasteners for inclusions, cracks, or laps.',
+        'Oil & Gas Fields (Onshore/Offshore) and Chemical Facilities â€“ Examine piping systems, exchangers, and heat exchanger tubes for wall thinning, corrosion under insulation (CUI), or fatigue cracking without stripping coatings.',
+        'FPSO & FSO Vessels â€“ Inspect hull welds, piping systems, and deck structures for stress corrosion cracking or pitting â€” including areas under non-conductive coatings.',
+        'Power & Utilities (Hydro, Thermal, Coal, Geo Thermal, and Gas) â€“ Detect stress corrosion cracking, flow-accelerated corrosion (FAC), or micro cracks in turbine blades, generator windings, and boiler tubes.'
       ]
     },
     {
       heading: 'Key Features and Benefits',
       content: [
         'High sensitivity to surface and near-surface defects in conductive materials',
-        'No need for couplant – dry method, no contamination risk',
+        'No need for couplant â€“ dry method, no contamination risk',
         'Effective through coatings and thin insulation layers',
         'Portable and fast scanning, ideal for field inspections',
         'Data logging and real-time digital defect imaging',
@@ -60,16 +60,16 @@ const DATA = {
     {
       heading: 'Standards We Follow',
       content: [
-        'ASTM E376 / ASTM E243 / ASTM E571 – Eddy current examination procedures',
-        'ASME Section V, Article 8 – Eddy current method',
-        'EN ISO 15548-1 / ISO 15549 – General principles for eddy current testing',
-        'NADCAP / API / ASNT SNT-TC-1A / ISO 9712 / EN 4179 – Personnel qualifications and industry-specific compliance'
+        'ASTM E376 / ASTM E243 / ASTM E571 â€“ Eddy current examination procedures',
+        'ASME Section V, Article 8 â€“ Eddy current method',
+        'EN ISO 15548-1 / ISO 15549 â€“ General principles for eddy current testing',
+        'NADCAP / API / ASNT SNT-TC-1A / ISO 9712 / EN 4179 â€“ Personnel qualifications and industry-specific compliance'
       ]
     },
     {
       heading: 'Ready to Detect Critical Flaws with Precision?',
       content:
-        'Let our expert Eddy Current Testing (ET/ECT) services ensure your components are free from critical defects – protecting life, assets, and compliance.\n\nTo discuss how our ET/ECT services can support your inspection strategy, contact CBM 360 TIV today.'
+        'Let our expert Eddy Current Testing (ET/ECT) services ensure your components are free from critical defects â€“ protecting life, assets, and compliance.\n\nTo discuss how our ET/ECT services can support your inspection strategy, contact INSPECTORS 360 TIV today.'
     }
   ]
 };
@@ -125,19 +125,19 @@ async function linkSectionToPage(sectionId) {
 }
 
 async function main() {
-  console.log('🔌 Connecting to MongoDB...');
+  console.log('ðŸ”Œ Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI);
-  console.log('✅ Connected');
+  console.log('âœ… Connected');
   try {
     const sectionId = await upsertSection();
     await linkSectionToPage(sectionId);
-    console.log('✅ Eddy Current Testing section upserted');
+    console.log('âœ… Eddy Current Testing section upserted');
   } catch (e) {
-    console.error('❌ Error:', e.message);
+    console.error('âŒ Error:', e.message);
     process.exitCode = 1;
   } finally {
     await mongoose.connection.close();
-    console.log('🔌 Disconnected');
+    console.log('ðŸ”Œ Disconnected');
   }
 }
 
@@ -146,3 +146,4 @@ if (require.main === module) {
 }
 
 module.exports = { main };
+

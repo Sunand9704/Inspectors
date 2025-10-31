@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 /*
   Usage:
@@ -24,7 +24,7 @@ async function main() {
   const uriIndex = args.indexOf('--uri');
   const cliUri = uriIndex !== -1 ? (args[uriIndex + 1] || '') : '';
 
-  const uri = cliUri || process.env.MONGODB_URI || "mongodb+srv://cbm360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  const uri = cliUri || process.env.MONGODB_URI || "mongodb+srv://INSPECTORS360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
   const dbName = (cliDbName || process.env.MONGODB_DB || '').trim() || undefined;
 
   if (!uri) {
@@ -62,5 +62,6 @@ main().catch((err) => {
   console.error('Error listing slugs:', err && err.message);
   process.exit(1);
 });
+
 
 

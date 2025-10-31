@@ -1,4 +1,4 @@
-
+﻿
 import { HeroSection } from '@/components/Common/HeroSection';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -142,10 +142,10 @@ export default function Blog() {
     
     return content.split('\n').map((line, index) => {
       if (line.trim() === '') return <br key={index} />;
-      if (line.startsWith('•')) {
+      if (line.startsWith('â€¢')) {
         return (
           <div key={index} className="flex items-start space-x-2 mb-2">
-            <span className="text-primary mt-1">•</span>
+            <span className="text-primary mt-1">â€¢</span>
             <span>{line.substring(1).trim()}</span>
           </div>
         );
@@ -295,7 +295,7 @@ export default function Blog() {
               <div className="text-sm text-white/70">
                 <label className="flex items-center justify-center space-x-2">
                   <input type="checkbox" className="rounded border-white/30" />
-                  <span>I agree to receive marketing communications from CBM</span>
+                  <span>I agree to receive marketing communications from INSPECTORS</span>
                 </label>
               </div>
             </div>
@@ -331,3 +331,4 @@ export default function Blog() {
     </div>
   );
 }
+

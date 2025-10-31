@@ -1,4 +1,4 @@
-{
+﻿{
   "byId": {
     "665000000000000000000001": "\n\nExtra text for specific Mongo _id"
   },
@@ -7,8 +7,9 @@
     "features": "\n\nFeature list footnote"
   },
   "byPageSection": {
-    "cbm::intro": "\n\nCBM page intro extra",
-    "testing::visual-testing": "\n\nReady to Inspect with Precision?\n\nVisual Testing is the first line of defines in structural and component integrity assurance. CBM 360 TIV brings trusted expertise, global experience, and certification-driven performance to your project — whether onshore, offshore, in fabrication shops, or on active industrial sites.\n\nContact CBM 360 TIV today to learn how our Visual Testing (VT) Services can enhance your quality assurance and asset reliability."
+    "INSPECTORS::intro": "\n\nINSPECTORS page intro extra",
+    "testing::visual-testing": "\n\nReady to Inspect with Precision?\n\nVisual Testing is the first line of defines in structural and component integrity assurance. INSPECTORS 360 TIV brings trusted expertise, global experience, and certification-driven performance to your project â€” whether onshore, offshore, in fabrication shops, or on active industrial sites.\n\nContact INSPECTORS 360 TIV today to learn how our Visual Testing (VT) Services can enhance your quality assurance and asset reliability."
   },
   "defaultAppend": "\n\nDefault footer for unmatched sections"
 }
+

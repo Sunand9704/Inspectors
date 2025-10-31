@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const nodemailer = require('nodemailer');
 const { logger } = require('../setup/logger');
@@ -16,12 +16,12 @@ class EmailService {
    */
   async sendContactInquiry(inquiryData) {
     try {
-      const adminEmail = process.env.ADMIN_EMAIL || 'admin@cbm.com';
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@INSPECTORS.com';
 
       const emailContent = this.generateContactEmail(inquiryData);
 
       const mailOptions = {
-        from: `"CBM Contact" <${process.env.SMTP_USER}>`,
+        from: `"INSPECTORS Contact" <${process.env.SMTP_USER}>`,
         to: adminEmail,
         replyTo: inquiryData.email,
         subject: `New Contact Inquiry from ${inquiryData.firstName} ${inquiryData.lastName} (${inquiryData.company})`,
@@ -47,7 +47,7 @@ class EmailService {
    * @returns {string} HTML email content
    */
   generateContactEmail(inquiryData) {
-    const safe = (v) => (v ? String(v) : '—');
+    const safe = (v) => (v ? String(v) : 'â€”');
     return `
       <!DOCTYPE html>
       <html>
@@ -125,7 +125,7 @@ class EmailService {
             </div>
           </div>
           <div class="footer">
-            This inquiry was submitted from the CBM website contact form. Please respond directly to the sender by replying to this email.
+            This inquiry was submitted from the INSPECTORS website contact form. Please respond directly to the sender by replying to this email.
           </div>
         </div>
       </body>
@@ -164,12 +164,12 @@ class EmailService {
    */
   async sendJobApplication(applicationData, resumeBuffer, resumeFileName) {
     try {
-      const adminEmail = process.env.ADMIN_EMAIL || 'admin@cbm.com';
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@INSPECTORS.com';
       
       const emailContent = this.generateApplicationEmail(applicationData);
       
       const mailOptions = {
-        from: `"CBM Careers" <${process.env.SMTP_USER}>`,
+        from: `"INSPECTORS Careers" <${process.env.SMTP_USER}>`,
         to: adminEmail,
         subject: `New Job Application: ${applicationData.position}`,
         html: emailContent,
@@ -260,7 +260,7 @@ class EmailService {
           </div>
           
           <div class="footer">
-            <p>This application was submitted through the CBM Careers portal.</p>
+            <p>This application was submitted through the INSPECTORS Careers portal.</p>
             <p>Application received on: ${new Date().toLocaleString()}</p>
           </div>
         </div>
@@ -294,9 +294,9 @@ class EmailService {
       const emailContent = this.generateConfirmationEmail(applicationData);
       
       const mailOptions = {
-        from: `"CBM Careers" <${process.env.SMTP_USER}>`,
+        from: `"INSPECTORS Careers" <${process.env.SMTP_USER}>`,
         to: applicationData.email,
-        subject: 'Application Received - CBM Careers',
+        subject: 'Application Received - INSPECTORS Careers',
         html: emailContent
       };
 
@@ -350,14 +350,14 @@ class EmailService {
           <div class="content">
             <p>Dear ${applicationData.firstName} ${applicationData.lastName},</p>
             
-            <p>Thank you for your interest in joining the CBM team! We have successfully received your application for the <strong>${applicationData.position}</strong> position.</p>
+            <p>Thank you for your interest in joining the INSPECTORS team! We have successfully received your application for the <strong>${applicationData.position}</strong> position.</p>
             
             <p>Our talent team will review your application and qualifications against the role requirements. You can expect to hear from us within 5-7 business days.</p>
             
             <p>If you have any questions about your application, please don't hesitate to contact our HR team.</p>
             
             <p>Best regards,<br>
-            The CBM Careers Team</p>
+            The INSPECTORS Careers Team</p>
           </div>
           
           <div class="footer">
@@ -371,3 +371,4 @@ class EmailService {
 }
 
 module.exports = new EmailService();
+

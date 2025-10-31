@@ -1,4 +1,4 @@
-
+﻿
 import { HeroSection } from '@/components/Common/HeroSection';
 import { JobApplicationDialog } from '@/components/Common/JobApplicationDialog';
 import { GeneralApplicationDialog } from '@/components/Common/GeneralApplicationDialog';
@@ -62,12 +62,12 @@ export default function Careers() {
         }}
       /> */}
 
-      {/* Why CBM */} 
+      {/* Why INSPECTORS */} 
       {/* <section className="section">
         <div className="container-responsive">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Why Choose CBM?
+              Why Choose INSPECTORS?
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Join a company where your expertise drives innovation and your work 
@@ -129,7 +129,7 @@ export default function Careers() {
                 Our Culture & Values
               </h2>
               <p className="text-white/90 text-lg mb-8">
-                At CBM, we foster an environment where excellence thrives, 
+                At INSPECTORS, we foster an environment where excellence thrives, 
                 innovation flourishes, and every team member can reach their full potential.
               </p>
               
@@ -348,3 +348,4 @@ export default function Careers() {
     </div>
   );
 }
+

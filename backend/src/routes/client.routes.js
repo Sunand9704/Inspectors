@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const express = require('express');
 const multer = require('multer');
@@ -45,8 +45,8 @@ router.post('/clients/images', upload.single('image'), async (req, res) => {
     
     // Upload to Cloudinary
     const uploadResult = await cloudinaryService.uploadFromBuffer(req.file.buffer, {
-      folder: 'cbm/clients',
-      tags: ['clients', 'cbm'],
+      folder: 'INSPECTORS/clients',
+      tags: ['clients', 'INSPECTORS'],
       transformation: [
         { quality: 'auto:good' },
         { fetch_format: 'auto' }
@@ -62,7 +62,7 @@ router.post('/clients/images', upload.single('image'), async (req, res) => {
       height: uploadResult.height,
       format: uploadResult.format,
       size: uploadResult.size,
-      tags: ['clients', 'cbm'],
+      tags: ['clients', 'INSPECTORS'],
       isActive: true
     });
 
@@ -119,5 +119,6 @@ router.delete('/clients/images/:id', async (req, res) => {
 });
 
 module.exports = router;
+
 
 

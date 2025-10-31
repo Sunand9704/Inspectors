@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 // Bulk backfill for Testing services.
 // Usage:
@@ -13,7 +13,7 @@ require('dotenv').config();
 const Section = require('../models/Section');
 const Page = require('../models/Page');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/INSPECTORS';
 const PAGE_SLUG = 'testing';
 
 // Map human-friendly service names to route slugs used on the frontend
@@ -28,7 +28,7 @@ const NAME_TO_SLUG = {
   'Radiographic Testing (RT)': 'radiographic-testing'
 };
 
-// Already migrated sections – will be skipped
+// Already migrated sections â€“ will be skipped
 const SKIP_SECTION_IDS = new Set(['borescope-inspection', 'drone-inspection']);
 
 function kebabCase(str) {
@@ -62,7 +62,7 @@ async function ensureTestingPage() {
   let page = await Page.findOne({ slug: PAGE_SLUG });
   if (!page) {
     page = await Page.create({ title: 'Testing & Inspection', slug: PAGE_SLUG, language: 'en', isActive: true });
-    console.log(`✅ Created page '${PAGE_SLUG}'`);
+    console.log(`âœ… Created page '${PAGE_SLUG}'`);
   }
   return page;
 }
@@ -70,7 +70,7 @@ async function ensureTestingPage() {
 async function upsertService(service) {
   const sectionId = resolveSectionId(service.service);
   if (SKIP_SECTION_IDS.has(sectionId)) {
-    console.log(`⏭️  Skipping ${service.service} (${sectionId}) – already migrated`);
+    console.log(`â­ï¸  Skipping ${service.service} (${sectionId}) â€“ already migrated`);
     return null;
   }
 
@@ -80,11 +80,11 @@ async function upsertService(service) {
   const update = { title, bodyText, page: PAGE_SLUG, isActive: true };
   if (existing) {
     await Section.updateOne({ _id: existing._id }, { $set: update });
-    console.log(`🔄 Updated ${sectionId}`);
+    console.log(`ðŸ”„ Updated ${sectionId}`);
     return existing._id;
   }
   const created = await Section.create({ ...update, sectionId, language: 'en' });
-  console.log(`✅ Created ${sectionId}`);
+  console.log(`âœ… Created ${sectionId}`);
   return created._id;
 }
 
@@ -95,7 +95,7 @@ async function linkSection(sectionObjectId) {
   if (!already) {
     page.sections = [...(page.sections || []).map((s) => s._id), sectionObjectId];
     await page.save();
-    console.log('🔗 Linked to page');
+    console.log('ðŸ”— Linked to page');
   }
 }
 
@@ -103,18 +103,18 @@ async function main() {
   const inputPathArg = process.argv[2] || path.join(__dirname, 'testing-bulk.json');
   const absolutePath = path.isAbsolute(inputPathArg) ? inputPathArg : path.join(process.cwd(), inputPathArg);
   if (!fs.existsSync(absolutePath)) {
-    console.error(`❌ Data file not found: ${absolutePath}`);
+    console.error(`âŒ Data file not found: ${absolutePath}`);
     process.exit(1);
   }
 
   const raw = fs.readFileSync(absolutePath, 'utf8');
   let data;
-  try { data = JSON.parse(raw); } catch (e) { console.error('❌ Invalid JSON:', e.message); process.exit(1); }
-  if (!Array.isArray(data)) { console.error('❌ Expected an array of services'); process.exit(1); }
+  try { data = JSON.parse(raw); } catch (e) { console.error('âŒ Invalid JSON:', e.message); process.exit(1); }
+  if (!Array.isArray(data)) { console.error('âŒ Expected an array of services'); process.exit(1); }
 
-  console.log('🔌 Connecting to MongoDB...');
+  console.log('ðŸ”Œ Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI);
-  console.log('✅ Connected');
+  console.log('âœ… Connected');
   try {
     await ensureTestingPage();
     for (const svc of data) {
@@ -122,13 +122,13 @@ async function main() {
         const id = await upsertService(svc);
         await linkSection(id);
       } catch (e) {
-        console.error(`❌ Failed for service '${svc.service}':`, e.message);
+        console.error(`âŒ Failed for service '${svc.service}':`, e.message);
       }
     }
-    console.log('🏁 Bulk update completed');
+    console.log('ðŸ Bulk update completed');
   } finally {
     await mongoose.connection.close();
-    console.log('🔌 Disconnected');
+    console.log('ðŸ”Œ Disconnected');
   }
 }
 
@@ -137,5 +137,6 @@ if (require.main === module) {
 }
 
 module.exports = { main };
+
 
 

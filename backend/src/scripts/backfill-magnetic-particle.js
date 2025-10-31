@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -6,7 +6,7 @@ require('dotenv').config();
 const Section = require('../models/Section');
 const Page = require('../models/Page');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/INSPECTORS';
 
 const PAGE_SLUG = 'testing';
 const SECTION_ID = 'magnetic-particle-testing';
@@ -17,10 +17,10 @@ const DATA = {
     {
       heading: 'Magnetic Particle Testing & Fluorescent Magnetic Particle Testing',
       content:
-        'CBM 360 TIV provides Magnetic Particle Testing (MT) and Fluorescent Magnetic Particle Testing (FMPT) solutions to identify surface and near-surface discontinuities in ferromagnetic materials. These methods are widely applied to ensure safety, reliability, and compliance across critical industries.'
+        'INSPECTORS 360 TIV provides Magnetic Particle Testing (MT) and Fluorescent Magnetic Particle Testing (FMPT) solutions to identify surface and near-surface discontinuities in ferromagnetic materials. These methods are widely applied to ensure safety, reliability, and compliance across critical industries.'
     },
     {
-      heading: 'Why Choose MT & FMPT from CBM 360 TIV?',
+      heading: 'Why Choose MT & FMPT from INSPECTORS 360 TIV?',
       content: [
         'Highly effective in detecting cracks, seams, laps, and other discontinuities on or near the surface',
         'Fluorescent MT provides enhanced visibility under UV light for more accurate detection',
@@ -32,16 +32,16 @@ const DATA = {
     {
       heading: 'Expert Magnetic Particle Inspection by Certified Professionals',
       content:
-        'CBM 360 TIV employs Level II and III MT/FMPT certified professionals who deliver accurate flaw detection and precise evaluations. Our experts ensure compliance with ASME, ASTM, and ISO standards while supporting shutdown inspections, routine maintenance, and asset integrity programs.'
+        'INSPECTORS 360 TIV employs Level II and III MT/FMPT certified professionals who deliver accurate flaw detection and precise evaluations. Our experts ensure compliance with ASME, ASTM, and ISO standards while supporting shutdown inspections, routine maintenance, and asset integrity programs.'
     },
     {
       heading: 'Global Experience Across Multiple Industries',
       content: [
-        'Mining and Metal Industries – Structural welds, heavy machinery, and castings',
-        'Oil & Gas (Onshore/Offshore) – Pipelines, pressure vessels, storage tanks, and drilling equipment',
-        'Power Generation – Turbine components, generator shafts, and boiler parts',
-        'Shipbuilding & Marine – Hull structures, deck equipment, and critical welds',
-        'Aerospace & Manufacturing – Landing gear, fasteners, and safety-critical components'
+        'Mining and Metal Industries â€“ Structural welds, heavy machinery, and castings',
+        'Oil & Gas (Onshore/Offshore) â€“ Pipelines, pressure vessels, storage tanks, and drilling equipment',
+        'Power Generation â€“ Turbine components, generator shafts, and boiler parts',
+        'Shipbuilding & Marine â€“ Hull structures, deck equipment, and critical welds',
+        'Aerospace & Manufacturing â€“ Landing gear, fasteners, and safety-critical components'
       ]
     },
     {
@@ -58,17 +58,17 @@ const DATA = {
     {
       heading: 'Standards & Certification',
       content: [
-        'ASME BPVC Section V, Article 7 – MT procedures',
-        'ASTM E1444 / ASTM E709 – Standard practices for Magnetic Particle Testing',
-        'EN ISO 9934 series – Non-destructive testing – Magnetic Particle Testing',
-        'ISO 3059 – Non-destructive testing – MT – Viewing conditions',
-        'EN ISO 9712 / ASNT SNT-TC-1A / NAS 410 – Personnel qualification & certification'
+        'ASME BPVC Section V, Article 7 â€“ MT procedures',
+        'ASTM E1444 / ASTM E709 â€“ Standard practices for Magnetic Particle Testing',
+        'EN ISO 9934 series â€“ Non-destructive testing â€“ Magnetic Particle Testing',
+        'ISO 3059 â€“ Non-destructive testing â€“ MT â€“ Viewing conditions',
+        'EN ISO 9712 / ASNT SNT-TC-1A / NAS 410 â€“ Personnel qualification & certification'
       ]
     },
     {
       heading: 'Ready to Detect Surface and Sub-Surface Defects?',
       content:
-        'CBM 360 TIV\'s MT and FMPT solutions ensure accurate detection of surface and near-surface flaws, safeguarding your components and systems against critical failures. Contact us today to plan your magnetic testing inspection campaign.'
+        'INSPECTORS 360 TIV\'s MT and FMPT solutions ensure accurate detection of surface and near-surface flaws, safeguarding your components and systems against critical failures. Contact us today to plan your magnetic testing inspection campaign.'
     }
   ]
 };
@@ -124,19 +124,19 @@ async function linkSectionToPage(sectionId) {
 }
 
 async function main() {
-  console.log('🔌 Connecting to MongoDB...');
+  console.log('ðŸ”Œ Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI);
-  console.log('✅ Connected');
+  console.log('âœ… Connected');
   try {
     const sectionId = await upsertSection();
     await linkSectionToPage(sectionId);
-    console.log('✅ Magnetic Particle Testing section upserted');
+    console.log('âœ… Magnetic Particle Testing section upserted');
   } catch (e) {
-    console.error('❌ Error:', e.message);
+    console.error('âŒ Error:', e.message);
     process.exitCode = 1;
   } finally {
     await mongoose.connection.close();
-    console.log('🔌 Disconnected');
+    console.log('ðŸ”Œ Disconnected');
   }
 }
 
@@ -145,3 +145,4 @@ if (require.main === module) {
 }
 
 module.exports = { main };
+

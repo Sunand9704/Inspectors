@@ -1,6 +1,6 @@
-# Career Translation System
+﻿# Career Translation System
 
-This guide explains how to use the career translation system for CBM.
+This guide explains how to use the career translation system for INSPECTORS.
 
 ## Overview
 
@@ -29,17 +29,17 @@ Each career document includes a `translations` Map that stores translated versio
 ```javascript
 {
   "fr": {
-    "title": "Ingénieur de Test Senior - Automobile",
+    "title": "IngÃ©nieur de Test Senior - Automobile",
     "description": "Diriger des projets de test automobile...",
-    "department": "Ingénierie",
-    "location": "Détroit, MI",
+    "department": "IngÃ©nierie",
+    "location": "DÃ©troit, MI",
     "responsibilities": ["Diriger des projets...", "Collaborer avec..."],
-    "requirements": ["Diplôme en ingénierie...", "5+ années d'expérience..."],
-    "benefits": ["Assurance santé complète...", "Plan de retraite 401k..."],
-    "tags": ["automobile", "test", "sécurité", "ingénierie"]
+    "requirements": ["DiplÃ´me en ingÃ©nierie...", "5+ annÃ©es d'expÃ©rience..."],
+    "benefits": ["Assurance santÃ© complÃ¨te...", "Plan de retraite 401k..."],
+    "tags": ["automobile", "test", "sÃ©curitÃ©", "ingÃ©nierie"]
   },
   "pt": {
-    "title": "Engenheiro de Testes Sênior - Automotivo",
+    "title": "Engenheiro de Testes SÃªnior - Automotivo",
     // ... Portuguese translations
   },
   "es": {
@@ -47,7 +47,7 @@ Each career document includes a `translations` Map that stores translated versio
     // ... Spanish translations
   },
   "ru": {
-    "title": "Старший инженер по тестированию - Автомобильная промышленность",
+    "title": "Ð¡Ñ‚Ð°Ñ€ÑˆÐ¸Ð¹ Ð¸Ð½Ð¶ÐµÐ½ÐµÑ€ Ð¿Ð¾ Ñ‚ÐµÑÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸ÑŽ - ÐÐ²Ñ‚Ð¾Ð¼Ð¾Ð±Ð¸Ð»ÑŒÐ½Ð°Ñ Ð¿Ñ€Ð¾Ð¼Ñ‹ÑˆÐ»ÐµÐ½Ð½Ð¾ÑÑ‚ÑŒ",
     // ... Russian translations
   }
 }
@@ -186,3 +186,4 @@ For debugging, you can modify the script to add more verbose logging or test wit
 - `models/Career.js` - Updated Career model with translation support
 - `services/translation.js` - Core translation service
 - `TRANSLATION_SETUP.md` - Google Cloud setup guide
+
