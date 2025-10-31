@@ -1,4 +1,4 @@
-const cloudinary = require('cloudinary').v2;
+﻿const cloudinary = require('cloudinary').v2;
 const { logger } = require('../setup/logger');
 require('dotenv').config();
 
@@ -20,7 +20,7 @@ class CloudinaryService {
    */
   async uploadImage(filePath, serviceType, subService, imageName = null) {
     try {
-      const folderPath = `cbm/${serviceType}/${subService}`;
+      const folderPath = `INSPECTORS/${serviceType}/${subService}`;
       const publicId = imageName ? `${folderPath}/${imageName}` : undefined;
       
       const result = await cloudinary.uploader.upload(filePath, {
@@ -31,7 +31,7 @@ class CloudinaryService {
           { quality: 'auto:good' },
           { fetch_format: 'auto' }
         ],
-        tags: [serviceType, subService, 'cbm']
+        tags: [serviceType, subService, 'INSPECTORS']
       });
 
       logger.info(`Image uploaded successfully: ${result.secure_url}`);
@@ -63,14 +63,14 @@ class CloudinaryService {
       const result = await cloudinary.uploader.upload(
         `data:image/jpeg;base64,${buffer.toString('base64')}`,
         {
-          folder: options.folder || 'cbm/contact-offices',
+          folder: options.folder || 'INSPECTORS/contact-offices',
           public_id: options.public_id,
           resource_type: 'auto',
           transformation: options.transformation || [
             { quality: 'auto:good' },
             { fetch_format: 'auto' }
           ],
-          tags: options.tags || ['contact-offices', 'cbm']
+          tags: options.tags || ['contact-offices', 'INSPECTORS']
         }
       );
 
@@ -145,7 +145,7 @@ class CloudinaryService {
   async getImagesFromFolder(serviceType, subService, maxResults = 50) {
     try {
       // Use the correct path with the duplicate structure
-      const folderPath = `cbm/${serviceType}/${subService}/cbm/${serviceType}/${subService}`;
+      const folderPath = `INSPECTORS/${serviceType}/${subService}/INSPECTORS/${serviceType}/${subService}`;
       
       const result = await cloudinary.api.resources({
         type: 'upload',
@@ -204,3 +204,4 @@ class CloudinaryService {
 }
 
 module.exports = new CloudinaryService();
+

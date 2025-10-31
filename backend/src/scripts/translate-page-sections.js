@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Production Translation Script for Page Sections
  * 
  * This script translates English sections to 4 languages (fr, pt, es, ru)
@@ -26,10 +26,10 @@ const TARGET_LANGUAGES = ['fr', 'pt', 'es', 'ru'];
 // Database connection
 async function connectDB() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://cbm360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster');
-    console.log('✅ Connected to MongoDB');
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://INSPECTORS360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster');
+    console.log('âœ… Connected to MongoDB');
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error.message);
+    console.error('âŒ MongoDB connection error:', error.message);
     process.exit(1);
   }
 }
@@ -43,24 +43,24 @@ function initializeTranslationClient() {
     
     if (process.env.GOOGLE_CLOUD_API_KEY) {
       config.key = process.env.GOOGLE_CLOUD_API_KEY;
-      console.log('✅ Using Google Cloud API Key for authentication');
+      console.log('âœ… Using Google Cloud API Key for authentication');
     } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
       config.keyFilename = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-      console.log('✅ Using Google Cloud service account key file');
+      console.log('âœ… Using Google Cloud service account key file');
     } else if (process.env.GOOGLE_CLOUD_PRIVATE_KEY) {
       config.credentials = {
         private_key: process.env.GOOGLE_CLOUD_PRIVATE_KEY,
         client_email: process.env.GOOGLE_CLOUD_CLIENT_EMAIL,
         client_id: process.env.GOOGLE_CLOUD_CLIENT_ID,
       };
-      console.log('✅ Using Google Cloud service account credentials');
+      console.log('âœ… Using Google Cloud service account credentials');
     } else {
       throw new Error('No Google Cloud credentials found');
     }
     
     return new Translate(config);
   } catch (error) {
-    console.error('❌ Error initializing Google Cloud Translation:', error.message);
+    console.error('âŒ Error initializing Google Cloud Translation:', error.message);
     process.exit(1);
   }
 }
@@ -72,7 +72,7 @@ function initializeTranslationClient() {
  */
 async function fetchEnglishSections(pageSlug) {
   try {
-    console.log(`\n📋 Fetching English sections for page: ${pageSlug}`);
+    console.log(`\nðŸ“‹ Fetching English sections for page: ${pageSlug}`);
     
     const sections = await Section.find({
       page: pageSlug,
@@ -80,10 +80,10 @@ async function fetchEnglishSections(pageSlug) {
       isActive: true
     }).sort({ pageNumber: 1, sectionId: 1 });
     
-    console.log(`✅ Found ${sections.length} English sections`);
+    console.log(`âœ… Found ${sections.length} English sections`);
     
     if (sections.length === 0) {
-      console.log('⚠️  No English sections found for this page');
+      console.log('âš ï¸  No English sections found for this page');
       return [];
     }
     
@@ -94,7 +94,7 @@ async function fetchEnglishSections(pageSlug) {
     
     return sections;
   } catch (error) {
-    console.error('❌ Error fetching sections:', error.message);
+    console.error('âŒ Error fetching sections:', error.message);
     throw error;
   }
 }
@@ -114,7 +114,7 @@ async function translateText(translateClient, text, targetLanguage, sourceLangua
     });
     return translation;
   } catch (error) {
-    console.error(`❌ Translation error (${sourceLanguage} → ${targetLanguage}):`, error.message);
+    console.error(`âŒ Translation error (${sourceLanguage} â†’ ${targetLanguage}):`, error.message);
     throw error;
   }
 }
@@ -127,13 +127,13 @@ async function translateText(translateClient, text, targetLanguage, sourceLangua
  */
 async function translateSection(section, translateClient) {
   try {
-    console.log(`\n🔄 Translating section: "${section.title}"`);
+    console.log(`\nðŸ”„ Translating section: "${section.title}"`);
     
     const translations = {};
     
     // Translate to each target language
     for (const lang of TARGET_LANGUAGES) {
-      console.log(`   📝 Translating to ${lang.toUpperCase()}...`);
+      console.log(`   ðŸ“ Translating to ${lang.toUpperCase()}...`);
       
       try {
         // Translate title and bodyText
@@ -147,13 +147,13 @@ async function translateSection(section, translateClient) {
           bodyText: translatedBodyText
         };
         
-        console.log(`   ✅ ${lang.toUpperCase()}: "${translatedTitle}"`);
+        console.log(`   âœ… ${lang.toUpperCase()}: "${translatedTitle}"`);
         
         // Add delay to avoid rate limiting
         await new Promise(resolve => setTimeout(resolve, 500));
         
       } catch (error) {
-        console.error(`   ❌ Failed to translate to ${lang}:`, error.message);
+        console.error(`   âŒ Failed to translate to ${lang}:`, error.message);
         // Continue with other languages
       }
     }
@@ -161,11 +161,11 @@ async function translateSection(section, translateClient) {
     // Update the section with translations
     section.translations = translations;
     
-    console.log(`✅ Completed translations for section: "${section.title}"`);
+    console.log(`âœ… Completed translations for section: "${section.title}"`);
     return section;
     
   } catch (error) {
-    console.error('❌ Error translating section:', error.message);
+    console.error('âŒ Error translating section:', error.message);
     throw error;
   }
 }
@@ -186,11 +186,11 @@ async function saveTranslatedSection(section) {
       { new: true }
     );
     
-    console.log(`💾 Saved translations for section: "${section.title}"`);
+    console.log(`ðŸ’¾ Saved translations for section: "${section.title}"`);
     return updatedSection;
     
   } catch (error) {
-    console.error('❌ Error saving section:', error.message);
+    console.error('âŒ Error saving section:', error.message);
     throw error;
   }
 }
@@ -200,7 +200,7 @@ async function saveTranslatedSection(section) {
  * @param {string} pageSlug - Page slug to translate
  */
 async function translatePageSections(pageSlug) {
-  console.log(`\n🚀 Starting translation for page: ${pageSlug}`);
+  console.log(`\nðŸš€ Starting translation for page: ${pageSlug}`);
   console.log('==========================================');
   
   try {
@@ -211,7 +211,7 @@ async function translatePageSections(pageSlug) {
     const sections = await fetchEnglishSections(pageSlug);
     
     if (sections.length === 0) {
-      console.log('⚠️  No sections to translate');
+      console.log('âš ï¸  No sections to translate');
       return;
     }
     
@@ -221,7 +221,7 @@ async function translatePageSections(pageSlug) {
     
     for (let i = 0; i < sections.length; i++) {
       const section = sections[i];
-      console.log(`\n📋 Processing section ${i + 1}/${sections.length}: ${section.title}`);
+      console.log(`\nðŸ“‹ Processing section ${i + 1}/${sections.length}: ${section.title}`);
       
       try {
         // Translate the section
@@ -234,31 +234,31 @@ async function translatePageSections(pageSlug) {
         
         // Add delay between sections to avoid rate limiting
         if (i < sections.length - 1) {
-          console.log('⏳ Waiting 2 seconds before next section...');
+          console.log('â³ Waiting 2 seconds before next section...');
           await new Promise(resolve => setTimeout(resolve, 2000));
         }
         
       } catch (error) {
-        console.error(`❌ Failed to process section "${section.title}":`, error.message);
+        console.error(`âŒ Failed to process section "${section.title}":`, error.message);
         errorCount++;
         // Continue with other sections
       }
     }
     
     // Display summary
-    console.log('\n📊 Translation Summary');
+    console.log('\nðŸ“Š Translation Summary');
     console.log('======================');
-    console.log(`✅ Successfully translated: ${successCount} sections`);
-    console.log(`❌ Failed translations: ${errorCount} sections`);
-    console.log(`📄 Total sections processed: ${sections.length}`);
+    console.log(`âœ… Successfully translated: ${successCount} sections`);
+    console.log(`âŒ Failed translations: ${errorCount} sections`);
+    console.log(`ðŸ“„ Total sections processed: ${sections.length}`);
     
     if (successCount > 0) {
-      console.log('\n🎉 Translation completed successfully!');
-      console.log('💡 Translations are now available in the database');
+      console.log('\nðŸŽ‰ Translation completed successfully!');
+      console.log('ðŸ’¡ Translations are now available in the database');
     }
     
   } catch (error) {
-    console.error('\n❌ Translation process failed:', error.message);
+    console.error('\nâŒ Translation process failed:', error.message);
     throw error;
   }
 }
@@ -267,7 +267,7 @@ async function translatePageSections(pageSlug) {
  * List available pages for translation
  */
 async function listAvailablePages() {
-  console.log('\n📋 Available Pages for Translation');
+  console.log('\nðŸ“‹ Available Pages for Translation');
   console.log('==================================');
   
   try {
@@ -277,7 +277,7 @@ async function listAvailablePages() {
     }).select('title slug sectionsCount').sort({ title: 1 });
     
     if (pages.length === 0) {
-      console.log('⚠️  No English pages found');
+      console.log('âš ï¸  No English pages found');
       return;
     }
     
@@ -285,10 +285,10 @@ async function listAvailablePages() {
       console.log(`  ${index + 1}. ${page.title} (${page.slug}) - ${page.sectionsCount} sections`);
     });
     
-    console.log(`\n✅ Found ${pages.length} pages available for translation`);
+    console.log(`\nâœ… Found ${pages.length} pages available for translation`);
     
   } catch (error) {
-    console.error('❌ Error listing pages:', error.message);
+    console.error('âŒ Error listing pages:', error.message);
     throw error;
   }
 }
@@ -298,7 +298,7 @@ async function listAvailablePages() {
  * @param {string} pageSlug - Page slug to check
  */
 async function checkTranslationStatus(pageSlug) {
-  console.log(`\n🔍 Translation Status for Page: ${pageSlug}`);
+  console.log(`\nðŸ” Translation Status for Page: ${pageSlug}`);
   console.log('==========================================');
   
   try {
@@ -309,11 +309,11 @@ async function checkTranslationStatus(pageSlug) {
     }).sort({ pageNumber: 1 });
     
     if (sections.length === 0) {
-      console.log('⚠️  No English sections found for this page');
+      console.log('âš ï¸  No English sections found for this page');
       return;
     }
     
-    console.log(`\n📊 Translation Status:`);
+    console.log(`\nðŸ“Š Translation Status:`);
     console.log(`Total sections: ${sections.length}`);
     
     const statusCounts = {
@@ -328,26 +328,26 @@ async function checkTranslationStatus(pageSlug) {
       
       let status;
       if (translationCount === expectedCount) {
-        status = '✅ Fully translated';
+        status = 'âœ… Fully translated';
         statusCounts.fullyTranslated++;
       } else if (translationCount > 0) {
-        status = '⚠️  Partially translated';
+        status = 'âš ï¸  Partially translated';
         statusCounts.partiallyTranslated++;
       } else {
-        status = '❌ Not translated';
+        status = 'âŒ Not translated';
         statusCounts.notTranslated++;
       }
       
       console.log(`  ${index + 1}. ${section.title} - ${status} (${translationCount}/${expectedCount})`);
     });
     
-    console.log(`\n📈 Summary:`);
-    console.log(`  ✅ Fully translated: ${statusCounts.fullyTranslated}`);
-    console.log(`  ⚠️  Partially translated: ${statusCounts.partiallyTranslated}`);
-    console.log(`  ❌ Not translated: ${statusCounts.notTranslated}`);
+    console.log(`\nðŸ“ˆ Summary:`);
+    console.log(`  âœ… Fully translated: ${statusCounts.fullyTranslated}`);
+    console.log(`  âš ï¸  Partially translated: ${statusCounts.partiallyTranslated}`);
+    console.log(`  âŒ Not translated: ${statusCounts.notTranslated}`);
     
   } catch (error) {
-    console.error('❌ Error checking translation status:', error.message);
+    console.error('âŒ Error checking translation status:', error.message);
     throw error;
   }
 }
@@ -365,7 +365,7 @@ async function main() {
       case 'translate':
         const pageSlug = args[1];
         if (!pageSlug) {
-          console.error('❌ Please provide page slug. Usage: node translate-page-sections.js translate <page-slug>');
+          console.error('âŒ Please provide page slug. Usage: node translate-page-sections.js translate <page-slug>');
           process.exit(1);
         }
         await translatePageSections(pageSlug);
@@ -378,14 +378,14 @@ async function main() {
       case 'status':
         const statusPageSlug = args[1];
         if (!statusPageSlug) {
-          console.error('❌ Please provide page slug. Usage: node translate-page-sections.js status <page-slug>');
+          console.error('âŒ Please provide page slug. Usage: node translate-page-sections.js status <page-slug>');
           process.exit(1);
         }
         await checkTranslationStatus(statusPageSlug);
         break;
         
       default:
-        console.log('🚀 Page Section Translation Script');
+        console.log('ðŸš€ Page Section Translation Script');
         console.log('==================================');
         console.log('\nUsage:');
         console.log('  node translate-page-sections.js translate <page-slug>  # Translate sections for a page');
@@ -401,12 +401,12 @@ async function main() {
     }
     
   } catch (error) {
-    console.error('\n❌ Script failed:', error.message);
+    console.error('\nâŒ Script failed:', error.message);
     process.exit(1);
   } finally {
     // Close database connection
     await mongoose.connection.close();
-    console.log('\n🔌 Database connection closed');
+    console.log('\nðŸ”Œ Database connection closed');
   }
 }
 
@@ -423,3 +423,4 @@ module.exports = {
   translateSection,
   saveTranslatedSection
 };
+

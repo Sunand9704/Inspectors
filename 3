@@ -1,4 +1,4 @@
-[1mdiff --git a/backend/src/routes/client.routes.js b/backend/src/routes/client.routes.js[m
+﻿[1mdiff --git a/backend/src/routes/client.routes.js b/backend/src/routes/client.routes.js[m
 [1mnew file mode 100644[m
 [1mindex 0000000..cb5407f[m
 [1m--- /dev/null[m
@@ -51,8 +51,8 @@
 [32m+[m[41m    [m
 [32m+[m[32m    // Upload to Cloudinary[m
 [32m+[m[32m    const uploadResult = await cloudinaryService.uploadFromBuffer(req.file.buffer, {[m
-[32m+[m[32m      folder: 'cbm/clients',[m
-[32m+[m[32m      tags: ['clients', 'cbm'],[m
+[32m+[m[32m      folder: 'INSPECTORS/clients',[m
+[32m+[m[32m      tags: ['clients', 'INSPECTORS'],[m
 [32m+[m[32m      transformation: [[m
 [32m+[m[32m        { quality: 'auto:good' },[m
 [32m+[m[32m        { fetch_format: 'auto' }[m
@@ -68,7 +68,7 @@
 [32m+[m[32m      height: uploadResult.height,[m
 [32m+[m[32m      format: uploadResult.format,[m
 [32m+[m[32m      size: uploadResult.size,[m
-[32m+[m[32m      tags: ['clients', 'cbm'],[m
+[32m+[m[32m      tags: ['clients', 'INSPECTORS'],[m
 [32m+[m[32m      isActive: true[m
 [32m+[m[32m    });[m
 [32m+[m
@@ -127,3 +127,4 @@
 [32m+[m[32mmodule.exports = router;[m
 [32m+[m
 [32m+[m
+

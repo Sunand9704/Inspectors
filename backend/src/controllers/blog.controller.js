@@ -1,4 +1,4 @@
-const Blog = require('../models/Blog');
+﻿const Blog = require('../models/Blog');
 const cloudinaryService = require('../services/cloudinary');
 
 // Get all published blogs with pagination and filtering
@@ -283,12 +283,12 @@ const createBlog = async (req, res) => {
         const publicId = `blog-${timestamp}`;
         
         const uploadResult = await cloudinaryService.uploadFromBuffer(req.file.buffer, {
-          folder: 'cbm/blog/featured-images',
+          folder: 'INSPECTORS/blog/featured-images',
           public_id: publicId,
           transformation: [
             { width: 800, height: 600, crop: 'fit', quality: 'auto' }
           ],
-          tags: ['blog', 'featured-image', 'cbm']
+          tags: ['blog', 'featured-image', 'INSPECTORS']
         });
         
         blogData.featuredImage = uploadResult.url;
@@ -372,12 +372,12 @@ const updateBlog = async (req, res) => {
         const publicId = `blog-${timestamp}`;
         
         const uploadResult = await cloudinaryService.uploadFromBuffer(req.file.buffer, {
-          folder: 'cbm/blog/featured-images',
+          folder: 'INSPECTORS/blog/featured-images',
           public_id: publicId,
           transformation: [
             { width: 800, height: 600, crop: 'fit', quality: 'auto' }
           ],
-          tags: ['blog', 'featured-image', 'cbm']
+          tags: ['blog', 'featured-image', 'INSPECTORS']
         });
         
         updateData.featuredImage = uploadResult.url;

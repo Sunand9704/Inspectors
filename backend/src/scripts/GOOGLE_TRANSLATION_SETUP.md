@@ -1,6 +1,6 @@
-# Google Cloud Translation Setup Guide
+﻿# Google Cloud Translation Setup Guide
 
-This guide will help you set up Google Cloud Translation API for the CBM translation script.
+This guide will help you set up Google Cloud Translation API for the INSPECTORS translation script.
 
 ## Prerequisites
 
@@ -20,7 +20,7 @@ This guide will help you set up Google Cloud Translation API for the CBM transla
 
 1. Go to "IAM & Admin" > "Service Accounts"
 2. Click "Create Service Account"
-3. Enter a name (e.g., "cbm-translation-service")
+3. Enter a name (e.g., "INSPECTORS-translation-service")
 4. Add a description (optional)
 5. Click "Create and Continue"
 6. Grant the following roles:
@@ -166,6 +166,7 @@ Google Cloud Translation API pricing (as of 2024):
 - [Google Cloud Translation Documentation](https://cloud.google.com/translate/docs)
 - [Google Cloud Console](https://console.cloud.google.com/)
 - [Service Account Documentation](https://cloud.google.com/iam/docs/service-accounts)
+
 
 
 

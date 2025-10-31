@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -6,7 +6,7 @@ require('dotenv').config();
 const Section = require('../models/Section');
 const Page = require('../models/Page');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/INSPECTORS';
 
 const PAGE_SLUG = 'testing';
 const SECTION_ID = 'hardness-testing';
@@ -17,10 +17,10 @@ const DATA = {
     {
       heading: 'Hardness Testing Services',
       content:
-        'CBM 360 TIV provides advanced Hardness Testing services to evaluate the mechanical strength and durability of materials and components. Our testing solutions ensure compliance with global standards and help prevent failures by verifying that materials meet required hardness specifications.'
+        'INSPECTORS 360 TIV provides advanced Hardness Testing services to evaluate the mechanical strength and durability of materials and components. Our testing solutions ensure compliance with global standards and help prevent failures by verifying that materials meet required hardness specifications.'
     },
     {
-      heading: 'Why Choose Hardness Testing from CBM 360 TIV?',
+      heading: 'Why Choose Hardness Testing from INSPECTORS 360 TIV?',
       content: [
         'Accurate and repeatable measurement of material hardness',
         'Wide range of portable and laboratory-based testing methods',
@@ -32,41 +32,41 @@ const DATA = {
     {
       heading: 'Global Support Across All Industries',
       content: [
-        'Oil & Gas – Testing pipelines, pressure vessels, and drilling equipment',
-        'Mining & Metals – Ensuring hardness consistency in castings and structural parts',
-        'Power Generation – Turbines, shafts, and boiler components',
-        'Aerospace & Automotive – Heat-treated alloys, gears, and fasteners',
-        'Manufacturing – Welds, forgings, and fabricated parts'
+        'Oil & Gas â€“ Testing pipelines, pressure vessels, and drilling equipment',
+        'Mining & Metals â€“ Ensuring hardness consistency in castings and structural parts',
+        'Power Generation â€“ Turbines, shafts, and boiler components',
+        'Aerospace & Automotive â€“ Heat-treated alloys, gears, and fasteners',
+        'Manufacturing â€“ Welds, forgings, and fabricated parts'
       ]
     },
     {
       heading: 'Our Hardness Testing Services Include:',
       content: [
-        'Brinell Hardness Testing (BHN) – Suitable for coarse or uneven surfaces',
-        'Rockwell Hardness Testing (HRB/HRC) – Quick and widely used for metals',
-        'Vickers Hardness Testing (VHN) – High precision for thin materials and coatings',
-        'Portable Hardness Testing – On-site measurements for large components and assets'
+        'Brinell Hardness Testing (BHN) â€“ Suitable for coarse or uneven surfaces',
+        'Rockwell Hardness Testing (HRB/HRC) â€“ Quick and widely used for metals',
+        'Vickers Hardness Testing (VHN) â€“ High precision for thin materials and coatings',
+        'Portable Hardness Testing â€“ On-site measurements for large components and assets'
       ]
     },
     {
       heading: 'Expert Hardness Testing by Certified Professionals',
       content:
-        'CBM 360 TIV employs certified inspectors trained in multiple hardness testing techniques. Our team ensures compliance with ASME, ASTM, and ISO standards, delivering reliable results to support your operational needs.'
+        'INSPECTORS 360 TIV employs certified inspectors trained in multiple hardness testing techniques. Our team ensures compliance with ASME, ASTM, and ISO standards, delivering reliable results to support your operational needs.'
     },
     {
       heading: 'Standards & Certification',
       content: [
-        'ASTM E10 – Standard Test Method for Brinell Hardness',
-        'ASTM E18 – Standard Test Method for Rockwell Hardness',
-        'ASTM E92 – Standard Test Method for Vickers Hardness',
-        'ISO 6506 / 6507 / 6508 – International standards for hardness testing',
-        'ASME Section V – Nondestructive Examination requirements'
+        'ASTM E10 â€“ Standard Test Method for Brinell Hardness',
+        'ASTM E18 â€“ Standard Test Method for Rockwell Hardness',
+        'ASTM E92 â€“ Standard Test Method for Vickers Hardness',
+        'ISO 6506 / 6507 / 6508 â€“ International standards for hardness testing',
+        'ASME Section V â€“ Nondestructive Examination requirements'
       ]
     },
     {
       heading: 'Ready to Ensure Material Reliability?',
       content:
-        'Trust CBM 360 TIV\'s Hardness Testing services to validate the durability and performance of your critical assets. Contact us today to schedule your inspection and ensure compliance with global standards.'
+        'Trust INSPECTORS 360 TIV\'s Hardness Testing services to validate the durability and performance of your critical assets. Contact us today to schedule your inspection and ensure compliance with global standards.'
     }
   ]
 };
@@ -122,19 +122,19 @@ async function linkSectionToPage(sectionId) {
 }
 
 async function main() {
-  console.log('🔌 Connecting to MongoDB...');
+  console.log('ðŸ”Œ Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI);
-  console.log('✅ Connected');
+  console.log('âœ… Connected');
   try {
     const sectionId = await upsertSection();
     await linkSectionToPage(sectionId);
-    console.log('✅ Hardness Testing Services section upserted');
+    console.log('âœ… Hardness Testing Services section upserted');
   } catch (e) {
-    console.error('❌ Error:', e.message);
+    console.error('âŒ Error:', e.message);
     process.exitCode = 1;
   } finally {
     await mongoose.connection.close();
-    console.log('🔌 Disconnected');
+    console.log('ðŸ”Œ Disconnected');
   }
 }
 
@@ -143,3 +143,4 @@ if (require.main === module) {
 }
 
 module.exports = { main };
+

@@ -1,4 +1,4 @@
-const express = require('express');
+﻿const express = require('express');
 const router = express.Router();
 const imageController = require('../controllers/image.controller');
 const { getUploadMiddleware } = require('../middlewares/upload');
@@ -43,13 +43,13 @@ router.post('/auditing/:subService/upload',
 
 router.get('/auditing/:subService/images', imageController.getImages);
 
-// CBM Service Routes (placeholder)
-router.post('/cbm/:subService/upload',
-  (req, res, next) => applyUploadMiddleware('cbm', req.params.subService)(req, res, next),
+// INSPECTORS Service Routes (placeholder)
+router.post('/INSPECTORS/:subService/upload',
+  (req, res, next) => applyUploadMiddleware('INSPECTORS', req.params.subService)(req, res, next),
   imageController.uploadImages
 );
 
-router.get('/cbm/:subService/images', imageController.getImages);
+router.get('/INSPECTORS/:subService/images', imageController.getImages);
 
 // Verification & Certification Service Routes (placeholder)
 router.post('/verification-certification/:subService/upload',
@@ -90,3 +90,4 @@ router.get('/health', (req, res) => {
 });
 
 module.exports = router;
+

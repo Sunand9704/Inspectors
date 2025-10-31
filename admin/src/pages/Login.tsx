@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+﻿import { FormEvent, useState } from 'react';
 import { requestOtp, verifyOtp } from '@/services/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -51,7 +51,7 @@ export default function Login() {
 
   return (
     <div style={{ maxWidth: 420, margin: '80px auto', padding: 24, border: '1px solid #e5e7eb', borderRadius: 8 }}>
-      <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 16 }}>CBM Admin Login</h1>
+      <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 16 }}>INSPECTORS Admin Login</h1>
       {message && <div style={{ marginBottom: 12, color: '#111827' }}>{message}</div>}
       {step === 'request' ? (
         <form onSubmit={handleRequest}>
@@ -80,4 +80,5 @@ export default function Login() {
     </div>
   );
 }
+
 

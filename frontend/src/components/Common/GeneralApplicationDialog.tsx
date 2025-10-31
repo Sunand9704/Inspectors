@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -318,7 +318,7 @@ export function GeneralApplicationDialog({ children }: GeneralApplicationDialogP
             <Label htmlFor="coverLetter">Cover Letter *</Label>
             <Textarea
               id="coverLetter"
-              placeholder="Tell us about your background, skills, and why you're interested in joining CBM..."
+              placeholder="Tell us about your background, skills, and why you're interested in joining INSPECTORS..."
               value={formData.coverLetter}
               onChange={(e) => handleInputChange('coverLetter', e.target.value)}
               rows={6}
@@ -359,6 +359,7 @@ export function GeneralApplicationDialog({ children }: GeneralApplicationDialogP
     </Dialog>
   );
 }
+
 
 
 

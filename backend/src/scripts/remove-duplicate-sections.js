@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+﻿const mongoose = require('mongoose');
 require('dotenv').config();
 
 // Import models
 const Section = require('./src/models/Section');
 
 // Configure MongoDB connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/INSPECTORS';
 
 /**
  * Find duplicate sections by sectionId
@@ -13,7 +13,7 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
  */
 async function findDuplicateSections() {
   try {
-    console.log('🔍 Finding duplicate sections...\n');
+    console.log('ðŸ” Finding duplicate sections...\n');
     
     // Aggregate to find duplicates
     const duplicates = await Section.aggregate([
@@ -35,11 +35,11 @@ async function findDuplicateSections() {
     ]);
 
     if (duplicates.length === 0) {
-      console.log('✅ No duplicate sections found!');
+      console.log('âœ… No duplicate sections found!');
       return {};
     }
 
-    console.log(`❌ Found ${duplicates.length} section IDs with duplicates:\n`);
+    console.log(`âŒ Found ${duplicates.length} section IDs with duplicates:\n`);
     
     const duplicateGroups = {};
     
@@ -50,7 +50,7 @@ async function findDuplicateSections() {
       
       duplicateGroups[sectionId] = sections;
       
-      console.log(`📁 ${sectionId}: ${count} duplicates`);
+      console.log(`ðŸ“ ${sectionId}: ${count} duplicates`);
       sections.forEach((section, index) => {
         console.log(`   ${index + 1}. ID: ${section._id}`);
         console.log(`      Title: ${section.title}`);
@@ -65,7 +65,7 @@ async function findDuplicateSections() {
     return duplicateGroups;
 
   } catch (error) {
-    console.error('❌ Error finding duplicates:', error.message);
+    console.error('âŒ Error finding duplicates:', error.message);
     throw error;
   }
 }
@@ -77,13 +77,13 @@ async function findDuplicateSections() {
  */
 async function removeDuplicateSections(duplicateGroups) {
   try {
-    console.log('🧹 Removing duplicate sections...\n');
+    console.log('ðŸ§¹ Removing duplicate sections...\n');
     
     let totalRemoved = 0;
     let totalGroups = Object.keys(duplicateGroups).length;
     
     for (const [sectionId, sections] of Object.entries(duplicateGroups)) {
-      console.log(`🔄 Processing duplicates for: ${sectionId}`);
+      console.log(`ðŸ”„ Processing duplicates for: ${sectionId}`);
       
       // Sort by creation date, keep the most recent
       const sortedSections = sections.sort((a, b) => 
@@ -93,17 +93,17 @@ async function removeDuplicateSections(duplicateGroups) {
       const sectionToKeep = sortedSections[0];
       const sectionsToRemove = sortedSections.slice(1);
       
-      console.log(`   ✅ Keeping: ${sectionToKeep._id} (created: ${sectionToKeep.createdAt})`);
-      console.log(`   🗑️  Removing: ${sectionsToRemove.length} duplicates`);
+      console.log(`   âœ… Keeping: ${sectionToKeep._id} (created: ${sectionToKeep.createdAt})`);
+      console.log(`   ðŸ—‘ï¸  Removing: ${sectionsToRemove.length} duplicates`);
       
       // Remove duplicate sections
       for (const section of sectionsToRemove) {
         try {
           await Section.deleteOne({ _id: section._id });
-          console.log(`      ❌ Removed: ${section._id}`);
+          console.log(`      âŒ Removed: ${section._id}`);
           totalRemoved++;
         } catch (error) {
-          console.error(`      ❌ Error removing ${section._id}:`, error.message);
+          console.error(`      âŒ Error removing ${section._id}:`, error.message);
         }
       }
       
@@ -117,7 +117,7 @@ async function removeDuplicateSections(duplicateGroups) {
     };
 
   } catch (error) {
-    console.error('❌ Error removing duplicates:', error.message);
+    console.error('âŒ Error removing duplicates:', error.message);
     throw error;
   }
 }
@@ -127,7 +127,7 @@ async function removeDuplicateSections(duplicateGroups) {
  */
 async function showSectionCounts() {
   try {
-    console.log('📊 Current section counts by page:\n');
+    console.log('ðŸ“Š Current section counts by page:\n');
     
     const sections = await Section.find({}, 'sectionId page');
     
@@ -144,14 +144,14 @@ async function showSectionCounts() {
     // Show counts
     Object.keys(sectionsByPage).forEach(page => {
       const uniqueSections = [...new Set(sectionsByPage[page])];
-      console.log(`📄 ${page.toUpperCase()}: ${uniqueSections.length} unique sections`);
+      console.log(`ðŸ“„ ${page.toUpperCase()}: ${uniqueSections.length} unique sections`);
     });
 
-    console.log(`\n📊 Total sections: ${sections.length}`);
-    console.log(`📊 Total unique section IDs: ${new Set(sections.map(s => s.sectionId)).size}`);
+    console.log(`\nðŸ“Š Total sections: ${sections.length}`);
+    console.log(`ðŸ“Š Total unique section IDs: ${new Set(sections.map(s => s.sectionId)).size}`);
 
   } catch (error) {
-    console.error('❌ Error showing section counts:', error.message);
+    console.error('âŒ Error showing section counts:', error.message);
   }
 }
 
@@ -160,7 +160,7 @@ async function showSectionCounts() {
  */
 async function showDuplicateAnalysis() {
   try {
-    console.log('🔍 Detailed duplicate analysis...\n');
+    console.log('ðŸ” Detailed duplicate analysis...\n');
     
     const duplicates = await findDuplicateSections();
     
@@ -169,7 +169,7 @@ async function showDuplicateAnalysis() {
     }
 
     // Show summary by page
-    console.log('📋 DUPLICATE SUMMARY BY PAGE:');
+    console.log('ðŸ“‹ DUPLICATE SUMMARY BY PAGE:');
     console.log('='.repeat(60));
     
     const pageDuplicates = {};
@@ -186,7 +186,7 @@ async function showDuplicateAnalysis() {
 
     Object.keys(pageDuplicates).forEach(page => {
       const uniqueDuplicates = [...new Set(pageDuplicates[page])];
-      console.log(`📄 ${page.toUpperCase()}: ${uniqueDuplicates.length} duplicate section IDs`);
+      console.log(`ðŸ“„ ${page.toUpperCase()}: ${uniqueDuplicates.length} duplicate section IDs`);
       uniqueDuplicates.forEach(sectionId => {
         const count = duplicates[sectionId].length;
         console.log(`   - ${sectionId}: ${count} copies`);
@@ -196,7 +196,7 @@ async function showDuplicateAnalysis() {
     console.log('='.repeat(60));
 
   } catch (error) {
-    console.error('❌ Error in duplicate analysis:', error.message);
+    console.error('âŒ Error in duplicate analysis:', error.message);
   }
 }
 
@@ -205,12 +205,12 @@ async function showDuplicateAnalysis() {
  */
 async function dryRunRemoval() {
   try {
-    console.log('🔍 DRY RUN - Showing what would be removed:\n');
+    console.log('ðŸ” DRY RUN - Showing what would be removed:\n');
     
     const duplicates = await findDuplicateSections();
     
     if (Object.keys(duplicates).length === 0) {
-      console.log('✅ No duplicates to remove');
+      console.log('âœ… No duplicates to remove');
       return;
     }
 
@@ -220,19 +220,19 @@ async function dryRunRemoval() {
       const sectionsToRemove = sections.slice(1); // Keep first, remove rest
       totalWouldRemove += sectionsToRemove.length;
       
-      console.log(`📁 ${sectionId}: Would remove ${sectionsToRemove.length} duplicates`);
+      console.log(`ðŸ“ ${sectionId}: Would remove ${sectionsToRemove.length} duplicates`);
       sectionsToRemove.forEach((section, index) => {
         console.log(`   ${index + 1}. ${section._id} - ${section.title}`);
       });
       console.log('');
     });
 
-    console.log(`📋 DRY RUN SUMMARY:`);
-    console.log(`📊 Would remove: ${totalWouldRemove} duplicate sections`);
-    console.log(`📊 Would keep: ${Object.keys(duplicates).length} original sections`);
+    console.log(`ðŸ“‹ DRY RUN SUMMARY:`);
+    console.log(`ðŸ“Š Would remove: ${totalWouldRemove} duplicate sections`);
+    console.log(`ðŸ“Š Would keep: ${Object.keys(duplicates).length} original sections`);
 
   } catch (error) {
-    console.error('❌ Error in dry run:', error.message);
+    console.error('âŒ Error in dry run:', error.message);
   }
 }
 
@@ -240,16 +240,16 @@ async function dryRunRemoval() {
 async function main() {
   try {
     // Connect to MongoDB
-    console.log('🔌 Connecting to MongoDB...');
+    console.log('ðŸ”Œ Connecting to MongoDB...');
     await mongoose.connect(MONGODB_URI);
-    console.log('✅ Connected to MongoDB successfully\n');
+    console.log('âœ… Connected to MongoDB successfully\n');
 
     // Check command line arguments
     const args = process.argv.slice(2);
     
     if (args.length === 0) {
       // No arguments - show help
-      console.log('🆘 Duplicate Section Removal Script Help\n');
+      console.log('ðŸ†˜ Duplicate Section Removal Script Help\n');
       console.log('Usage:');
       console.log('  node remove-duplicate-sections.js --find          # Find duplicates (dry run)');
       console.log('  node remove-duplicate-sections.js --remove        # Remove duplicates');
@@ -269,10 +269,10 @@ async function main() {
       const duplicates = await findDuplicateSections();
       if (Object.keys(duplicates).length > 0) {
         const result = await removeDuplicateSections(duplicates);
-        console.log('\n📋 REMOVAL SUMMARY:');
+        console.log('\nðŸ“‹ REMOVAL SUMMARY:');
         console.log('='.repeat(60));
-        console.log(`📊 Duplicate groups processed: ${result.totalGroups}`);
-        console.log(`🗑️  Total sections removed: ${result.totalRemoved}`);
+        console.log(`ðŸ“Š Duplicate groups processed: ${result.totalGroups}`);
+        console.log(`ðŸ—‘ï¸  Total sections removed: ${result.totalRemoved}`);
         console.log('='.repeat(60));
       }
     } else if (args[0] === '--counts' || args[0] === '-c') {
@@ -286,7 +286,7 @@ async function main() {
       await dryRunRemoval();
     } else if (args[0] === '--help' || args[0] === '-h') {
       // Show help
-      console.log('🆘 Duplicate Section Removal Script Help\n');
+      console.log('ðŸ†˜ Duplicate Section Removal Script Help\n');
       console.log('Usage:');
       console.log('  node remove-duplicate-sections.js --find          # Find duplicates (dry run)');
       console.log('  node remove-duplicate-sections.js --remove        # Remove duplicates');
@@ -299,16 +299,16 @@ async function main() {
       console.log('  node remove-duplicate-sections.js --remove');
       console.log('  node remove-duplicate-sections.js --counts');
     } else {
-      console.log('❌ Unknown argument. Use --help for usage information.');
+      console.log('âŒ Unknown argument. Use --help for usage information.');
     }
 
   } catch (error) {
-    console.error('❌ Fatal error:', error.message);
+    console.error('âŒ Fatal error:', error.message);
   } finally {
     // Close MongoDB connection
     if (mongoose.connection.readyState === 1) {
       await mongoose.connection.close();
-      console.log('🔌 MongoDB connection closed');
+      console.log('ðŸ”Œ MongoDB connection closed');
     }
     process.exit(0);
   }
@@ -326,3 +326,4 @@ module.exports = {
   showDuplicateAnalysis,
   dryRunRemoval
 };
+

@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -6,7 +6,7 @@ require('dotenv').config();
 const Section = require('../models/Section');
 const Page = require('../models/Page');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/INSPECTORS';
 
 const PAGE_SLUG = 'testing';
 const SECTION_ID = 'guided-wave-lrut';
@@ -17,10 +17,10 @@ const DATA = {
     {
       heading: 'Guided Wave Ultrasonic Testing (GWUT) / Long Range Ultrasonic Testing (LRUT)',
       content:
-        'From CBM 360 TIV - Known as Condition Based Monitoring 360° Technical Industrial Verification – Deliver long-range ultrasonic inspection solutions for Mining and Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power & Utility Infrastructure.\n\nGuided Wave Ultrasonic Testing (GWUT), also known as Long Range Ultrasonic Testing (LRUT), uses low-frequency ultrasonic waves that travel along the length of a pipe or structure to detect corrosion, wall thinning, and other defects over long distances from a single inspection point.'
+        'From INSPECTORS 360 TIV - Known as Condition Based Monitoring 360Â° Technical Industrial Verification â€“ Deliver long-range ultrasonic inspection solutions for Mining and Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power & Utility Infrastructure.\n\nGuided Wave Ultrasonic Testing (GWUT), also known as Long Range Ultrasonic Testing (LRUT), uses low-frequency ultrasonic waves that travel along the length of a pipe or structure to detect corrosion, wall thinning, and other defects over long distances from a single inspection point.'
     },
     {
-      heading: 'Why Choose GWUT/LRUT from CBM 360 TIV?',
+      heading: 'Why Choose GWUT/LRUT from INSPECTORS 360 TIV?',
       content: [
         'Covers up to 100 meters of pipe in a single test',
         'Minimizes the need for insulation or coating removal',
@@ -64,26 +64,26 @@ const DATA = {
     {
       heading: 'Trusted GWUT/LRUT by Industry Experts',
       content:
-        'CBM 360 TIV\'s certified inspectors utilize state-of-the-art GWUT/LRUT systems with advanced data analysis software to provide accurate detection of wall loss and defects, supporting predictive maintenance and integrity management.'
+        'INSPECTORS 360 TIV\'s certified inspectors utilize state-of-the-art GWUT/LRUT systems with advanced data analysis software to provide accurate detection of wall loss and defects, supporting predictive maintenance and integrity management.'
     },
     {
       heading: 'Applications Across Industries',
       content: [
-        'Mining & Metals – Slurry pipelines, transfer lines, and buried piping',
-        'Industrial Plants – Process pipelines, storage tank piping, road crossings',
-        'Oil & Gas – Subsea pipelines, offshore risers, and insulated pipelines',
-        'FPSO/FSO Vessels – Cargo lines, deck piping, and subsea risers',
-        'Power & Utilities – Steam lines, buried high-energy piping systems'
+        'Mining & Metals â€“ Slurry pipelines, transfer lines, and buried piping',
+        'Industrial Plants â€“ Process pipelines, storage tank piping, road crossings',
+        'Oil & Gas â€“ Subsea pipelines, offshore risers, and insulated pipelines',
+        'FPSO/FSO Vessels â€“ Cargo lines, deck piping, and subsea risers',
+        'Power & Utilities â€“ Steam lines, buried high-energy piping systems'
       ]
     },
     {
       heading: 'Global Experience in All Major Sectors',
       content: [
-        'Mining & Metal Facilities – Slurry lines, tailings pipelines, remote conveyor piping',
-        'Industrial Manufacturing & Process Plants – Steam lines, chemical delivery pipes',
-        'Onshore/Offshore Oil & Gas Facilities – Insulated flowlines, risers, subsea tie-ins',
-        'FPSO & FSO Vessels – Deck piping, cargo offloading lines, ballast systems',
-        'Power & Utility Plants – Condensate lines, superheated steam lines, buried pipelines'
+        'Mining & Metal Facilities â€“ Slurry lines, tailings pipelines, remote conveyor piping',
+        'Industrial Manufacturing & Process Plants â€“ Steam lines, chemical delivery pipes',
+        'Onshore/Offshore Oil & Gas Facilities â€“ Insulated flowlines, risers, subsea tie-ins',
+        'FPSO & FSO Vessels â€“ Deck piping, cargo offloading lines, ballast systems',
+        'Power & Utility Plants â€“ Condensate lines, superheated steam lines, buried pipelines'
       ]
     },
     {
@@ -99,16 +99,16 @@ const DATA = {
     {
       heading: 'Standards We Follow:',
       content: [
-        'ASNT SNT-TC-1A – Personnel qualification and certification',
-        'ISO 18211 – Long-range ultrasonic testing (LRUT) of pipelines',
-        'ASME BPVC Section V – Ultrasonic examination',
-        'API 570 – Piping inspection code'
+        'ASNT SNT-TC-1A â€“ Personnel qualification and certification',
+        'ISO 18211 â€“ Long-range ultrasonic testing (LRUT) of pipelines',
+        'ASME BPVC Section V â€“ Ultrasonic examination',
+        'API 570 â€“ Piping inspection code'
       ]
     },
     {
       heading: 'Ready to Inspect with GWUT/LRUT?',
       content:
-        'Trust CBM 360 TIV\'s Guided Wave / Long Range Ultrasonic Testing services to deliver efficient, safe, and reliable pipeline inspection solutions.\n\nContact CBM 360 TIV today to schedule a GWUT/LRUT inspection.'
+        'Trust INSPECTORS 360 TIV\'s Guided Wave / Long Range Ultrasonic Testing services to deliver efficient, safe, and reliable pipeline inspection solutions.\n\nContact INSPECTORS 360 TIV today to schedule a GWUT/LRUT inspection.'
     }
   ]
 };
@@ -164,19 +164,19 @@ async function linkSectionToPage(sectionId) {
 }
 
 async function main() {
-  console.log('🔌 Connecting to MongoDB...');
+  console.log('ðŸ”Œ Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI);
-  console.log('✅ Connected');
+  console.log('âœ… Connected');
   try {
     const sectionId = await upsertSection();
     await linkSectionToPage(sectionId);
-    console.log('✅ Guided Wave Ultrasonic Testing section upserted');
+    console.log('âœ… Guided Wave Ultrasonic Testing section upserted');
   } catch (e) {
-    console.error('❌ Error:', e.message);
+    console.error('âŒ Error:', e.message);
     process.exitCode = 1;
   } finally {
     await mongoose.connection.close();
-    console.log('🔌 Disconnected');
+    console.log('ðŸ”Œ Disconnected');
   }
 }
 
@@ -185,3 +185,4 @@ if (require.main === module) {
 }
 
 module.exports = { main };
+

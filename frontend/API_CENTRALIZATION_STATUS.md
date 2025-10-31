@@ -1,9 +1,9 @@
-# API Centralization Status
+﻿# API Centralization Status
 
 ## Overview
 This document tracks the status of API call centralization in the frontend. All API calls should go through the centralized `api.ts` file to ensure consistent configuration, error handling, and logging.
 
-## ✅ **PROPERLY CENTRALIZED (Using api.ts)**
+## âœ… **PROPERLY CENTRALIZED (Using api.ts)**
 
 ### Pages (All Correctly Connected)
 - `Auditing.tsx` - Uses `getPageWithSections` from `api.ts`
@@ -14,17 +14,17 @@ This document tracks the status of API call centralization in the frontend. All 
 - `TestingDetail.tsx` - Uses `getPageWithSections` from `api.ts`
 - `Inspection.tsx` - Uses `getPageWithSections` from `api.ts`
 - `InspectionDetail.tsx` - Uses `getPageWithSections` from `api.ts`
-- `CBMDetail.tsx` - Uses `getPageWithSections` from `api.ts`
-- `CBMMonitoring.tsx` - Uses `getPageWithSections` from `api.ts`
+- `INSPECTORSDetail.tsx` - Uses `getPageWithSections` from `api.ts`
+- `INSPECTORSMonitoring.tsx` - Uses `getPageWithSections` from `api.ts`
 
 ### Services (Now Fixed)
-- `translationService.ts` - ✅ **FIXED**: Now uses `apiClient` instead of direct axios calls
-- `imageService.ts` - ✅ **FIXED**: Now uses `apiClient` instead of direct fetch calls
+- `translationService.ts` - âœ… **FIXED**: Now uses `apiClient` instead of direct axios calls
+- `imageService.ts` - âœ… **FIXED**: Now uses `apiClient` instead of direct fetch calls
 
 ### Utils
 - `api.ts` - Central API client with interceptors, logging, and error handling
 
-## 🔧 **What Was Fixed**
+## ðŸ”§ **What Was Fixed**
 
 ### 1. Translation Service (`translationService.ts`)
 **Before:**
@@ -69,7 +69,7 @@ const response = await apiClient.get(
 );
 ```
 
-## 📊 **Benefits of Centralization**
+## ðŸ“Š **Benefits of Centralization**
 
 1. **Consistent Configuration**: All API calls use the same base URL and headers
 2. **Centralized Logging**: Request/response logging through interceptors
@@ -78,22 +78,23 @@ const response = await apiClient.get(
 5. **Maintainability**: Easy to update API configuration in one place
 6. **Debugging**: Centralized logging makes debugging easier
 
-## 🚀 **Current Status: 100% CENTRALIZED**
+## ðŸš€ **Current Status: 100% CENTRALIZED**
 
 All API calls in the frontend are now properly routed through the centralized `api.ts` file. The system provides:
 
-- ✅ Consistent API configuration
-- ✅ Request/response logging
-- ✅ Error handling
-- ✅ Environment-based configuration
-- ✅ Type safety with TypeScript interfaces
+- âœ… Consistent API configuration
+- âœ… Request/response logging
+- âœ… Error handling
+- âœ… Environment-based configuration
+- âœ… Type safety with TypeScript interfaces
 
-## 🔍 **API Endpoints Used**
+## ðŸ” **API Endpoints Used**
 
 - **Pages**: `/api/pages/search/*`, `/api/pages/slug/*`
 - **Translations**: `/translate/static/*`
 - **Images**: `/images/*/*/images`
 
 All endpoints now go through the centralized `apiClient` with proper error handling and logging.
+
 
 

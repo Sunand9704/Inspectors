@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
@@ -29,7 +29,7 @@ const testingSubServices = [
 ];
 
 async function countImagesFor(folder) {
-  const prefix = `cbm/testing/${folder}`;
+  const prefix = `INSPECTORS/testing/${folder}`;
   const res = await cloudinary.api.resources({ type: 'upload', prefix, max_results: 500 });
   return res.resources.length;
 }
@@ -46,5 +46,6 @@ async function countImagesFor(folder) {
     console.log(`Phased Array UT images: ${phased.count}`);
   }
 })();
+
 
 

@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
@@ -34,7 +34,7 @@ async function listImages(prefix) {
   do {
     const res = await cloudinary.api.resources({
       type: 'upload',
-      prefix: `cbm/testing/${prefix}`,
+      prefix: `INSPECTORS/testing/${prefix}`,
       max_results: 500,
       next_cursor: nextCursor
     });
@@ -51,5 +51,6 @@ async function listImages(prefix) {
     urls.forEach((u, i) => console.log(`${i + 1}. ${u}`));
   }
 })();
+
 
 

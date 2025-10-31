@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -6,17 +6,17 @@ require('dotenv').config();
 const Section = require('../models/Section');
 const Page = require('../models/Page');
 
-const MONGODB_URI = "mongodb+srv://cbm360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster" || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = "mongodb+srv://INSPECTORS360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster" || 'mongodb://localhost:27017/INSPECTORS';
 
 const PAGE_SLUG = 'about';
 const SECTION_ID = 'about-main';
 
 const DATA = {
-  about: 'CBM 360 TIV – Global Leader in Testing, Inspection & Verification',
+  about: 'INSPECTORS 360 TIV â€“ Global Leader in Testing, Inspection & Verification',
   sections: [
     {
-      heading: 'CBM 360 TIV – Global Leader in Testing, Inspection & Verification',
-      content: 'Founded in 1992 in the United Kingdom, CBM 360 TIV has grown into a trusted global partner in Testing, Inspection, Certification, Condition-Based Monitoring, and Verification services. With regional headquarters in Dubai (Middle East & Africa), Hong Kong (Asia), and Brazil (North & South America), we support industries across 72 countries, driven by a commitment to safety, quality, and sustainability.'
+      heading: 'INSPECTORS 360 TIV â€“ Global Leader in Testing, Inspection & Verification',
+      content: 'Founded in 1992 in the United Kingdom, INSPECTORS 360 TIV has grown into a trusted global partner in Testing, Inspection, Certification, Condition-Based Monitoring, and Verification services. With regional headquarters in Dubai (Middle East & Africa), Hong Kong (Asia), and Brazil (North & South America), we support industries across 72 countries, driven by a commitment to safety, quality, and sustainability.'
     },
     {
       heading: 'Global Team & Network',
@@ -24,7 +24,7 @@ const DATA = {
     },
     {
       heading: 'Industry Coverage',
-      content: 'At CBM 360 TIV, we go beyond compliance — delivering innovative solutions that address the evolving challenges of industries including Oil & Gas (Onshore/Offshore), Mining, Power Generation, Petrochemicals, Manufacturing, Marine, and Infrastructure Development.'
+      content: 'At INSPECTORS 360 TIV, we go beyond compliance â€” delivering innovative solutions that address the evolving challenges of industries including Oil & Gas (Onshore/Offshore), Mining, Power Generation, Petrochemicals, Manufacturing, Marine, and Infrastructure Development.'
     },
     {
       heading: 'Our Brand Values',
@@ -32,7 +32,7 @@ const DATA = {
     },
     {
       heading: 'Tagline',
-      content: 'CBM 360 TIV – Ensuring Reliability. Driving Innovation. Building Confidence.'
+      content: 'INSPECTORS 360 TIV â€“ Ensuring Reliability. Driving Innovation. Building Confidence.'
     }
   ]
 };
@@ -106,9 +106,9 @@ async function linkSectionToPage(sectionId) {
 }
 
 async function main() {
-  console.log('🔌 Connecting to MongoDB...');
+  console.log('ðŸ”Œ Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI);
-  console.log('✅ Connected');
+  console.log('âœ… Connected');
   try {
     const args = process.argv.slice(2);
     if (args.includes('clear')) {
@@ -117,18 +117,18 @@ async function main() {
       if (page) {
         await Page.deleteOne({ _id: page._id });
       }
-      console.log('🗑️ Deleted about page and its sections');
+      console.log('ðŸ—‘ï¸ Deleted about page and its sections');
     } else {
       const sectionId = await upsertMainSection();
       await linkSectionToPage(sectionId);
-      console.log('✅ About page updated with main section');
+      console.log('âœ… About page updated with main section');
     }
   } catch (e) {
-    console.error('❌ Error:', e.message);
+    console.error('âŒ Error:', e.message);
     process.exitCode = 1;
   } finally {
     await mongoose.connection.close();
-    console.log('🔌 Disconnected');
+    console.log('ðŸ”Œ Disconnected');
   }
 }
 
@@ -137,3 +137,4 @@ if (require.main === module) {
 }
 
 module.exports = { main };
+

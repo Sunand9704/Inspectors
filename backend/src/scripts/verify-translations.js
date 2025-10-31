@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Translation Verification Script
  * 
  * This script checks all pages and sections to verify if translations are complete.
@@ -23,10 +23,10 @@ const TARGET_LANGUAGES = ['fr', 'pt', 'es', 'ru'];
 // Database connection
 async function connectDB() {
   try {
-    await mongoose.connect('mongodb+srv://cbm360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster');
-    console.log('✅ Connected to MongoDB');
+    await mongoose.connect('mongodb+srv://INSPECTORS360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster');
+    console.log('âœ… Connected to MongoDB');
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error.message);
+    console.error('âŒ MongoDB connection error:', error.message);
     process.exit(1);
   }
 }
@@ -65,7 +65,7 @@ function checkSectionTranslationStatus(section) {
  * @param {string} specificPage - Check only specific page (optional)
  */
 async function verifyAllTranslations(detailed = false, specificPage = null) {
-  console.log('\n🔍 Translation Verification Report');
+  console.log('\nðŸ” Translation Verification Report');
   console.log('==================================');
   
   try {
@@ -75,12 +75,12 @@ async function verifyAllTranslations(detailed = false, specificPage = null) {
       // Get page first, then get sections by page reference
       const page = await Page.findOne({ slug: specificPage, isActive: true });
       if (!page) {
-        console.log(`❌ Page '${specificPage}' not found or not active`);
+        console.log(`âŒ Page '${specificPage}' not found or not active`);
         return;
       }
       
-      console.log(`📄 Checking page: ${page.title} (${page.slug})`);
-      console.log(`📋 Page has ${page.sections.length} section references`);
+      console.log(`ðŸ“„ Checking page: ${page.title} (${page.slug})`);
+      console.log(`ðŸ“‹ Page has ${page.sections.length} section references`);
       
       // Get sections by their IDs from the page
       sections = await Section.find({
@@ -89,7 +89,7 @@ async function verifyAllTranslations(detailed = false, specificPage = null) {
         isActive: true
       }).sort({ pageNumber: 1, sectionId: 1 });
       
-      console.log(`✅ Found ${sections.length} English sections for this page`);
+      console.log(`âœ… Found ${sections.length} English sections for this page`);
     } else {
       // Build query for all sections
       const sectionQuery = {
@@ -104,7 +104,7 @@ async function verifyAllTranslations(detailed = false, specificPage = null) {
     }
     
     if (sections.length === 0) {
-      console.log('⚠️  No English sections found');
+      console.log('âš ï¸  No English sections found');
       return;
     }
     
@@ -128,14 +128,14 @@ async function verifyAllTranslations(detailed = false, specificPage = null) {
     const untranslatedSections = sectionStatuses.filter(s => !s.hasTranslations).length;
     
     // Display summary
-    console.log(`\n📊 Overall Statistics:`);
+    console.log(`\nðŸ“Š Overall Statistics:`);
     console.log(`Total sections: ${totalSections}`);
-    console.log(`✅ Complete translations: ${completeSections} (${((completeSections/totalSections)*100).toFixed(1)}%)`);
-    console.log(`⚠️  Partial translations: ${partialSections} (${((partialSections/totalSections)*100).toFixed(1)}%)`);
-    console.log(`❌ No translations: ${untranslatedSections} (${((untranslatedSections/totalSections)*100).toFixed(1)}%)`);
+    console.log(`âœ… Complete translations: ${completeSections} (${((completeSections/totalSections)*100).toFixed(1)}%)`);
+    console.log(`âš ï¸  Partial translations: ${partialSections} (${((partialSections/totalSections)*100).toFixed(1)}%)`);
+    console.log(`âŒ No translations: ${untranslatedSections} (${((untranslatedSections/totalSections)*100).toFixed(1)}%)`);
     
     // Display page-by-page breakdown
-    console.log(`\n📄 Page-by-Page Breakdown:`);
+    console.log(`\nðŸ“„ Page-by-Page Breakdown:`);
     console.log('========================');
     
     Object.entries(pageGroups).forEach(([pageSlug, pageSections]) => {
@@ -144,12 +144,12 @@ async function verifyAllTranslations(detailed = false, specificPage = null) {
       const pageUntranslated = pageSections.filter(s => !s.hasTranslations).length;
       const pageTotal = pageSections.length;
       
-      console.log(`\n📄 ${pageSlug} (${pageTotal} sections)`);
-      console.log(`   ✅ Complete: ${pageComplete} | ⚠️  Partial: ${pagePartial} | ❌ None: ${pageUntranslated}`);
+      console.log(`\nðŸ“„ ${pageSlug} (${pageTotal} sections)`);
+      console.log(`   âœ… Complete: ${pageComplete} | âš ï¸  Partial: ${pagePartial} | âŒ None: ${pageUntranslated}`);
       
       if (detailed) {
         pageSections.forEach((status, index) => {
-          const statusIcon = status.isComplete ? '✅' : status.hasTranslations ? '⚠️' : '❌';
+          const statusIcon = status.isComplete ? 'âœ…' : status.hasTranslations ? 'âš ï¸' : 'âŒ';
           console.log(`   ${index + 1}. ${statusIcon} ${status.title}`);
           
           if (!status.isComplete) {
@@ -167,7 +167,7 @@ async function verifyAllTranslations(detailed = false, specificPage = null) {
     });
     
     // Show missing translations summary
-    console.log(`\n🔍 Missing Translations Summary:`);
+    console.log(`\nðŸ” Missing Translations Summary:`);
     console.log('===============================');
     
     const missingByLanguage = {};
@@ -184,7 +184,7 @@ async function verifyAllTranslations(detailed = false, specificPage = null) {
     // Show sections that need attention
     const needsAttention = sectionStatuses.filter(s => !s.isComplete);
     if (needsAttention.length > 0) {
-      console.log(`\n⚠️  Sections Needing Attention (${needsAttention.length}):`);
+      console.log(`\nâš ï¸  Sections Needing Attention (${needsAttention.length}):`);
       console.log('==========================================');
       
       needsAttention.forEach((status, index) => {
@@ -195,22 +195,22 @@ async function verifyAllTranslations(detailed = false, specificPage = null) {
     }
     
     // Generate recommendations
-    console.log(`\n💡 Recommendations:`);
+    console.log(`\nðŸ’¡ Recommendations:`);
     console.log('==================');
     
     if (untranslatedSections > 0) {
-      console.log(`• Run translation for ${untranslatedSections} untranslated sections`);
+      console.log(`â€¢ Run translation for ${untranslatedSections} untranslated sections`);
     }
     
     if (partialSections > 0) {
-      console.log(`• Complete translations for ${partialSections} partially translated sections`);
+      console.log(`â€¢ Complete translations for ${partialSections} partially translated sections`);
     }
     
     if (completeSections === totalSections) {
-      console.log('🎉 All sections are fully translated!');
+      console.log('ðŸŽ‰ All sections are fully translated!');
     } else {
       const completionRate = ((completeSections / totalSections) * 100).toFixed(1);
-      console.log(`• Overall completion rate: ${completionRate}%`);
+      console.log(`â€¢ Overall completion rate: ${completionRate}%`);
     }
     
     // Return summary data
@@ -225,7 +225,7 @@ async function verifyAllTranslations(detailed = false, specificPage = null) {
     };
     
   } catch (error) {
-    console.error('❌ Error verifying translations:', error.message);
+    console.error('âŒ Error verifying translations:', error.message);
     throw error;
   }
 }
@@ -236,19 +236,19 @@ async function verifyAllTranslations(detailed = false, specificPage = null) {
  * @param {boolean} detailed - Show detailed information
  */
 async function verifyPageTranslations(pageSlug, detailed = false) {
-  console.log(`\n🔍 Translation Verification for Page: ${pageSlug}`);
+  console.log(`\nðŸ” Translation Verification for Page: ${pageSlug}`);
   console.log('==========================================');
   
   try {
     // Check if page exists
     const page = await Page.findOne({ slug: pageSlug, isActive: true });
     if (!page) {
-      console.log(`❌ Page '${pageSlug}' not found or not active`);
+      console.log(`âŒ Page '${pageSlug}' not found or not active`);
       return;
     }
     
-    console.log(`📄 Page: ${page.title} (${page.slug})`);
-    console.log(`📋 Page has ${page.sections.length} section references`);
+    console.log(`ðŸ“„ Page: ${page.title} (${page.slug})`);
+    console.log(`ðŸ“‹ Page has ${page.sections.length} section references`);
     
     // Get sections by their IDs from the page
     const sections = await Section.find({
@@ -257,10 +257,10 @@ async function verifyPageTranslations(pageSlug, detailed = false) {
       isActive: true
     }).sort({ pageNumber: 1, sectionId: 1 });
     
-    console.log(`✅ Found ${sections.length} English sections for this page`);
+    console.log(`âœ… Found ${sections.length} English sections for this page`);
     
     if (sections.length === 0) {
-      console.log('⚠️  No English sections found for this page');
+      console.log('âš ï¸  No English sections found for this page');
       return;
     }
     
@@ -274,18 +274,18 @@ async function verifyPageTranslations(pageSlug, detailed = false) {
     const untranslatedSections = sectionStatuses.filter(s => !s.hasTranslations).length;
     
     // Display summary
-    console.log(`\n📊 Page Statistics:`);
+    console.log(`\nðŸ“Š Page Statistics:`);
     console.log(`Total sections: ${totalSections}`);
-    console.log(`✅ Complete translations: ${completeSections} (${((completeSections/totalSections)*100).toFixed(1)}%)`);
-    console.log(`⚠️  Partial translations: ${partialSections} (${((partialSections/totalSections)*100).toFixed(1)}%)`);
-    console.log(`❌ No translations: ${untranslatedSections} (${((untranslatedSections/totalSections)*100).toFixed(1)}%)`);
+    console.log(`âœ… Complete translations: ${completeSections} (${((completeSections/totalSections)*100).toFixed(1)}%)`);
+    console.log(`âš ï¸  Partial translations: ${partialSections} (${((partialSections/totalSections)*100).toFixed(1)}%)`);
+    console.log(`âŒ No translations: ${untranslatedSections} (${((untranslatedSections/totalSections)*100).toFixed(1)}%)`);
     
     // Display sections
-    console.log(`\n📋 Sections:`);
+    console.log(`\nðŸ“‹ Sections:`);
     console.log('============');
     
     sectionStatuses.forEach((status, index) => {
-      const statusIcon = status.isComplete ? '✅' : status.hasTranslations ? '⚠️' : '❌';
+      const statusIcon = status.isComplete ? 'âœ…' : status.hasTranslations ? 'âš ï¸' : 'âŒ';
       console.log(`\n${index + 1}. ${statusIcon} ${status.title}`);
       console.log(`   Section ID: ${status.sectionId}`);
       console.log(`   Page Number: ${status.pageNumber}`);
@@ -309,7 +309,7 @@ async function verifyPageTranslations(pageSlug, detailed = false) {
     });
     
     // Show missing translations summary
-    console.log(`\n🔍 Missing Translations Summary:`);
+    console.log(`\nðŸ” Missing Translations Summary:`);
     console.log('===============================');
     
     const missingByLanguage = {};
@@ -326,7 +326,7 @@ async function verifyPageTranslations(pageSlug, detailed = false) {
     // Show sections that need attention
     const needsAttention = sectionStatuses.filter(s => !s.isComplete);
     if (needsAttention.length > 0) {
-      console.log(`\n⚠️  Sections Needing Attention (${needsAttention.length}):`);
+      console.log(`\nâš ï¸  Sections Needing Attention (${needsAttention.length}):`);
       console.log('==========================================');
       
       needsAttention.forEach((status, index) => {
@@ -337,22 +337,22 @@ async function verifyPageTranslations(pageSlug, detailed = false) {
     }
     
     // Generate recommendations
-    console.log(`\n💡 Recommendations:`);
+    console.log(`\nðŸ’¡ Recommendations:`);
     console.log('==================');
     
     if (untranslatedSections > 0) {
-      console.log(`• Run translation for ${untranslatedSections} untranslated sections`);
+      console.log(`â€¢ Run translation for ${untranslatedSections} untranslated sections`);
     }
     
     if (partialSections > 0) {
-      console.log(`• Complete translations for ${partialSections} partially translated sections`);
+      console.log(`â€¢ Complete translations for ${partialSections} partially translated sections`);
     }
     
     if (completeSections === totalSections) {
-      console.log('🎉 All sections are fully translated!');
+      console.log('ðŸŽ‰ All sections are fully translated!');
     } else {
       const completionRate = ((completeSections / totalSections) * 100).toFixed(1);
-      console.log(`• Overall completion rate: ${completionRate}%`);
+      console.log(`â€¢ Overall completion rate: ${completionRate}%`);
     }
     
     return {
@@ -366,7 +366,7 @@ async function verifyPageTranslations(pageSlug, detailed = false) {
     };
     
   } catch (error) {
-    console.error('❌ Error verifying page translations:', error.message);
+    console.error('âŒ Error verifying page translations:', error.message);
     throw error;
   }
 }
@@ -376,19 +376,19 @@ async function verifyPageTranslations(pageSlug, detailed = false) {
  * @param {string} pageSlug - Page slug to get section IDs for
  */
 async function getPageSectionIds(pageSlug) {
-  console.log(`\n📋 Section IDs for Page: ${pageSlug}`);
+  console.log(`\nðŸ“‹ Section IDs for Page: ${pageSlug}`);
   console.log('=====================================');
   
   try {
     // Check if page exists
     const page = await Page.findOne({ slug: pageSlug, isActive: true });
     if (!page) {
-      console.log(`❌ Page '${pageSlug}' not found or not active`);
+      console.log(`âŒ Page '${pageSlug}' not found or not active`);
       return;
     }
     
-    console.log(`📄 Page: ${page.title} (${page.slug})`);
-    console.log(`📋 Page has ${page.sections.length} section references`);
+    console.log(`ðŸ“„ Page: ${page.title} (${page.slug})`);
+    console.log(`ðŸ“‹ Page has ${page.sections.length} section references`);
     
     // Get all sections by their IDs from the page (any language, any status)
     const allSections = await Section.find({
@@ -398,7 +398,7 @@ async function getPageSectionIds(pageSlug) {
     // Get only English active sections
     const sections = allSections.filter(s => s.language === 'en' && s.isActive === true);
     
-    console.log(`📊 Section Analysis:`);
+    console.log(`ðŸ“Š Section Analysis:`);
     console.log(`   Total section references: ${page.sections.length}`);
     console.log(`   Found in database: ${allSections.length}`);
     console.log(`   English & active: ${sections.length}`);
@@ -419,15 +419,15 @@ async function getPageSectionIds(pageSlug) {
       });
     }
     
-    console.log(`✅ Found ${sections.length} English sections for this page`);
+    console.log(`âœ… Found ${sections.length} English sections for this page`);
     
     if (sections.length === 0) {
-      console.log('⚠️  No English sections found for this page');
+      console.log('âš ï¸  No English sections found for this page');
       return;
     }
     
     // Display section IDs and details
-    console.log(`\n📋 Section Details:`);
+    console.log(`\nðŸ“‹ Section Details:`);
     console.log('==================');
     
     sections.forEach((section, index) => {
@@ -444,7 +444,7 @@ async function getPageSectionIds(pageSlug) {
     
     // Return section IDs for programmatic use
     const sectionIds = sections.map(s => s.sectionId || s._id.toString());
-    console.log(`\n📝 Section IDs Array:`);
+    console.log(`\nðŸ“ Section IDs Array:`);
     console.log(JSON.stringify(sectionIds, null, 2));
     
     return {
@@ -465,7 +465,7 @@ async function getPageSectionIds(pageSlug) {
     };
     
   } catch (error) {
-    console.error('❌ Error getting page section IDs:', error.message);
+    console.error('âŒ Error getting page section IDs:', error.message);
     throw error;
   }
 }
@@ -474,7 +474,7 @@ async function getPageSectionIds(pageSlug) {
  * Generate translation report in JSON format
  */
 async function generateTranslationReport() {
-  console.log('\n📋 Generating Translation Report...');
+  console.log('\nðŸ“‹ Generating Translation Report...');
   
   try {
     const sections = await Section.find({
@@ -520,13 +520,13 @@ async function generateTranslationReport() {
     // Calculate completion rate
     report.summary.completionRate = ((report.summary.complete / report.totalSections) * 100).toFixed(1);
     
-    console.log('✅ Translation report generated');
-    console.log(`📊 Summary: ${report.summary.complete}/${report.totalSections} complete (${report.summary.completionRate}%)`);
+    console.log('âœ… Translation report generated');
+    console.log(`ðŸ“Š Summary: ${report.summary.complete}/${report.totalSections} complete (${report.summary.completionRate}%)`);
     
     return report;
     
   } catch (error) {
-    console.error('❌ Error generating report:', error.message);
+    console.error('âŒ Error generating report:', error.message);
     throw error;
   }
 }
@@ -568,7 +568,7 @@ async function main() {
         
       case 'sections':
         if (!pageSlug) {
-          console.error('❌ Please provide page slug. Usage: node verify-translations.js sections --page=<page-slug>');
+          console.error('âŒ Please provide page slug. Usage: node verify-translations.js sections --page=<page-slug>');
           console.error('   Or: node verify-translations.js sections <page-slug>');
           process.exit(1);
         }
@@ -586,12 +586,12 @@ async function main() {
     }
     
   } catch (error) {
-    console.error('\n❌ Script failed:', error.message);
+    console.error('\nâŒ Script failed:', error.message);
     process.exit(1);
   } finally {
     // Close database connection
     await mongoose.connection.close();
-    console.log('\n🔌 Database connection closed');
+    console.log('\nðŸ”Œ Database connection closed');
   }
 }
 
@@ -607,3 +607,4 @@ module.exports = {
   checkSectionTranslationStatus,
   generateTranslationReport
 };
+

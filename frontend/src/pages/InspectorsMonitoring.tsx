@@ -1,4 +1,4 @@
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+﻿import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link, useNavigate } from 'react-router-dom';
@@ -60,7 +60,7 @@ export default function InspectorsMonitoring() {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink href="/services/cbm">Condition based Monitoring (CBM)</BreadcrumbLink>
+                <BreadcrumbLink href="/services/INSPECTORS">Condition based Monitoring (INSPECTORS)</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -76,10 +76,10 @@ export default function InspectorsMonitoring() {
             ) : (
               <>
                 <h1 className="text-3xl lg:text-4xl font-bold mb-3">
-                  {pageData?.title || 'Condition based Monitoring (CBM)'}
+                  {pageData?.title || 'Condition based Monitoring (INSPECTORS)'}
                 </h1>
                 <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-none leading-relaxed md:leading-8 whitespace-pre-line text-justify">
-                  {pageData?.description || 'Our Condition-Based Monitoring (CBM) services provide real-time insights into the health and performance of critical assets, enabling predictive maintenance, reduced downtime, and extended equipment life. By integrating IoT, AI, and advanced sensor technologies, we help industries move from reactive and scheduled maintenance to a datadriven, proactive approach. "Smart Monitoring. Predictive Insights. Reliable Assets."'}
+                  {pageData?.description || 'Our Condition-Based Monitoring (INSPECTORS) services provide real-time insights into the health and performance of critical assets, enabling predictive maintenance, reduced downtime, and extended equipment life. By integrating IoT, AI, and advanced sensor technologies, we help industries move from reactive and scheduled maintenance to a datadriven, proactive approach. "Smart Monitoring. Predictive Insights. Reliable Assets."'}
                 </p>
               </>
             )}
@@ -100,16 +100,16 @@ export default function InspectorsMonitoring() {
               <Card
                 key={item._id}
                 className="overflow-hidden group hover:shadow-tuv-md transition-all cursor-pointer"
-                onClick={() => navigate(`/services/cbm/${item.sectionId || toSlug(item.title)}`, { 
-                  state: { sectionData: item, serviceType: 'cbm', serviceDisplayName: 'Condition based Monitoring (CBM)' } 
+                onClick={() => navigate(`/services/INSPECTORS/${item.sectionId || toSlug(item.title)}`, { 
+                  state: { sectionData: item, serviceType: 'INSPECTORS', serviceDisplayName: 'Condition based Monitoring (INSPECTORS)' } 
                 })}
                 role="link"
                 tabIndex={0}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    navigate(`/services/cbm/${item.sectionId || toSlug(item.title)}`, { 
-                      state: { sectionData: item, serviceType: 'cbm', serviceDisplayName: 'Condition based Monitoring (CBM)' } 
+                    navigate(`/services/INSPECTORS/${item.sectionId || toSlug(item.title)}`, { 
+                      state: { sectionData: item, serviceType: 'INSPECTORS', serviceDisplayName: 'Condition based Monitoring (INSPECTORS)' } 
                     });
                   }
                 }}
@@ -126,8 +126,8 @@ export default function InspectorsMonitoring() {
                 <CardFooter>
                   <Button asChild variant="outline" className="w-full">
                     <Link 
-                      to={`/services/cbm/${item.sectionId || toSlug(item.title)}`}
-                      state={{ sectionData: item, serviceType: 'cbm', serviceDisplayName: 'Condition based Monitoring (CBM)' }}
+                      to={`/services/INSPECTORS/${item.sectionId || toSlug(item.title)}`}
+                      state={{ sectionData: item, serviceType: 'INSPECTORS', serviceDisplayName: 'Condition based Monitoring (INSPECTORS)' }}
                     >
                       View Details
                     </Link>
@@ -141,5 +141,6 @@ export default function InspectorsMonitoring() {
     </div>
   );
 }
+
 
 

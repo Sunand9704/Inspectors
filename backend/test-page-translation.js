@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Test script to demonstrate page translation functionality
  * This script shows how the updated page controller handles translations
  */
@@ -10,8 +10,8 @@ require('dotenv').config();
 async function testPageTranslation() {
   try {
     // Connect to database
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://cbm360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster');
-    console.log('✅ Connected to MongoDB');
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://INSPECTORS360tiv:MiiFze4xYGr6XNji@cluster0.sf6iagh.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster');
+    console.log('âœ… Connected to MongoDB');
 
     // Find a page with translations
     const page = await Page.findOne({
@@ -21,17 +21,17 @@ async function testPageTranslation() {
     });
 
     if (!page) {
-      console.log('⚠️  No pages with translations found. Please run the translation script first.');
+      console.log('âš ï¸  No pages with translations found. Please run the translation script first.');
       return;
     }
 
-    console.log('\n📋 Original Page (English):');
+    console.log('\nðŸ“‹ Original Page (English):');
     console.log(`Title: ${page.title}`);
     console.log(`Description: ${page.description}`);
     console.log(`Language: ${page.language}`);
 
     // Show available translations
-    console.log('\n🌍 Available Translations:');
+    console.log('\nðŸŒ Available Translations:');
     if (page.translations) {
       if (page.translations instanceof Map) {
         for (const [lang, translation] of page.translations) {
@@ -52,7 +52,7 @@ async function testPageTranslation() {
     const testLanguages = ['fr', 'pt', 'es', 'ru'];
     
     for (const lang of testLanguages) {
-      console.log(`\n🔄 Simulating translation to ${lang.toUpperCase()}:`);
+      console.log(`\nðŸ”„ Simulating translation to ${lang.toUpperCase()}:`);
       
       // Simulate the controller translation logic
       let pageFromDb = null;
@@ -72,22 +72,22 @@ async function testPageTranslation() {
         console.log(`  Description: ${translatedDescription}`);
         console.log(`  Language: ${lang}`);
       } else {
-        console.log(`  ❌ No translation available for ${lang.toUpperCase()}`);
+        console.log(`  âŒ No translation available for ${lang.toUpperCase()}`);
       }
     }
 
-    console.log('\n✅ Page translation test completed!');
-    console.log('\n💡 To test with actual API calls:');
+    console.log('\nâœ… Page translation test completed!');
+    console.log('\nðŸ’¡ To test with actual API calls:');
     console.log('  GET /api/pages/slug/testing?lang=fr');
     console.log('  GET /api/pages/slug/testing?lang=pt');
     console.log('  GET /api/pages/slug/testing?lang=es');
     console.log('  GET /api/pages/slug/testing?lang=ru');
 
   } catch (error) {
-    console.error('❌ Test failed:', error.message);
+    console.error('âŒ Test failed:', error.message);
   } finally {
     await mongoose.connection.close();
-    console.log('\n🔌 Database connection closed');
+    console.log('\nðŸ”Œ Database connection closed');
   }
 }
 
@@ -97,6 +97,7 @@ if (require.main === module) {
 }
 
 module.exports = { testPageTranslation };
+
 
 
 

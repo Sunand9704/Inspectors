@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 // INSPECTORS page data (English only to start)
 const inspectorsPages = [
@@ -12,7 +12,7 @@ const inspectorsPages = [
     sections: [
       "vibration-analysis-balancing",
       "laser-shaft-alignment",
-      "remote-cbm-iot-cloud",
+      "remote-INSPECTORS-iot-cloud",
       "infrared-thermography",
       "lubrication-oil-analysis"
     ],
@@ -26,4 +26,5 @@ const inspectorsPages = [
 ];
 
 module.exports = inspectorsPages;
+
 

@@ -1,6 +1,6 @@
-# CBM Backend Email Integration
+﻿# INSPECTORS Backend Email Integration
 
-This document explains how to set up the email functionality for job applications in the CBM backend.
+This document explains how to set up the email functionality for job applications in the INSPECTORS backend.
 
 ## Email Service Setup
 
@@ -18,7 +18,7 @@ SMTP_USER=your-email@gmail.com
 SMTP_PASS=your-app-password
 
 # Admin Email (where job applications will be sent)
-ADMIN_EMAIL=admin@cbm.com
+ADMIN_EMAIL=admin@INSPECTORS.com
 ```
 
 ### Gmail Setup Instructions
@@ -26,7 +26,7 @@ ADMIN_EMAIL=admin@cbm.com
 1. **Enable 2-Factor Authentication** on your Gmail account
 2. **Generate App Password**:
    - Go to Google Account settings
-   - Security → 2-Step Verification → App passwords
+   - Security â†’ 2-Step Verification â†’ App passwords
    - Generate a password for "Mail"
    - Use this password as `SMTP_PASS`
 
@@ -148,5 +148,6 @@ To test the email functionality:
 - File uploads are validated for type and size
 - Rate limiting is applied to prevent abuse
 - Error messages don't expose sensitive information
+
 
 

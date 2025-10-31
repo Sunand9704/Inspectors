@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const multer = require('multer');
 const path = require('path');
@@ -119,7 +119,7 @@ const uploadMiddlewares = {
   
   // Other services (to be expanded)
   auditing: {},
-  cbm: {},
+  INSPECTORS: {},
   'verification-certification': {}
 };
 
@@ -159,5 +159,6 @@ module.exports = {
   cleanupTempFiles,
   imageFilter
 };
+
 
 

@@ -1,11 +1,11 @@
-'use strict';
+﻿'use strict';
 
 /**
  * Script: Append missing text to Section.bodyText records
  *
  * Usage examples:
  *   node src/scripts/append-missing-section-bodytext.js --append "\n\nAdditional info." --dry-run
- *   node src/scripts/append-missing-section-bodytext.js --page cbm --language en --append "\nFooter text"
+ *   node src/scripts/append-missing-section-bodytext.js --page INSPECTORS --language en --append "\nFooter text"
  *   node src/scripts/append-missing-section-bodytext.js --mapping ./section-append-map.json
  *   node src/scripts/append-missing-section-bodytext.js --mapping ./section-append-map.json --only-mapped
  *
@@ -13,7 +13,7 @@
  * {
  *   "byId": { "<mongodb _id>": "text to append" },
  *   "bySectionId": { "<sectionId>": "text to append" },
- *   "byPageSection": { "cbm::intro": "text for page 'cbm' sectionId 'intro'" },
+ *   "byPageSection": { "INSPECTORS::intro": "text for page 'INSPECTORS' sectionId 'intro'" },
  *   "defaultAppend": "\n\nDefault text if nothing else matched"
  * }
  */
@@ -58,7 +58,7 @@ function parseArgs(argv) {
 function printHelpAndExit(code = 0) {
   console.log(`\nAppend missing text to Section.bodyText\n\n` +
     `Options:\n` +
-    `  --page <slug>           Filter by page slug (e.g., cbm, testing)\n` +
+    `  --page <slug>           Filter by page slug (e.g., INSPECTORS, testing)\n` +
     `  --language <code>       Filter by language (en, fr, pt, es, ru)\n` +
     `  --append <text>         Default text to append when not using mapping\n` +
     `  --mapping <file.json>   JSON mapping file for per-section text\n` +
@@ -178,6 +178,7 @@ main().catch(async (err) => {
   } catch (_) {}
   process.exit(1);
 });
+
 
 
 

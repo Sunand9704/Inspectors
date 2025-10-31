@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -6,7 +6,7 @@ require('dotenv').config();
 const Section = require('../models/Section');
 const Page = require('../models/Page');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/cbm';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/INSPECTORS';
 
 const PAGE_SLUG = 'testing';
 const SECTION_ID = 'liquid-penetrant-testing';
@@ -17,10 +17,10 @@ const DATA = {
     {
       heading: 'Liquid Penetrant Testing (PT)',
       content:
-        'From CBM 360 TIV - Known as Condition Based Monitoring 360° Technical Industrial Verification – Deliver precise liquid penetrant testing services for Mining and Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power & Utility Infrastructure.\n\nLiquid Penetrant Testing (PT) is a widely used non-destructive testing method that detects surface-breaking defects in non-porous materials. It uses capillary action to draw penetrant into surface discontinuities, making them visible for inspection.'
+        'From INSPECTORS 360 TIV - Known as Condition Based Monitoring 360Â° Technical Industrial Verification â€“ Deliver precise liquid penetrant testing services for Mining and Metal Plants, Oil & Gas Facilities, FPSO/FSO Vessels, Industrial Plants, and Power & Utility Infrastructure.\n\nLiquid Penetrant Testing (PT) is a widely used non-destructive testing method that detects surface-breaking defects in non-porous materials. It uses capillary action to draw penetrant into surface discontinuities, making them visible for inspection.'
     },
     {
-      heading: 'Why Choose PT from CBM 360 TIV?',
+      heading: 'Why Choose PT from INSPECTORS 360 TIV?',
       content: [
         'Detects surface-breaking defects in non-porous materials',
         'Simple and cost-effective inspection method',
@@ -67,32 +67,32 @@ const DATA = {
     {
       heading: 'Trusted PT by Industry Experts',
       content:
-        'CBM 360 TIV\'s certified PT technicians utilize advanced penetrant systems and proper procedures to ensure accurate defect detection. Our PT services deliver reliable results with detailed reporting and documentation.'
+        'INSPECTORS 360 TIV\'s certified PT technicians utilize advanced penetrant systems and proper procedures to ensure accurate defect detection. Our PT services deliver reliable results with detailed reporting and documentation.'
     },
     {
       heading: 'Applications Across Industries',
       content: [
-        'Mining & Metals – Weld inspection, casting quality assessment',
-        'Industrial Plants – Pressure vessels, heat exchangers, piping',
-        'Oil & Gas – Pipeline welds, storage tanks, offshore structures',
-        'FPSO/FSO Vessels – Hull welds, deck structures, cargo tanks',
-        'Power & Utilities – Turbine components, boiler welds, high-pressure systems'
+        'Mining & Metals â€“ Weld inspection, casting quality assessment',
+        'Industrial Plants â€“ Pressure vessels, heat exchangers, piping',
+        'Oil & Gas â€“ Pipeline welds, storage tanks, offshore structures',
+        'FPSO/FSO Vessels â€“ Hull welds, deck structures, cargo tanks',
+        'Power & Utilities â€“ Turbine components, boiler welds, high-pressure systems'
       ]
     },
     {
       heading: 'Standards & Certification',
       content: [
-        'ASME BPVC Section V Article 6 – PT procedures and acceptance',
-        'ASTM E165 / ASTM E1417 – Standard practices for PT',
-        'ISO 3452 Series – Non-destructive testing — PT methods',
-        'EN ISO 9712 / ASNT SNT-TC-1A / NAS 410 – Personnel qualification & certification',
+        'ASME BPVC Section V Article 6 â€“ PT procedures and acceptance',
+        'ASTM E165 / ASTM E1417 â€“ Standard practices for PT',
+        'ISO 3452 Series â€“ Non-destructive testing â€” PT methods',
+        'EN ISO 9712 / ASNT SNT-TC-1A / NAS 410 â€“ Personnel qualification & certification',
         'API 510 / 570 / 653, AWS D1.1, project-specific specifications'
       ]
     },
     {
       heading: 'Ready to Ensure Surface Integrity?',
       content:
-        'CBM 360 TIV offers rapid mobilization and full documentation for all Liquid Penetrant Testing activities worldwide. Contact us today to schedule your inspection campaign and secure the reliability of your critical components.'
+        'INSPECTORS 360 TIV offers rapid mobilization and full documentation for all Liquid Penetrant Testing activities worldwide. Contact us today to schedule your inspection campaign and secure the reliability of your critical components.'
     }
   ]
 };
@@ -148,19 +148,19 @@ async function linkSectionToPage(sectionId) {
 }
 
 async function main() {
-  console.log('🔌 Connecting to MongoDB...');
+  console.log('ðŸ”Œ Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI);
-  console.log('✅ Connected');
+  console.log('âœ… Connected');
   try {
     const sectionId = await upsertSection();
     await linkSectionToPage(sectionId);
-    console.log('✅ Liquid Penetrant Testing section upserted');
+    console.log('âœ… Liquid Penetrant Testing section upserted');
   } catch (e) {
-    console.error('❌ Error:', e.message);
+    console.error('âŒ Error:', e.message);
     process.exitCode = 1;
   } finally {
     await mongoose.connection.close();
-    console.log('🔌 Disconnected');
+    console.log('ðŸ”Œ Disconnected');
   }
 }
 
@@ -169,3 +169,4 @@ if (require.main === module) {
 }
 
 module.exports = { main };
+

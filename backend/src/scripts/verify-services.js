@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 require('dotenv').config();
 
@@ -11,7 +11,7 @@ async function main() {
   try {
     await connectToDatabase();
 
-    const expected = (process.env.EXPECTED_SERVICE_SLUGS || 'testing,cbm,inspection,auditing,verification-certification,innovation-rd')
+    const expected = (process.env.EXPECTED_SERVICE_SLUGS || 'testing,INSPECTORS,inspection,auditing,verification-certification,innovation-rd')
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean);
@@ -102,5 +102,6 @@ async function main() {
 }
 
 main();
+
 
 
