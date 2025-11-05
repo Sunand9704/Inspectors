@@ -317,20 +317,28 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
         <div className="container-responsive max-w-5xl mx-auto">
           {(() => {
             const content = section?.bodyText || '';
-            const blocks = parseContentToBlocks(content);
+            let blocks = parseContentToBlocks(content);
+            // Remove duplicate top heading if it matches section title
+            if (blocks.length > 0 && ['h1','h2','h3'].includes(blocks[0].type)) {
+              const firstHeadingText = String(blocks[0].props?.children || '').trim().toLowerCase();
+              const sectionTitleText = String(section?.title || '').trim().toLowerCase();
+              if (firstHeadingText && sectionTitleText && firstHeadingText === sectionTitleText) {
+                blocks = blocks.slice(1);
+              }
+            }
             const imageUrls = Array.isArray(section?.images) ? section!.images : [];
 
             if (imageUrls.length >= 2) {
               return (
                 <div className="flex flex-col gap-8">
                   <div className="overflow-hidden">
-                    <img src={imageUrls[0]} alt={`${section?.title || 'Service'} 1`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                    <img src={imageUrls[0]} alt={`${section?.title || 'Service'} 1`} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
                   </div>
                   <div className="space-y-4 md:px-4">
                     {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
                   </div>
                   <div className="overflow-hidden">
-                    <img src={imageUrls[1]} alt={`${section?.title || 'Service'} 2`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                    <img src={imageUrls[1]} alt={`${section?.title || 'Service'} 2`} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
                   </div>
                 </div>
               );
@@ -340,7 +348,7 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
               return (
                 <div className="flex flex-col gap-8">
                   <div className="overflow-hidden">
-                    <img src={imageUrls[0]} alt={section?.title || 'Service'} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                    <img src={imageUrls[0]} alt={section?.title || 'Service'} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
                   </div>
                   <div className="space-y-4 md:px-4">
                     {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}

@@ -113,6 +113,10 @@ export default function IndustriesDetail() {
         startNewBlock();
         const level = hMatch[1].length;
         const text = hMatch[2].trim();
+        // Avoid duplicate main title: skip H1 inside body, render only page title at top
+        if (level === 1) {
+          return;
+        }
         const Tag = (level === 1 ? 'h1' : level === 2 ? 'h2' : 'h3') as keyof JSX.IntrinsicElements;
         const sizeClass = level === 1 ? 'text-3xl md:text-4xl' : level === 2 ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl';
         blocks.push({
@@ -174,14 +178,14 @@ export default function IndustriesDetail() {
               return (
                 <div className="flex flex-col gap-8">
                   <div className="overflow-hidden">
-                    <img src={imageUrls[0]} alt={`${section.title} 1`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                    <img src={imageUrls[0]} alt={`${section.title} 1`} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
                   </div>
                   <div className="space-y-4 md:px-4">
                     {elements}
                   </div>
                   {imageUrls.length >= 3 && (
                     <div className="overflow-hidden">
-                      <img src={imageUrls[2]} alt={`${section.title} 3`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                      <img src={imageUrls[2]} alt={`${section.title} 3`} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
                     </div>
                   )}
                 </div>
@@ -192,7 +196,7 @@ export default function IndustriesDetail() {
               return (
                 <div className="flex flex-col gap-8">
                   <div className="overflow-hidden">
-                    <img src={imageUrls[0]} alt={section.title} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                    <img src={imageUrls[0]} alt={section.title} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
                   </div>
                   <div className="space-y-4">
                     {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
@@ -210,23 +214,7 @@ export default function IndustriesDetail() {
         </div>
       </section>
 
-      {/* If there are images, show total count above a grid to clarify how many exist in cloud */}
-      {Array.isArray(section.images) && section.images.length > 0 && (
-        <section className="section pt-0">
-          <div className="container-responsive max-w-5xl mx-auto">
-            <div className="flex justify-end mb-2">
-              <span className="text-xs text-muted-foreground">{section.images.length} image{section.images.length === 1 ? '' : 's'}</span>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {section.images.map((url, idx) => (
-                <div key={`${url}-${idx}`} className="overflow-hidden rounded-lg">
-                  <img src={url} alt={`${section.title} image ${idx + 1}`} className="w-full h-40 object-cover" loading="lazy" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Bottom gallery removed as requested */}
 
     </div>
   );
