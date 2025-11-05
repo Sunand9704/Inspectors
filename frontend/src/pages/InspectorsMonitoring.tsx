@@ -115,7 +115,7 @@ export default function InspectorsMonitoring() {
                 }}
               >
                 <div className="aspect-video w-full overflow-hidden">
-                  <img src={(item.images && item.images[0]) || '/placeholder.svg'} alt={item.title} className="h-full w-full object-cover group-hover:scale-[1.03] transition-transform duration-300" />
+                  <img src={item.coverPhoto || (item.images && item.images[0]) || '/placeholder.svg'} alt={item.title} className="h-full w-full object-cover group-hover:scale-[1.03] transition-transform duration-300" />
                 </div>
                 <CardHeader>
                   <CardTitle className="text-xl">{item.title}</CardTitle>

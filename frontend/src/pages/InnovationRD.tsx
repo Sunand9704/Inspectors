@@ -116,7 +116,7 @@ export default function InnovationRD() {
                 }}
               >
                 <div className="aspect-video w-full overflow-hidden">
-                  <img src={(s.images && s.images[0]) || '/placeholder.svg'} alt={s.title} className="h-full w-full object-cover group-hover:scale-[1.03] transition-transform duration-300" />
+                  <img src={s.coverPhoto || (s.images && s.images[0]) || '/placeholder.svg'} alt={s.title} className="h-full w-full object-cover group-hover:scale-[1.03] transition-transform duration-300" />
                 </div>
                 <CardHeader>
                   <CardTitle className="text-xl">{s.title}</CardTitle>

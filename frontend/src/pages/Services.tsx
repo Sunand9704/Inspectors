@@ -43,15 +43,33 @@ export default function Services() {
         const page = await getPageWithSections('services', undefined, undefined);
         if (!isMounted) return;
         const sections: SectionDto[] = page.sections || [];
+        
+        // Log all service cover images for verification
+        console.log('=== SERVICE COVER IMAGES DEBUG ===');
+        sections.forEach((s) => {
+          console.log(`Service: ${s.title}`);
+          console.log(`  - coverPhoto: ${s.coverPhoto || 'NOT SET'}`);
+          console.log(`  - images[0]: ${s.images?.[0] || 'NOT SET'}`);
+          console.log(`  - images array length: ${s.images?.length || 0}`);
+          if (s.images && s.images.length > 0) {
+            console.log(`  - All images:`, s.images);
+          }
+        });
+        console.log('================================');
+        
         const toSlug = (text: string) => String(text).toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
-        const items = sections.map((s, index) => ({
-          id: s._id || index,
-          title: s.title,
-          description: s.bodyText?.slice(0, 220) || '',
-          icon: iconMap.Search,
-          link: `/services/${s.sectionId || toSlug(s.title)}`,
-          imageUrl: (s.images && s.images[0]) || undefined,
-        }));
+        const items = sections.map((s, index) => {
+          const imageUrl = s.coverPhoto || (s.images && s.images[0]) || undefined;
+          console.log(`[Service: ${s.title}] Final imageUrl: ${imageUrl || 'UNDEFINED'}`);
+          return {
+            id: s._id || index,
+            title: s.title,
+            description: s.bodyText?.slice(0, 220) || '',
+            icon: iconMap.Search,
+            link: `/services/${s.sectionId || toSlug(s.title)}`,
+            imageUrl,
+          };
+        });
         setServices(items);
       } catch {
         if (isMounted) setServices([]);

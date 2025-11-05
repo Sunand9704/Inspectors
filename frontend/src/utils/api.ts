@@ -71,6 +71,7 @@ export type SectionDto = {
   title: string;
   bodyText?: string;
   images?: string[];
+  coverPhoto?: string;
   language?: string;
   pageNumber?: number;
   sectionId?: string;
