@@ -1,10 +1,10 @@
 import axios from 'axios';
 const envBaseUrl = (import.meta as any)?.env?.VITE_API_BASE_URL as string | undefined;
 
-const apiBaseURL = "https://inspectors.onrender.com";
-// Use frontend env var if provided; otherwise default to local backend that points to your new DB
-const renderurl ="https://inspectors.onrender.com";
-const local = "http://localhost:8000";
+// Prefer environment variable; otherwise default to local backend.
+// This avoids accidentally calling the remote Render API which may have stale data
+// and wrong coverPhoto values compared to your local database.
+const apiBaseURL = envBaseUrl || "http://localhost:8000";
 
 
 
@@ -70,6 +70,7 @@ export type SectionDto = {
   title: string;
   bodyText?: string;
   images?: string[];
+  coverPhoto?: string;
   language?: string;
   pageNumber?: number;
   sectionId?: string;
