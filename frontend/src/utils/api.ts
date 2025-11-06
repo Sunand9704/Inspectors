@@ -6,7 +6,7 @@ const envBaseUrl = (import.meta as any)?.env?.VITE_API_BASE_URL as string | unde
 const renderurl ="https://inspectors.onrender.com";
 const local = "http://localhost:8000";
 
-const apiBaseURL = true ? local : renderurl;
+const apiBaseURL = false ? local : renderurl;
 
 
 export const apiClient = axios.create({
