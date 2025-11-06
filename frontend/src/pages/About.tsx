@@ -245,8 +245,9 @@ export default function About() {
       <div className="container-responsive py-12">
         <article className="prose max-w-none">
         {(!blocks.some(b => b.type === 'h1')) && (
-          <h1 className="text-3xl lg:text-5xl font-bold mb-4">{page?.title || aboutTranslations?.title || 'About'}</h1>
+          <h1 className="text-3xl lg:text-5xl font-bold mb-2">{page?.title || aboutTranslations?.title || 'About'}</h1>
         )}
+        <p className="text-sm md:text-base text-muted-foreground mb-4">Established year: 2012</p>
         {/* Hero banner after first heading */}
         {mainSection?.images && mainSection.images[0] && (
           <div className="mb-8 max-w-3xl mx-auto">

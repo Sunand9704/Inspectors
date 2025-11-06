@@ -158,13 +158,33 @@ export default function IndustriesDetail() {
         <div className="container-responsive max-w-5xl mx-auto">
           {(() => {
             const blocks = parseContentToBlocks(section.bodyText || '');
-            const imageUrls = section.images || [];
+            const imageUrls = [section.coverPhoto, ...(section.images || [])].filter(Boolean) as string[];
+
+            // Extract the first heading (h2/h3) to place before the first image
+            const headingIndex = blocks.findIndex(b => b.type === 'h2' || b.type === 'h3' || b.type === 'h1');
+            const headingEl = headingIndex >= 0 ? <div key="first-heading">{blocks[headingIndex].content}</div> : null;
+            const bodyBlocks = headingIndex >= 0 ? blocks.filter((_, i) => i !== headingIndex) : blocks;
 
             if (imageUrls.length >= 2) {
-              // Insert second image around the middle of the text blocks
+              // If there are no body blocks, show both images stacked
+              if (bodyBlocks.length === 0) {
+                return (
+                  <div className="flex flex-col gap-8">
+                    {headingEl}
+                    <div className="overflow-hidden">
+                      <img src={imageUrls[0]} alt={`${section.title} 1`} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
+                    </div>
+                    <div className="overflow-hidden">
+                      <img src={imageUrls[1]} alt={`${section.title} 2`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                    </div>
+                  </div>
+                );
+              }
+
+              // Insert second image around the middle of the remaining text blocks
               const elements: JSX.Element[] = [];
-              const middleIndex = Math.max(0, Math.ceil(blocks.length / 2) - 1);
-              blocks.forEach((b, i) => {
+              const middleIndex = Math.max(0, Math.ceil(bodyBlocks.length / 2) - 1);
+              bodyBlocks.forEach((b, i) => {
                 elements.push(<div key={`blk-${i}`}>{b.content}</div>);
                 if (i === middleIndex) {
                   elements.push(
@@ -177,6 +197,7 @@ export default function IndustriesDetail() {
 
               return (
                 <div className="flex flex-col gap-8">
+                  {headingEl}
                   <div className="overflow-hidden">
                     <img src={imageUrls[0]} alt={`${section.title} 1`} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
                   </div>
@@ -195,11 +216,12 @@ export default function IndustriesDetail() {
             if (imageUrls.length === 1) {
               return (
                 <div className="flex flex-col gap-8">
+                  {headingEl}
                   <div className="overflow-hidden">
                     <img src={imageUrls[0]} alt={section.title} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
                   </div>
                   <div className="space-y-4">
-                    {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
+                    {bodyBlocks.map((b, i) => (<div key={i}>{b.content}</div>))}
                   </div>
                 </div>
               );
