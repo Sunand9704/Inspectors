@@ -1,4 +1,3 @@
-
 import { HeroSection } from '@/components/Common/HeroSection';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,7 +19,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { fetchContactOffices, sendContactInquiry } from '@/services/contactOffices';
 import { useToast } from '@/hooks/use-toast';
 
-// Using dynamic offices data from contact-offices.ts
+// Fetching offices data from database via API
 
 export default function Contact() {
   const [groups, setGroups] = useState<{ region_name: string; offices: any[] }[]>([]);
@@ -51,8 +50,12 @@ export default function Contact() {
   }, [form]);
   useEffect(() => {
     fetchContactOffices()
-      .then(setGroups)
-      .catch(() => {
+      .then((data) => {
+        console.log('Fetched contact offices:', data);
+        setGroups(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching contact offices:', error);
         setGroups([]);
       });
   }, []);
@@ -145,41 +148,41 @@ export default function Contact() {
             {groups.map((group, index) => (
               <div key={index}>
                 <h3 className="text-2xl font-bold mb-8 text-center">{group.region_name}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {group.offices.map((office, officeIndex) => (
-                    <div key={officeIndex} className="bg-white border border-border rounded-lg p-0 hover:shadow-lg transition-shadow overflow-hidden">
-                      {/* Header like small tab */}
-                      <div className="px-4 py-3 bg-tuv-gray-50 border-b flex items-center justify-between gap-4">
-                        <div>
-                          <h4 className="text-base font-semibold">{office.office_name}</h4>
+                    <div key={officeIndex} className="bg-white border border-gray-200 rounded-xl p-0 hover:shadow-lg transition-shadow overflow-hidden">
+                      {/* Header with office name and flag */}
+                      <div className="px-5 py-4 flex items-start justify-between gap-4 border-b border-gray-100">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-base font-bold text-gray-900 leading-tight">{office.office_name}</h4>
                           {office.is_lab_facility && (
-                            <p className="text-xs text-primary mt-1">laboratory facility</p>
+                            <p className="text-xs text-gray-600 mt-1.5">laboratory facility</p>
                           )}
                         </div>
                         {office.image_url && (
                           <img
                             src={office.image_url}
-                            alt={office.office_name}
-                            className="h-14 w-24 object-cover rounded-md border"
+                            alt={`${office.country} flag`}
+                            className="h-12 w-16 object-cover rounded flex-shrink-0"
                             loading="lazy"
                           />
                         )}
                       </div>
-                      {/* Body rows */}
-                      <div className="p-4 space-y-3 text-sm">
-                        <div className="flex items-start gap-2">
-                          <MapPin className="h-4 w-4 text-primary mt-0.5" />
-                          <p className="text-muted-foreground leading-6">{office.address}</p>
+                      {/* Contact details */}
+                      <div className="px-5 py-4 space-y-3">
+                        <div className="flex items-start gap-3">
+                          <MapPin className="h-4 w-4 text-gray-500 mt-0.5 flex-shrink-0" />
+                          <p className="text-sm text-gray-700 leading-relaxed">{office.address}</p>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Phone className="h-4 w-4 text-primary" />
-                          <p className="text-muted-foreground">{office.phone}</p>
+                        <div className="flex items-center gap-3">
+                          <Phone className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                          <p className="text-sm text-gray-700">{office.phone}</p>
                         </div>
-                        <div className="flex items-start gap-2">
-                          <Mail className="h-4 w-4 text-primary mt-0.5" />
+                        <div className="flex items-start gap-3">
+                          <Mail className="h-4 w-4 text-gray-500 mt-0.5 flex-shrink-0" />
                           <div className="space-y-1">
                             {office.emails.map((e, i) => (
-                              <p key={i} className="text-muted-foreground">{e}</p>
+                              <a key={i} href={`mailto:${e}`} className="text-sm text-blue-600 hover:text-blue-800 block">{e}</a>
                             ))}
                           </div>
                         </div>
