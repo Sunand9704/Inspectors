@@ -332,14 +332,16 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
               return (
                 <div className="flex flex-col gap-8">
                   <div className="overflow-hidden">
-                    <img src={imageUrls[0]} alt={`${section?.title || 'Service'} 1`} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
+                    <img src={imageUrls[0]} alt={`${section?.title || 'Service'} 1`} className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl" />
                   </div>
                   <div className="space-y-4 md:px-4">
                     {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
                   </div>
-                  <div className="overflow-hidden">
-                    <img src={imageUrls[1]} alt={`${section?.title || 'Service'} 2`} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
-                  </div>
+                  {imageUrls.slice(1).map((url, index) => (
+                    <div key={index} className="overflow-hidden">
+                      <img src={url} alt={`${section?.title || 'Service'} ${index + 2}`} className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl" />
+                    </div>
+                  ))}
                 </div>
               );
             }
@@ -348,7 +350,7 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
               return (
                 <div className="flex flex-col gap-8">
                   <div className="overflow-hidden">
-                    <img src={imageUrls[0]} alt={section?.title || 'Service'} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
+                    <img src={imageUrls[0]} alt={section?.title || 'Service'} className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl" />
                   </div>
                   <div className="space-y-4 md:px-4">
                     {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
