@@ -166,6 +166,9 @@ export default function IndustriesDetail() {
             const bodyBlocks = headingIndex >= 0 ? blocks.filter((_, i) => i !== headingIndex) : blocks;
 
             if (imageUrls.length >= 2) {
+              // Check if this is "Oil & Gas (Onshore & Offshore)" industry
+              const isOilGasIndustry = section.title === "Oil & Gas (Onshore & Offshore)";
+              
               // If there are no body blocks, show both images stacked
               if (bodyBlocks.length === 0) {
                 return (
@@ -174,8 +177,12 @@ export default function IndustriesDetail() {
                     <div className="overflow-hidden">
                       <img src={imageUrls[0]} alt={`${section.title} 1`} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
                     </div>
-                    <div className="overflow-hidden">
-                      <img src={imageUrls[1]} alt={`${section.title} 2`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                    <div className={isOilGasIndustry ? "mt-6" : "overflow-hidden"}>
+                      <img 
+                        src={imageUrls[1]} 
+                        alt={`${section.title} 2`} 
+                        className={`w-full ${isOilGasIndustry ? 'object-contain' : 'h-64 md:h-80 object-cover'} rounded-2xl`} 
+                      />
                     </div>
                   </div>
                 );
@@ -188,8 +195,12 @@ export default function IndustriesDetail() {
                 elements.push(<div key={`blk-${i}`}>{b.content}</div>);
                 if (i === middleIndex) {
                   elements.push(
-                    <div key="img-2" className="overflow-hidden mt-6">
-                      <img src={imageUrls[1]} alt={`${section.title} 2`} className="w-full h-64 md:h-80 object-cover rounded-2xl" />
+                    <div key="img-2" className={isOilGasIndustry ? "mt-6 -mx-4 md:-mx-8" : "overflow-hidden mt-6"}>
+                      <img 
+                        src={imageUrls[1]} 
+                        alt={`${section.title} 2`} 
+                        className={`w-full ${isOilGasIndustry ? 'object-contain max-w-none' : 'h-64 md:h-80 object-cover'} rounded-2xl`} 
+                      />
                     </div>
                   );
                 }
@@ -201,7 +212,7 @@ export default function IndustriesDetail() {
                   <div className="overflow-hidden">
                     <img src={imageUrls[0]} alt={`${section.title} 1`} className="w-full h-80 md:h-96 object-cover rounded-2xl" />
                   </div>
-                  <div className="space-y-4 md:px-4">
+                  <div className={`space-y-4 ${isOilGasIndustry ? '' : 'md:px-4'}`}>
                     {elements}
                   </div>
                   {imageUrls.length >= 3 && (
