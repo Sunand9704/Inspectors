@@ -1,5 +1,6 @@
+import { apiClient } from '@/utils/api';
+
 export interface OfficeData {
-  region_name: string;
   region: string;
   country: string;
   office_name: string;
@@ -11,11 +12,21 @@ export interface OfficeData {
   image_url?: string;
 }
 
-import { apiClient } from '@/utils/api';
-
 export async function fetchContactOffices(): Promise<{ region_name: string; offices: OfficeData[] }[]> {
-  const { data } = await apiClient.get('/api/contact-offices');
-  return data;
+  try {
+    // Fetch from API (database)
+    const { data } = await apiClient.get('/api/contact-offices');
+    if (data && Array.isArray(data) && data.length > 0) {
+      return data;
+    }
+    // Return empty array if API returns empty
+    console.warn('API returned empty data');
+    return [];
+  } catch (error) {
+    // Log error and return empty array
+    console.error('Failed to fetch contact offices from API:', error);
+    return [];
+  }
 }
 
 export type ContactInquiry = {
