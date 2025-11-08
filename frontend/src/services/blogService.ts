@@ -23,6 +23,15 @@ export type BlogPostDto = {
   formattedPublishedAt: string;
   createdAt: string;
   updatedAt: string;
+  translations?: {
+    [key: string]: {
+      title?: string;
+      excerpt?: string;
+      content?: string;
+      tags?: string[];
+      metaDescription?: string;
+    };
+  };
 };
 
 export type BlogListParams = {

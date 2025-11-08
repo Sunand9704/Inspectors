@@ -11,6 +11,7 @@ import Services from "./pages/Services";
 import Industries from "./pages/Industries";
 import About from "./pages/About";
 import Careers from "./pages/Careers";
+import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import TestingInspection from "./pages/TestingInspection";
@@ -49,7 +50,9 @@ const App = () => (
               <Route path="/industries" element={<Industries />} />
               <Route path="/industries/:slug" element={<IndustriesDetail />} />
               <Route path="/clients" element={<Clients />} />
+              <Route path="/careers" element={<Careers />} />
               <Route path="/vacancies" element={<Careers />} />
+              <Route path="/blog" element={<Blog />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />
