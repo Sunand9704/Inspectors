@@ -54,7 +54,7 @@ const translations = {
           hero: {
             title: "Leading Testing, Inspection & Certification Services",
             subtitle: "Trusted Worldwide",
-            description: "Ensuring safety, security, and sustainability across industries with comprehensive testing, inspection, certification, and advisory services.",
+            description: "we provide complete inspection workforce and technical support solutions, including recruitment, contract staffing, payroll, logistics, and training—ensuring qualified professionals and reliable service for every project.",
             primaryCTAText: "Explore Services",
             secondaryCTAText: "Get Quote",
           },
@@ -70,7 +70,7 @@ const translations = {
         },
         careers: {
           title: "Current Openings",
-          description: "Explore exciting career opportunities across our global organization. Find the perfect role to advance your career.",
+          description: "Join INSPECTORS 360 and become part of a global network of certified inspectors, engineers, and technical professionals. We connect skilled talent with leading projects across Oil & Gas, Mining, and Industrial sectors worldwide.",
           applyNow: "Apply Now",
           hiringProcess: {
             title: "Our Hiring Process",
@@ -102,7 +102,7 @@ const translations = {
         },
         blog: {
           title: "Latest Articles",
-          description: "Technical insights and industry updates from our team of experts."
+          description: "Stay updated with the latest insights, trends, and best practices in inspection, workforce solutions, and industrial compliance from INSPECTORS 360."
         },
         contact: {
           officesTitle: "Our Global Offices",
@@ -307,7 +307,7 @@ const translations = {
           hero: {
             title: "Services de test, d'inspection et de certification de premier plan",
             subtitle: "De confiance dans le monde entier",
-            description: "Garantir la sécurité, la sûreté et la durabilité dans tous les secteurs grâce à des services complets de test, d'inspection, de certification et de conseil.",
+            description: "Nous fournissons des solutions complètes de main-d’œuvre d’inspection et de soutien technique, incluant le recrutement, le personnel sous contrat, la paie, la logistique et la formation — garantissant des professionnels qualifiés et un service fiable pour chaque projet.",
             primaryCTAText: "Explorer les services",
             secondaryCTAText: "Obtenir un devis",
           },
@@ -323,7 +323,7 @@ const translations = {
         },
         careers: {
           title: "Offres d'emploi actuelles",
-          description: "Découvrez des opportunités de carrière passionnantes au sein de notre organisation mondiale. Trouvez le poste idéal pour faire progresser votre carrière.",
+          description: "Rejoignez INSPECTORS 360 et faites partie d’un réseau mondial d’inspecteurs, d’ingénieurs et de professionnels techniques certifiés. Nous connectons les talents qualifiés aux projets majeurs des secteurs du pétrole et du gaz, de l’exploitation minière et de l’industrie à travers le monde.",
           applyNow: "Postuler maintenant",
           hiringProcess: {
             title: "Notre processus de recrutement",
@@ -355,7 +355,7 @@ const translations = {
         },
         blog: {
           title: "Derniers Articles",
-          description: "Analyses techniques et actualités du secteur de notre équipe d'experts."
+          description: "Restez informé des dernières analyses, tendances et meilleures pratiques en matière d’inspection, de solutions de main-d’œuvre et de conformité industrielle avec INSPECTORS 360."
         },
         contact: {
           officesTitle: "Nos bureaux dans le monde",
@@ -560,7 +560,7 @@ const translations = {
           hero: {
             title: "Principais serviços de Teste, Inspeção e Certificação",
             subtitle: "Confiável em todo o mundo",
-            description: "Garantindo segurança, proteção e sustentabilidade em diversos setores com serviços abrangentes de teste, inspeção, certificação e consultoria.",
+            description: "Fornecemos soluções completas de equipe de inspeção e suporte técnico, incluindo recrutamento, contratação temporária, folha de pagamento, logística e treinamento — garantindo profissionais qualificados e um serviço confiável para cada projeto.",
             primaryCTAText: "Explorar Serviços",
             secondaryCTAText: "Solicitar Orçamento",
           },
@@ -576,7 +576,7 @@ const translations = {
         },
         careers: {
           title: "Vagas Abertas",
-          description: "Explore oportunidades de carreira empolgantes em nossa organização global. Encontre o cargo ideal para avançar na sua carreira.",
+          description: "Junte-se à INSPECTORS 360 e faça parte de uma rede global de inspetores, engenheiros e profissionais técnicos certificados. Conectamos talentos qualificados a projetos de destaque nos setores de Petróleo e Gás, Mineração e Indústria em todo o mundo.",
           applyNow: "Candidatar-se agora",
           hiringProcess: {
             title: "Nosso processo de contratação",
@@ -608,7 +608,7 @@ const translations = {
         },
         blog: {
           title: "Artigos Mais Recentes",
-          description: "Percepções técnicas e novidades do setor da nossa equipe de especialistas."
+          description: "Mantenha-se atualizado com as mais recentes percepções, tendências e melhores práticas em inspeção, soluções de força de trabalho e conformidade industrial da INSPECTORS 360."
         },
         contact: {
           officesTitle: "Nossos Escritórios Globais",
@@ -813,7 +813,7 @@ const translations = {
           hero: {
             title: "Servicios líderes de Pruebas, Inspección y Certificación",
             subtitle: "De confianza en todo el mundo",
-            description: "Garantizando la seguridad, la protección y la sostenibilidad en todas las industrias con servicios integrales de prueba, inspección, certificación y asesoría.",
+            description: "Proporcionamos soluciones completas de personal de inspección y soporte técnico, que incluyen reclutamiento, contratación temporal, nómina, logística y capacitación, garantizando profesionales calificados y un servicio confiable para cada proyecto.",
             primaryCTAText: "Explorar Servicios",
             secondaryCTAText: "Obtener Cotización",
           },
@@ -829,7 +829,7 @@ const translations = {
         },
         careers: {
           title: "Vacantes Actuales",
-          description: "Explora emocionantes oportunidades de carrera en nuestra organización global. Encuentra el puesto perfecto para impulsar tu carrera.",
+          description: "Únete a INSPECTORS 360 y forma parte de una red global de inspectores, ingenieros y profesionales técnicos certificados. Conectamos talento calificado con proyectos líderes en los sectores de petróleo y gas, minería e industria en todo el mundo.",
           applyNow: "Postular ahora",
           hiringProcess: {
             title: "Nuestro proceso de contratación",
@@ -861,7 +861,7 @@ const translations = {
         },
         blog: {
           title: "Artículos Recientes",
-          description: "Perspectivas técnicas y novedades de la industria de nuestro equipo de expertos."
+          description: "Mantente actualizado con las últimas ideas, tendencias y mejores prácticas en inspección, soluciones laborales y cumplimiento industrial de INSPECTORS 360."
         },
         contact: {
           officesTitle: "Nuestras Oficinas Globales",
@@ -1066,7 +1066,7 @@ const translations = {
           hero: {
             title: "Ведущие услуги по тестированию, инспекции и сертификации",
             subtitle: "Доверие по всему миру",
-            description: "Обеспечение безопасности, надежности и устойчивого развития в различных отраслях благодаря комплексным услугам по тестированию, инспекции, сертификации и консультированию.",
+            description: "Мы предоставляем комплексные решения по обеспечению инспекционного персонала и технической поддержке, включая набор, контрактный персонал, расчет заработной платы, логистику и обучение — обеспечивая квалифицированных специалистов и надежное обслуживание для каждого проекта.",
             primaryCTAText: "Изучить услуги",
             secondaryCTAText: "Получить предложение",
           },
@@ -1082,7 +1082,7 @@ const translations = {
         },
         careers: {
           title: "Актуальные вакансии",
-          description: "Изучите интересные карьерные возможности в нашей глобальной организации. Найдите идеальную роль для развития вашей карьеры.",
+          description: "Присоединяйтесь к INSPECTORS 360 и станьте частью глобальной сети сертифицированных инспекторов, инженеров и технических специалистов. Мы соединяем квалифицированных профессионалов с ведущими проектами в отраслях нефти и газа, горнодобывающей промышленности и промышленного сектора по всему миру.",
           applyNow: "Подать заявку",
           hiringProcess: {
             title: "Наш процесс найма",
@@ -1114,7 +1114,7 @@ const translations = {
         },
         blog: {
           title: "Последние статьи",
-          description: "Технические обзоры и новости отрасли от нашей команды экспертов."
+          description: "Будьте в курсе последних идей, тенденций и лучших практик в области инспекции, кадровых решений и промышленного соответствия от INSPECTORS 360."
         },
         contact: {
           officesTitle: "Наши офисы по всему миру",
@@ -1319,7 +1319,7 @@ const translations = {
           hero: {
             title: "领先的测试、检验和认证服务",
             subtitle: "全球信赖",
-            description: "通过全面的测试、检验、认证和咨询服务确保各行业的安全、保障和可持续性。",
+            description: "我们提供完整的检验人员和技术支持解决方案，包括招聘、合同用工、薪资管理、物流和培训，确保每个项目都有合格的专业人员和可靠的服务。",
             primaryCTAText: "探索服务",
             secondaryCTAText: "获取报价",
           },
@@ -1335,7 +1335,7 @@ const translations = {
         },
         careers: {
           title: "当前职位空缺",
-          description: "探索我们全球组织中激动人心的职业发展机会。找到理想的职位，助您职业发展。",
+          description: "加入 INSPECTORS 360，成为全球认证检验员、工程师和技术专业人士网络的一员。我们将优秀人才与全球石油和天然气、采矿及工业领域的领先项目相连接。",
           applyNow: "立即申请",
           hiringProcess: {
             title: "我们的招聘流程",
@@ -1367,7 +1367,7 @@ const translations = {
         },
         blog: {
           title: "最新文章",
-          description: "来自我们专家团队的技术见解和行业更新。"
+          description: "通过 INSPECTORS 360 获取最新的检验、劳动力解决方案和工业合规方面的洞察、趋势与最佳实践，保持与行业同步。"
         },
         contact: {
           officesTitle: "我们的全球办事处",
