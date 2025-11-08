@@ -312,7 +312,7 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
         </div>
       </section>
 
-      {/* Content + images arranged like other detail pages */}
+      {/* Content + images arranged with diagonal layout */}
       <section className="section pt-0">
         <div className="container-responsive max-w-5xl mx-auto">
           {(() => {
@@ -328,37 +328,89 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
             }
             const imageUrls = Array.isArray(section?.images) ? section!.images : [];
 
-            if (imageUrls.length >= 2) {
-              return (
-                <div className="flex flex-col gap-8">
-                  <div className="overflow-hidden">
-                    <img src={imageUrls[0]} alt={`${section?.title || 'Service'} 1`} className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl" />
-                  </div>
-                  <div className="space-y-4 md:px-4">
-                    {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
-                  </div>
-                  {imageUrls.slice(1).map((url, index) => (
-                    <div key={index} className="overflow-hidden">
-                      <img src={url} alt={`${section?.title || 'Service'} ${index + 2}`} className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl" />
+            // Extract the first heading to place before the first image
+            const headingIndex = blocks.findIndex(b => ['h1','h2','h3'].includes(b.type));
+            const headingEl = headingIndex >= 0 ? <div key="first-heading">{blocks[headingIndex].content}</div> : null;
+            const bodyBlocks = headingIndex >= 0 ? blocks.filter((_, i) => i !== headingIndex) : blocks;
+
+            if (imageUrls.length >= 1) {
+              // Build elements array with diagonal image layout
+              const elements: JSX.Element[] = [];
+              
+              // Add first heading if it exists
+              if (headingEl) {
+                elements.push(headingEl);
+              }
+              
+              // Add first image after first heading
+              elements.push(
+                <div key="img-0" className="overflow-hidden my-6">
+                  <img 
+                    src={imageUrls[0]} 
+                    alt={`${section?.title || 'Service'} 1`} 
+                    className="w-full h-64 md:h-80 object-cover rounded-2xl" 
+                  />
+                </div>
+              );
+
+              // Distribute remaining images and content blocks in diagonal pattern
+              let imageIndex = 1;
+              // Calculate spacing: distribute images evenly through content
+              const itemsPerImage = imageUrls.length > 1 && bodyBlocks.length > 0 
+                ? Math.ceil(bodyBlocks.length / (imageUrls.length - 1)) 
+                : bodyBlocks.length + 1; // Prevent division by zero
+
+              bodyBlocks.forEach((b, i) => {
+                elements.push(<div key={`blk-${i}`}>{b.content}</div>);
+                
+                // Insert images at intervals to create diagonal effect
+                // Alternate between left and right margins for staggered/diagonal appearance
+                if (imageIndex < imageUrls.length && itemsPerImage > 0 && (i + 1) % itemsPerImage === 0) {
+                  const isEven = imageIndex % 2 === 0;
+                  elements.push(
+                    <div 
+                      key={`img-${imageIndex}`} 
+                      className={`overflow-hidden my-6 ${isEven ? 'md:ml-16 lg:ml-24' : 'md:mr-16 lg:mr-24'}`}
+                    >
+                      <img 
+                        src={imageUrls[imageIndex]} 
+                        alt={`${section?.title || 'Service'} ${imageIndex + 1}`} 
+                        className="w-full h-64 md:h-80 object-cover rounded-2xl" 
+                      />
                     </div>
-                  ))}
-                </div>
-              );
-            }
+                  );
+                  imageIndex++;
+                }
+              });
 
-            if (imageUrls.length === 1) {
+              // Add any remaining images at the end with diagonal pattern
+              while (imageIndex < imageUrls.length) {
+                const isEven = imageIndex % 2 === 0;
+                elements.push(
+                  <div 
+                    key={`img-${imageIndex}`} 
+                    className={`overflow-hidden my-6 ${isEven ? 'md:ml-16 lg:ml-24' : 'md:mr-16 lg:mr-24'}`}
+                  >
+                    <img 
+                      src={imageUrls[imageIndex]} 
+                      alt={`${section?.title || 'Service'} ${imageIndex + 1}`} 
+                      className="w-full h-64 md:h-80 object-cover rounded-2xl" 
+                    />
+                  </div>
+                );
+                imageIndex++;
+              }
+
               return (
-                <div className="flex flex-col gap-8">
-                  <div className="overflow-hidden">
-                    <img src={imageUrls[0]} alt={section?.title || 'Service'} className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl" />
-                  </div>
+                <div className="flex flex-col gap-4">
                   <div className="space-y-4 md:px-4">
-                    {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
+                    {elements}
                   </div>
                 </div>
               );
             }
 
+            // No images - just render content
             return (
               <div className="space-y-4 md:px-4">
                 {blocks.map((b, i) => (<div key={i}>{b.content}</div>))}
