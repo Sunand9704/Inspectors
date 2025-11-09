@@ -83,6 +83,7 @@ router.get('/status', getApplicationStatus);
  */
 router.get('/', listCareers);
 
+// IMPORTANT: Keep /:id route LAST to avoid matching /apply or /status
 /**
  * @route GET /api/careers/:id
  * @desc Get one career by id

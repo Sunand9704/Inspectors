@@ -22,6 +22,7 @@ import VerificationCertification from "./pages/VerificationCertification";
 import InnovationRD from "./pages/InnovationRD";
 import ServiceDetail from "./pages/ServiceDetail";
 import IndustriesDetail from "./pages/IndustriesDetail";
+import CareerDetail from "./pages/CareerDetail";
 import Clients from "./pages/Clients";
 
 const queryClient = new QueryClient();
@@ -51,6 +52,7 @@ const App = () => (
               <Route path="/industries/:slug" element={<IndustriesDetail />} />
               <Route path="/clients" element={<Clients />} />
               <Route path="/careers" element={<Careers />} />
+              <Route path="/careers/:id" element={<CareerDetail />} />
               <Route path="/vacancies" element={<Careers />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/about" element={<About />} />
