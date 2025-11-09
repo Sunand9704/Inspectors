@@ -11,14 +11,35 @@ const Career = require('../models/Career');
  */
 async function submitJobApplication(req, res) {
   try {
+    // Log incoming request for debugging
+    logger.info('Job application request received', {
+      method: req.method,
+      url: req.url,
+      contentType: req.headers['content-type'],
+      hasFile: !!req.file,
+      bodyKeys: Object.keys(req.body || {}),
+    });
+
     const applicationData = req.body;
     const resumeFile = req.file;
+
+    // Log received data
+    logger.info('Application data received', {
+      fields: Object.keys(applicationData || {}),
+      fileInfo: resumeFile ? {
+        fieldname: resumeFile.fieldname,
+        originalname: resumeFile.originalname,
+        mimetype: resumeFile.mimetype,
+        size: resumeFile.size,
+      } : null,
+    });
 
     // Validate required fields
     const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'position', 'department', 'experience', 'coverLetter'];
     const missingFields = requiredFields.filter(field => !applicationData[field]);
     
     if (missingFields.length > 0) {
+      logger.warn('Missing required fields', { missingFields });
       return res.status(400).json({
         success: false,
         message: `Missing required fields: ${missingFields.join(', ')}`
@@ -60,33 +81,42 @@ async function submitJobApplication(req, res) {
       });
     }
 
-    // Send application email to admin
-    const adminEmailResult = await emailService.sendJobApplication(
-      applicationData,
-      resumeFile.buffer,
-      resumeFile.originalname
-    );
-
-    // Send confirmation email to applicant
-    const confirmationResult = await emailService.sendApplicationConfirmation(applicationData);
-
-    // Log the application
-    logger.info('Job application submitted successfully', {
-      position: applicationData.position,
-      applicant: `${applicationData.firstName} ${applicationData.lastName}`,
-      email: applicationData.email,
-      adminEmailSent: adminEmailResult.success,
-      confirmationEmailSent: confirmationResult.success
-    });
-
+    // Send response immediately, then send emails asynchronously (non-blocking)
+    // This prevents timeouts if email service is slow
     res.status(200).json({
       success: true,
       message: 'Application submitted successfully',
       data: {
-        adminEmailSent: adminEmailResult.success,
-        confirmationEmailSent: confirmationResult.success,
-        applicationId: adminEmailResult.messageId
+        applicationId: `app-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       }
+    });
+
+    // Send emails asynchronously (don't wait for them)
+    // This prevents the request from hanging if email service is slow
+    Promise.all([
+      emailService.sendJobApplication(
+        applicationData,
+        resumeFile.buffer,
+        resumeFile.originalname
+      ).catch(err => {
+        logger.error('Failed to send admin email:', err);
+        return { success: false, error: err.message };
+      }),
+      emailService.sendApplicationConfirmation(applicationData).catch(err => {
+        logger.error('Failed to send confirmation email:', err);
+        return { success: false, error: err.message };
+      })
+    ]).then(([adminEmailResult, confirmationResult]) => {
+      // Log the application after emails are sent (or failed)
+      logger.info('Job application processed', {
+        position: applicationData.position,
+        applicant: `${applicationData.firstName} ${applicationData.lastName}`,
+        email: applicationData.email,
+        adminEmailSent: adminEmailResult.success,
+        confirmationEmailSent: confirmationResult.success
+      });
+    }).catch(err => {
+      logger.error('Error processing emails:', err);
     });
 
   } catch (error) {

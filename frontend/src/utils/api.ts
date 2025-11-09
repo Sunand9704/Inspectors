@@ -3,27 +3,65 @@ const envBaseUrl = (import.meta as any)?.env?.VITE_API_BASE_URL as string | unde
 
 
 // Use frontend env var if provided; otherwise default to local backend that points to your new DB
-const renderurl ="https://inspectors.onrender.com";
+const renderurl = "https://inspectors.onrender.com";
 const local = "http://localhost:8000";
 
-const apiBaseURL = false ? local : renderurl;
+// For development, use localhost. Change to true to use Render.com
+const USE_LOCAL = true; // Set to false for production
+const apiBaseURL = USE_LOCAL ? local : renderurl;
 
 
 export const apiClient = axios.create({
   baseURL: apiBaseURL,
-  headers: { 'Content-Type': 'application/json' },
   withCredentials: false,
+  // Don't set default Content-Type - let axios set it based on data type
 });
 
 // Debug logging via interceptors
 apiClient.interceptors.request.use((config) => {
-  // eslint-disable-next-line no-console
-  console.log('[API][REQUEST]', {
-    method: config.method,
-    url: `${config.baseURL || ''}${config.url}`,
-    params: config.params,
-    data: config.data,
-  });
+  const isFormData = config.data instanceof FormData;
+  
+  // For FormData, axios will automatically set Content-Type with boundary
+  // For other requests, set Content-Type to application/json
+  if (!isFormData) {
+    if (!config.headers) {
+      config.headers = {} as any;
+    }
+    // Only set Content-Type if it's not already set and data exists
+    if (config.data && !config.headers['Content-Type'] && !config.headers['content-type']) {
+      config.headers['Content-Type'] = 'application/json';
+    }
+  }
+  
+  // Log request info for debugging
+  if (isFormData) {
+    const formDataEntries: string[] = [];
+    try {
+      for (const [key, value] of (config.data as FormData).entries()) {
+        if (value instanceof File) {
+          formDataEntries.push(`${key}: File(${value.name}, ${(value as File).size} bytes, ${(value as File).type})`);
+        } else {
+          formDataEntries.push(`${key}: ${String(value).substring(0, 50)}`);
+        }
+      }
+    } catch (e) {
+      formDataEntries.push('(could not iterate FormData)');
+    }
+    // eslint-disable-next-line no-console
+    console.log('[API][REQUEST] FormData Upload', {
+      method: config.method?.toUpperCase(),
+      url: `${config.baseURL || ''}${config.url}`,
+      entries: formDataEntries,
+    });
+  } else {
+    // eslint-disable-next-line no-console
+    console.log('[API][REQUEST]', {
+      method: config.method?.toUpperCase(),
+      url: `${config.baseURL || ''}${config.url}`,
+      params: config.params,
+    });
+  }
+  
   // performance timing start
   (config as any).metadata = { startTime: (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now() };
   return config;
@@ -147,23 +185,87 @@ export type JobApplicationData = {
 };
 
 export async function submitJobApplication(applicationData: JobApplicationData, resumeFile: File): Promise<any> {
+  // Create FormData object
   const formData = new FormData();
   
-  // Append all form data
-  Object.entries(applicationData).forEach(([key, value]) => {
-    formData.append(key, value);
-  });
+  // Append all form fields explicitly (important for multer on backend)
+  formData.append('firstName', applicationData.firstName);
+  formData.append('lastName', applicationData.lastName);
+  formData.append('email', applicationData.email);
+  formData.append('phone', applicationData.phone);
+  formData.append('position', applicationData.position);
+  formData.append('department', applicationData.department);
+  formData.append('experience', applicationData.experience);
+  formData.append('coverLetter', applicationData.coverLetter);
   
-  // Append resume file
-  formData.append('resume', resumeFile);
+  // Append resume file - multer expects field name 'resume'
+  formData.append('resume', resumeFile, resumeFile.name);
   
-  const { data } = await apiClient.post('/api/careers/apply', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  // Create an AbortController for timeout handling
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, 30000); // 30 second timeout - fail fast
   
-  return data;
+  try {
+    console.log('[submitJobApplication] Sending request to:', `${apiClient.defaults.baseURL}/api/careers/apply`);
+    
+    // Axios automatically handles FormData and sets correct Content-Type
+    // with multipart/form-data and boundary
+    const response = await apiClient.post('/api/careers/apply', formData, {
+      signal: controller.signal,
+      timeout: 30000, // 30 second timeout for file uploads
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity,
+      onUploadProgress: (progressEvent) => {
+        if (progressEvent.total) {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          console.log(`Upload progress: ${percentCompleted}%`);
+        }
+      },
+    });
+    
+    clearTimeout(timeoutId);
+    console.log('[submitJobApplication] Success:', response.data);
+    return response.data;
+  } catch (error: any) {
+    clearTimeout(timeoutId);
+    
+    // Handle different error types
+    let errorMessage = 'Failed to submit application. Please try again.';
+    
+    if (error.code === 'ECONNABORTED' || error.message === 'canceled' || error.name === 'AbortError') {
+      errorMessage = 'Request timed out. The server is taking too long to respond. Please check your connection and try again.';
+    } else if (error.code === 'ERR_NETWORK' || error.message.includes('Network Error')) {
+      errorMessage = 'Network error. Please check your internet connection and try again.';
+    } else if (error.response?.status === 400) {
+      errorMessage = error.response?.data?.message || 'Invalid data. Please check all fields and try again.';
+    } else if (error.response?.status === 500) {
+      errorMessage = 'Server error. Please try again later.';
+    } else if (error.response?.data?.message) {
+      errorMessage = error.response.data.message;
+    }
+    
+    // Enhanced error logging for debugging
+    const errorInfo = {
+      message: error.message,
+      code: error.code,
+      name: error.name,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      responseData: error.response?.data,
+      url: error.config?.url,
+    };
+    
+    console.error('[submitJobApplication] Error:', errorInfo);
+    console.error('[submitJobApplication] Error message for user:', errorMessage);
+    
+    // Create a user-friendly error
+    const userError = new Error(errorMessage);
+    (userError as any).response = error.response;
+    (userError as any).code = error.code;
+    throw userError;
+  }
 }
 
 

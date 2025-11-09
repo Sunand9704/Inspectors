@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -112,9 +112,17 @@ export function JobApplicationDialog({ job, children }: JobApplicationDialogProp
     setIsSubmitting(true);
     
     try {
+      console.log('Submitting application with data:', {
+        ...formData,
+        resumeFile: resumeFile.name,
+        resumeSize: resumeFile.size
+      });
+      
       const result = await submitJobApplication(formData, resumeFile);
       
-      if (result.success) {
+      console.log('Application submission result:', result);
+      
+      if (result && result.success) {
         toast({
           title: "Application submitted!",
           description: "Thank you for your application. We'll be in touch soon.",
@@ -133,13 +141,26 @@ export function JobApplicationDialog({ job, children }: JobApplicationDialogProp
         });
         setResumeFile(null);
       } else {
-        throw new Error(result.message || 'Failed to submit application');
+        throw new Error(result?.message || 'Failed to submit application');
       }
     } catch (error: any) {
+      console.error('Error submitting application:', error);
+      console.error('Error details:', {
+        message: error.message,
+        code: error.code,
+        response: error.response,
+        status: error.response?.status,
+        data: error.response?.data
+      });
+      
+      // Show user-friendly error message
+      const errorMessage = error.message || error.response?.data?.message || "Failed to submit application. Please try again.";
+      
       toast({
         title: "Submission failed",
-        description: error.response?.data?.message || error.message || "Failed to submit application. Please try again.",
+        description: errorMessage,
         variant: "destructive",
+        duration: 5000, // Show for 5 seconds
       });
     } finally {
       setIsSubmitting(false);
@@ -168,6 +189,9 @@ export function JobApplicationDialog({ job, children }: JobApplicationDialogProp
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">Apply for {job.title}</DialogTitle>
+          <DialogDescription>
+            Please fill out all required fields to submit your application.
+          </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-6">
