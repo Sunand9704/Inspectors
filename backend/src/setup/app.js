@@ -2,7 +2,6 @@
 
 const path = require('path');
 const express = require('express');
-const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
@@ -37,43 +36,6 @@ function createApp() {
     });
     next();
   });
-
-  // CORS configuration - must be before helmet
-  const defaultCorsOrigins = [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://localhost:8080',
-    'http://localhost:5174',
-    'http://localhost:5175',
-    'https://inspectors.onrender.com',
-    'https://inspectors-admin-pannel.onrender.com',
-  ];
-  const configuredOrigins = (process.env.CORS_ORIGINS || '')
-    .split(',')
-    .map((origin) => origin.trim())
-    .filter(Boolean);
-  const allowedOrigins = configuredOrigins.length > 0 ? configuredOrigins : defaultCorsOrigins;
-
-  app.use(
-    cors({
-      origin: (origin, callback) => {
-        // Allow requests with no origin (like mobile apps, Postman, etc.)
-        if (!origin) {
-          return callback(null, true);
-        }
-        if (allowedOrigins.includes(origin)) {
-          console.log(`CORS: Allowing origin ${origin}`);
-          return callback(null, true);
-        }
-        console.warn(`CORS: Blocked origin ${origin}. Allowed origins:`, allowedOrigins);
-        return callback(new Error('Not allowed by CORS'));
-      },
-      credentials: true,
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-      exposedHeaders: ['Content-Range', 'X-Content-Range'],
-    })
-  );
 
   // Middlewares
   app.use(helmet({
