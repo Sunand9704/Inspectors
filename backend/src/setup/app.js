@@ -38,8 +38,7 @@ function createApp() {
     next();
   });
 
-  // Middlewares
-  app.use(helmet());
+  // CORS configuration - must be before helmet
   const defaultCorsOrigins = [
     'http://localhost:3000',
     'http://localhost:5173',
@@ -58,15 +57,29 @@ function createApp() {
   app.use(
     cors({
       origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
+        // Allow requests with no origin (like mobile apps, Postman, etc.)
+        if (!origin) {
           return callback(null, true);
         }
-        console.warn(`Blocked by CORS: ${origin}`);
+        if (allowedOrigins.includes(origin)) {
+          console.log(`CORS: Allowing origin ${origin}`);
+          return callback(null, true);
+        }
+        console.warn(`CORS: Blocked origin ${origin}. Allowed origins:`, allowedOrigins);
         return callback(new Error('Not allowed by CORS'));
       },
       credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+      exposedHeaders: ['Content-Range', 'X-Content-Range'],
     })
   );
+
+  // Middlewares
+  app.use(helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    crossOriginEmbedderPolicy: false,
+  }));
   app.use(compression());
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true }));
