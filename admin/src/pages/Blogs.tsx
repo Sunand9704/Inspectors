@@ -48,7 +48,20 @@ export default function Blogs() {
   const handleCreateBlog = async (blogData: CreateBlogData | UpdateBlogData, featuredImageFile?: File) => {
     try {
       setFormLoading(true);
-      await blogService.createBlog(blogData, featuredImageFile);
+      // Ensure all required fields are present for CreateBlogData
+      const createData: CreateBlogData = {
+        title: blogData.title || '',
+        excerpt: blogData.excerpt || '',
+        content: blogData.content || '',
+        tags: blogData.tags || [],
+        featuredImage: blogData.featuredImage || '',
+        images: blogData.images,
+        isPublished: blogData.isPublished,
+        isFeatured: blogData.isFeatured,
+        metaDescription: blogData.metaDescription,
+        slug: blogData.slug
+      };
+      await blogService.createBlog(createData, featuredImageFile);
       setViewMode('list');
       loadBlogs();
     } catch (err) {
