@@ -37,10 +37,29 @@ function createApp() {
     next();
   });
 
+   const allowedOrigins = [
+      "http://localhost:8080", // React development server
+      "http://localhost:8081",
+      "http://localhost:3000", // Fallback for development
+      "http://localhost:5175", // Vite development server
+     "https://inspectors-admin-pannel.onrender.com"
+      // Add your production frontend URL here
+      // "https://yourdomain.com",
+      // "https://www.yourdomain.com",
+    ];
   // Middlewares
-  app.use(helmet({
-    crossOriginResourcePolicy: { policy: 'cross-origin' },
-    crossOriginEmbedderPolicy: false,
+  app.use(helmet());
+  app.use(cors({  origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   }));
   app.use(compression());
   app.use(express.json({ limit: '10mb' }));
