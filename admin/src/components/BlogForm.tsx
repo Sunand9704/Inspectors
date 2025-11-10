@@ -87,12 +87,16 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
       const checked = (e.target as HTMLInputElement).checked;
       setFormData(prev => ({ ...prev, [name]: checked }));
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-      
-      // Auto-generate slug when title changes (for new blogs or when slug is empty)
-      if (name === 'title' && (!blog || !formData.slug.trim())) {
-        setFormData(prev => ({ ...prev, slug: generateSlug(value) }));
-      }
+      setFormData(prev => {
+        const updated = { ...prev, [name]: value };
+        
+        // Auto-generate slug when title changes (for new blogs or when slug is empty)
+        if (name === 'title' && (!blog || !prev.slug || !prev.slug.trim())) {
+          updated.slug = generateSlug(value);
+        }
+        
+        return updated;
+      });
     }
     
     // Clear error when user starts typing
@@ -122,11 +126,11 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
     if (imageInput.url.trim()) {
       setFormData(prev => ({
         ...prev,
-        images: [...prev.images, {
+        images: [...(prev.images || []), {
           url: imageInput.url.trim(),
           alt: imageInput.alt.trim(),
           caption: imageInput.caption.trim(),
-          order: prev.images.length
+          order: (prev.images || []).length
         }]
       }));
       setImageInput({ url: '', alt: '', caption: '' });
@@ -136,7 +140,7 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
   const handleRemoveImage = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      images: prev.images.filter((_, i) => i !== index)
+      images: (prev.images || []).filter((_, i) => i !== index)
     }));
   };
 
@@ -214,7 +218,7 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
       newErrors.featuredImage = 'Featured image is required';
     }
     
-    if (!formData.slug.trim()) {
+    if (!formData.slug || !formData.slug.trim()) {
       newErrors.slug = 'Slug is required';
     }
 
@@ -261,8 +265,8 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
       console.log('Submitting data:', submitData);
       console.log('Calling onSave with:', { submitData, featuredImageFile, isEditMode: !!blog });
       
-      // Pass the file to the onSave function
-      await onSave(submitData, featuredImageFile);
+      // Pass the file to the onSave function (convert null to undefined)
+      await onSave(submitData, featuredImageFile || undefined);
       console.log('Blog saved successfully');
     } catch (error) {
       console.error('Error saving blog:', error);
@@ -624,7 +628,7 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
               Add
             </button>
           </div>
-          {formData.images.map((image, index) => (
+          {(formData.images || []).map((image, index) => (
             <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
               <span style={{ fontSize: '12px', color: '#6b7280', flex: 1 }}>
                 {image.url} {image.alt && `(${image.alt})`}
