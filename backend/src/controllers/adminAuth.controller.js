@@ -8,7 +8,7 @@ async function requestOtp(req, res) {
 		const email = process.env.ADMIN_EMAIL;
 		if (!email) return res.status(500).json({ success: false, message: 'ADMIN_EMAIL is not configured' });
 		await sendOtp(email);
-		return res.json({ success: true, message: 'OTP sent' });
+		return res.json({ success: true, message: 'OTP sent', data: { email } });
 	} catch (error) {
 		logger.error('requestOtp error:', error);
 		return res.status(500).json({ success: false, message: 'Failed to send OTP' });

@@ -3,12 +3,15 @@ import { requestOtp, verifyOtp } from '@/services/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Login() {
+  const adminEmail = import.meta.env.VITE_ADMIN_EMAIL ?? '';
   const [code, setCode] = useState('');
   const [step, setStep] = useState<'request' | 'verify'>('request');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [targetEmail, setTargetEmail] = useState<string | null>(adminEmail || null);
   const navigate = useNavigate();
   const location = useLocation() as any;
+  const infoText = message ?? (step === 'verify' && targetEmail ? `OTP sent to ${targetEmail}. Please check your inbox.` : null);
 
   const handleRequest = async (e: FormEvent) => {
     e.preventDefault();
@@ -18,12 +21,20 @@ export default function Login() {
       const res = await requestOtp();
       if (res.success) {
         setStep('verify');
-        setMessage('OTP sent to your email. Please check your inbox.');
+        const resolvedEmail = res.data?.email || adminEmail || null;
+        setTargetEmail(resolvedEmail);
+        setMessage(
+          resolvedEmail
+            ? `OTP sent to ${resolvedEmail}. Please check your inbox.`
+            : 'OTP sent. Please check your inbox.'
+        );
       } else {
         setMessage(res.message || 'Failed to send OTP');
+        setTargetEmail(null);
       }
     } catch (err: any) {
       setMessage(err?.response?.data?.message || err?.message || 'Failed to send OTP');
+      setTargetEmail(null);
     } finally {
       setLoading(false);
     }
@@ -52,7 +63,7 @@ export default function Login() {
   return (
     <div style={{ maxWidth: 420, margin: '80px auto', padding: 24, border: '1px solid #e5e7eb', borderRadius: 8 }}>
       <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 16 }}>CBM Admin Login</h1>
-      {message && <div style={{ marginBottom: 12, color: '#111827' }}>{message}</div>}
+      {infoText && <div style={{ marginBottom: 12, color: '#111827' }}>{infoText}</div>}
       {step === 'request' ? (
         <form onSubmit={handleRequest}>
           <button disabled={loading} type="submit" style={{ width: '100%', padding: 10, background: '#111827', color: 'white', borderRadius: 6 }}>
