@@ -8,7 +8,7 @@ const local = "http://localhost:8000";
 
 // For development, use localhost. Change to true to use Render.com
 const USE_LOCAL = true; // Set to false for production
-const apiBaseURL = USE_LOCAL ? local : renderurl;
+const apiBaseURL = renderurl;
 
 
 export const apiClient = axios.create({
