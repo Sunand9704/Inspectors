@@ -43,7 +43,8 @@ function createApp() {
       "http://localhost:8081",
       "http://localhost:3000", // Fallback for development
       "http://localhost:5175", // Vite development server
-     "https://inspectors-admin-pannel.onrender.com"
+     "https://inspectors-admin-pannel.onrender.com",
+     "https://inspectors-1.onrender.com"
       // Add your production frontend URL here
       // "https://yourdomain.com",
       // "https://www.yourdomain.com",
