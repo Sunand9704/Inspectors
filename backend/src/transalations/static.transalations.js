@@ -52,11 +52,15 @@ const translations = {
       pages: {
         services: {
           hero: {
-            title: "Leading Testing, Inspection & Certification Services",
+            title: " Inspectors 360°",
             subtitle: "Trusted Worldwide",
-            description: "we provide complete inspection workforce and technical support solutions, including recruitment, contract staffing, payroll, logistics, and training—ensuring qualified professionals and reliable service for every project.",
+            description: "We provide global workforce, staffing, and technical support solutions, delivering certified professionals and equipment to ensure safety, compliance, and performance across Oil & Gas, Mining, and Industrial sectors.",
             primaryCTAText: "Explore Services",
             secondaryCTAText: "Get Quote",
+          },
+          servicesOverview: {
+            title: "Services",
+            description: "we provide complete inspection workforce and technical support solutions, including recruitment, contract staffing, payroll, logistics, and training—ensuring qualified professionals and reliable service for every project."
           },
         },
         about: {
@@ -305,11 +309,15 @@ const translations = {
       pages: {
         services: {
           hero: {
-            title: "Services de test, d'inspection et de certification de premier plan",
+            title: "Inspecteurs 360°",
             subtitle: "De confiance dans le monde entier",
-            description: "Nous fournissons des solutions complètes de main-d’œuvre d’inspection et de soutien technique, incluant le recrutement, le personnel sous contrat, la paie, la logistique et la formation — garantissant des professionnels qualifiés et un service fiable pour chaque projet.",
+            description: "Nous fournissons des solutions mondiales de main-d’œuvre, de dotation en personnel et de soutien technique, en livrant des professionnels certifiés et des équipements afin d’assurer la sécurité, la conformité et la performance dans les secteurs du pétrole et du gaz, de la mine et de l’industrie.",
             primaryCTAText: "Explorer les services",
             secondaryCTAText: "Obtenir un devis",
+          },
+          servicesOverview: {
+            title: "Services",
+            description: "we provide complete inspection workforce and technical support solutions, including recruitment, contract staffing, payroll, logistics, and training—ensuring qualified professionals and reliable service for every project."
           },
         },
         about: {
@@ -558,11 +566,15 @@ const translations = {
       pages: {
         services: {
           hero: {
-            title: "Principais serviços de Teste, Inspeção e Certificação",
+            title: "Inspetores 360°",
             subtitle: "Confiável em todo o mundo",
-            description: "Fornecemos soluções completas de equipe de inspeção e suporte técnico, incluindo recrutamento, contratação temporária, folha de pagamento, logística e treinamento — garantindo profissionais qualificados e um serviço confiável para cada projeto.",
+            description: "Fornecemos soluções globais de força de trabalho, recrutamento e suporte técnico, entregando profissionais certificados e equipamentos para garantir segurança, conformidade e desempenho nos setores de Petróleo e Gás, Mineração e Indústria.",
             primaryCTAText: "Explorar Serviços",
             secondaryCTAText: "Solicitar Orçamento",
+          },
+          servicesOverview: {
+            title: "Services",
+            description: "we provide complete inspection workforce and technical support solutions, including recruitment, contract staffing, payroll, logistics, and training—ensuring qualified professionals and reliable service for every project."
           },
         },
         about: {
@@ -811,11 +823,15 @@ const translations = {
       pages: {
         services: {
           hero: {
-            title: "Servicios líderes de Pruebas, Inspección y Certificación",
+            title: "Inspectores 360°",
             subtitle: "De confianza en todo el mundo",
-            description: "Proporcionamos soluciones completas de personal de inspección y soporte técnico, que incluyen reclutamiento, contratación temporal, nómina, logística y capacitación, garantizando profesionales calificados y un servicio confiable para cada proyecto.",
+            description: "Ofrecemos soluciones globales de fuerza laboral, personal y soporte técnico, proporcionando profesionales certificados y equipos para garantizar la seguridad, el cumplimiento y el rendimiento en los sectores de petróleo y gas, minería e industria.",
             primaryCTAText: "Explorar Servicios",
             secondaryCTAText: "Obtener Cotización",
+          },
+          servicesOverview: {
+            title: "Services",
+            description: "we provide complete inspection workforce and technical support solutions, including recruitment, contract staffing, payroll, logistics, and training—ensuring qualified professionals and reliable service for every project."
           },
         },
         about: {
@@ -1064,11 +1080,15 @@ const translations = {
       pages: {
         services: {
           hero: {
-            title: "Ведущие услуги по тестированию, инспекции и сертификации",
+            title: "Инспекторы 360°",
             subtitle: "Доверие по всему миру",
-            description: "Мы предоставляем комплексные решения по обеспечению инспекционного персонала и технической поддержке, включая набор, контрактный персонал, расчет заработной платы, логистику и обучение — обеспечивая квалифицированных специалистов и надежное обслуживание для каждого проекта.",
+            description: "Мы предоставляем глобальные решения в области кадров, персонала и технической поддержки, обеспечивая сертифицированных специалистов и оборудование для гарантии безопасности, соответствия и эффективности в нефтегазовой, горнодобывающей и промышленной отраслях.",
             primaryCTAText: "Изучить услуги",
             secondaryCTAText: "Получить предложение",
+          },
+          servicesOverview: {
+            title: "Services",
+            description: "we provide complete inspection workforce and technical support solutions, including recruitment, contract staffing, payroll, logistics, and training—ensuring qualified professionals and reliable service for every project."
           },
         },
         about: {
@@ -1317,11 +1337,15 @@ const translations = {
       pages: {
         services: {
           hero: {
-            title: "领先的测试、检验和认证服务",
+            title: "检验员 360°",
             subtitle: "全球信赖",
-            description: "我们提供完整的检验人员和技术支持解决方案，包括招聘、合同用工、薪资管理、物流和培训，确保每个项目都有合格的专业人员和可靠的服务。",
+            description: "我们提供全球劳动力、人员配置和技术支持解决方案，提供经过认证的专业人员和设备，以确保石油和天然气、采矿及工业领域的安全、合规和高效运行。",
             primaryCTAText: "探索服务",
             secondaryCTAText: "获取报价",
+          },
+          servicesOverview: {
+            title: "Services",
+            description: "we provide complete inspection workforce and technical support solutions, including recruitment, contract staffing, payroll, logistics, and training—ensuring qualified professionals and reliable service for every project."
           },
         },
         about: {

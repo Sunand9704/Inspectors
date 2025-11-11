@@ -15,6 +15,7 @@ import { getPageWithSections, SectionDto } from '@/utils/api';
 export default function Services() {
   const { translations } = useTranslation();
   const hero = translations?.pages?.services?.hero;
+  const servicesOverview = (translations as any)?.pages?.services?.servicesOverview;
 
   // Icon mapping for services
   const iconMap = {
@@ -146,10 +147,10 @@ export default function Services() {
         <div className="container-responsive">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              {hero?.title || "Complete Service Portfolio"}
+              {servicesOverview?.title || "Services"}
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              {hero?.description || "From product testing to regulatory compliance, we provide comprehensive solutions to help you succeed in global markets."}
+              {servicesOverview?.description || "we provide complete inspection workforce and technical support solutions, including recruitment, contract staffing, payroll, logistics, and training—ensuring qualified professionals and reliable service for every project."}
             </p>
           </div>
           
