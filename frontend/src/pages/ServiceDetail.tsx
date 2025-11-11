@@ -348,7 +348,7 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
                   <img 
                     src={imageUrls[0]} 
                     alt={`${section?.title || 'Service'} 1`} 
-                    className="w-full h-64 md:h-80 object-cover rounded-2xl" 
+                    className="w-11/12 md:w-3/4 lg:w-2/3 mx-auto h-80 md:h-96 object-cover rounded-2xl" 
                   />
                 </div>
               );
@@ -375,7 +375,7 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
                       <img 
                         src={imageUrls[imageIndex]} 
                         alt={`${section?.title || 'Service'} ${imageIndex + 1}`} 
-                        className="w-full h-64 md:h-80 object-cover rounded-2xl" 
+                        className="w-11/12 md:w-3/4 lg:w-2/3 mx-auto h-80 md:h-96 object-cover rounded-2xl" 
                       />
                     </div>
                   );
@@ -394,7 +394,7 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
                     <img 
                       src={imageUrls[imageIndex]} 
                       alt={`${section?.title || 'Service'} ${imageIndex + 1}`} 
-                      className="w-full h-64 md:h-80 object-cover rounded-2xl" 
+                      className="w-11/12 md:w-3/4 lg:w-2/3 mx-auto h-80 md:h-96 object-cover rounded-2xl" 
                     />
                   </div>
                 );
