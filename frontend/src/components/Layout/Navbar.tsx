@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useTranslation } from '@/contexts/TranslationContext';
 import Logo from '@/components/Common/Logo';
+import { SITE_PHONE_DISPLAY } from '@/config/site';
 
 const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
@@ -50,8 +51,10 @@ export function Navbar() {
       { name: translations.navbar.services, href: '/services' },
       { name: translations.navbar.industries, href: '/industries' },
       { name: translations.navbar.about, href: '/about' },
-      { name: translations.navbar.careers, href: '/careers' },
-      { name: translations.navbar.blog || 'Blog', href: '/blog' },
+      // Some locales define "vacancies" instead of "careers"
+      { name: (translations.navbar as any).vacancies || (translations.navbar as any).careers || 'Vacancies', href: '/vacancies' },
+      // Some locales may not have "blog"
+      { name: (translations.navbar as any).blog || 'Blog', href: '/blog' },
       { name: translations.navbar.contact, href: '/contact' },
     ];
   };
@@ -67,7 +70,7 @@ export function Navbar() {
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span>+44 7934 980214</span>
+                <span>{SITE_PHONE_DISPLAY}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
