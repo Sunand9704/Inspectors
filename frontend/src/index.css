@@ -7,21 +7,21 @@
 
 @layer base {
   :root {
-    /* Core Brand Colors - Lavender Theme (Rebased to #9b6dc6) */
-    /* Base HEX: #9b6dc6 -> hsl(271, 44%, 60%) */
-    --tuv-blue-900: 271 44% 35%;
-    --tuv-blue-800: 271 44% 40%;
-    --tuv-blue-700: 271 44% 45%;
-    --tuv-blue-600: 271 44% 50%;
-    --tuv-blue-500: 271 44% 55%;
-    --tuv-blue-400: 271 44% 60%; /* ≈ #9b6dc6 */
-    --tuv-blue-100: 271 30% 95%;
-    --tuv-blue-50: 271 20% 98%;
+    /* Core Brand Colors - Orange Theme (Rebased to #E86F33) */
+    /* Base HEX: #E86F33 -> hsl(20, 80%, 56%) */
+    --tuv-blue-900: 20 80% 35%;
+    --tuv-blue-800: 20 80% 40%;
+    --tuv-blue-700: 20 80% 45%;
+    --tuv-blue-600: 20 80% 50%;
+    --tuv-blue-500: 20 80% 55%;
+    --tuv-blue-400: 20 80% 60%; /* ≈ #E86F33 */
+    --tuv-blue-100: 20 50% 95%;
+    --tuv-blue-50: 20 30% 98%;
 
-    /* Additional Lavender Accent Colors (derived from base) */
-    --tuv-lavender-light: 271 44% 90%;
-    --tuv-lavender-pale: 271 30% 95%;
-    --tuv-lavender-deep: 271 50% 30%;
+    /* Additional Orange Accent Colors (derived from base) */
+    --tuv-lavender-light: 20 60% 90%;
+    --tuv-lavender-pale: 20 40% 95%;
+    --tuv-lavender-deep: 20 85% 30%;
     
     --tuv-red: 350 85% 50%;            /* #e30613 - Accent Red */
     --tuv-red-light: 350 70% 95%;     /* #fef2f3 */
@@ -175,7 +175,7 @@
 
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px -10px rgba(139, 92, 246, 0.45), 0 6px 10px -8px rgba(0,0,0,0.25);
+    box-shadow: 0 10px 25px -10px rgba(232, 111, 51, 0.45), 0 6px 10px -8px rgba(0,0,0,0.25);
   }
 
   .btn-secondary {
@@ -187,7 +187,7 @@
 
   .btn-secondary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px -10px rgba(139, 92, 246, 0.25), 0 6px 10px -8px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 25px -10px rgba(232, 111, 51, 0.25), 0 6px 10px -8px rgba(0,0,0,0.15);
   }
 
   .btn-accent {
@@ -202,7 +202,7 @@
     box-shadow: 0 10px 25px -10px rgba(227, 6, 19, 0.35), 0 6px 10px -8px rgba(0,0,0,0.2);
   }
 
-  .btn-lavender {
+  .btn-orange {
     @apply bg-tuv-lavender-600 text-white hover:bg-tuv-lavender-700;
     @apply px-6 py-3 rounded-md font-medium;
     @apply transition-all duration-300;
@@ -210,12 +210,12 @@
     @apply border-0;
   }
 
-  .btn-lavender:hover {
+  .btn-orange:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 30px -12px rgba(155, 109, 198, 0.55), 0 6px 12px -8px rgba(0,0,0,0.25);
+    box-shadow: 0 12px 30px -12px rgba(232, 111, 51, 0.55), 0 6px 12px -8px rgba(0,0,0,0.25);
   }
 
-  .btn-lavender-outline {
+  .btn-orange-outline {
     @apply bg-transparent text-tuv-lavender-600 hover:bg-tuv-lavender-50;
     @apply px-6 py-3 rounded-md font-medium;
     @apply transition-all duration-300;
@@ -223,9 +223,9 @@
     @apply hover:border-tuv-lavender-700;
   }
 
-  .btn-lavender-outline:hover {
+  .btn-orange-outline:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px -12px rgba(155, 109, 198, 0.4);
+    box-shadow: 0 10px 25px -12px rgba(232, 111, 51, 0.4);
   }
 
   .btn-ghost {
@@ -244,7 +244,7 @@
 
   .card-hover:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 18px 50px -15px rgba(155, 109, 198, 0.25), 0 12px 25px -18px rgba(0,0,0,0.2);
+    box-shadow: 0 18px 50px -15px rgba(232, 111, 51, 0.25), 0 12px 25px -18px rgba(0,0,0,0.2);
   }
 
   .card-service {
@@ -256,18 +256,18 @@
     @apply text-center;
   }
 
-  .card-lavender {
+  .card-orange {
     @apply card-hover p-6;
     @apply border-l-4 border-tuv-lavender-600;
     @apply hover:border-tuv-lavender-700;
-    @apply lavender-shadow;
+    @apply orange-shadow;
   }
 
-  .card-lavender:hover {
-    box-shadow: 0 20px 55px -20px rgba(155, 109, 198, 0.35), 0 14px 30px -18px rgba(0,0,0,0.25);
+  .card-orange:hover {
+    box-shadow: 0 20px 55px -20px rgba(232, 111, 51, 0.35), 0 14px 30px -18px rgba(0,0,0,0.25);
   }
 
-  .card-lavender-soft {
+  .card-orange-soft {
     @apply bg-tuv-lavender-50 border-tuv-lavender-200;
     @apply p-6 rounded-lg;
     @apply transition-all duration-300;
@@ -310,19 +310,19 @@
     @apply w-full;
   }
 
-  .nav-link-lavender {
+  .nav-link-orange {
     @apply text-tuv-lavender-600 hover:text-tuv-lavender-700;
     @apply font-medium transition-colors duration-200;
     @apply relative;
   }
 
-  .nav-link-lavender::after {
+  .nav-link-orange::after {
     @apply content-[''] absolute bottom-0 left-0;
     @apply w-0 h-0.5 bg-tuv-lavender-600;
     @apply transition-all duration-200;
   }
 
-  .nav-link-lavender:hover::after {
+  .nav-link-orange:hover::after {
     @apply w-full;
   }
 
@@ -338,28 +338,28 @@
   }
 
   .hero-overlay {
-    background: linear-gradient(rgba(139, 92, 246, 0.8), rgba(192, 132, 252, 0.6));
+    background: linear-gradient(rgba(232, 111, 51, 0.8), rgba(255, 140, 80, 0.6));
   }
 
-  /* Lavender Theme Specific Styles */
-  .lavender-gradient {
+  /* Orange Theme Specific Styles */
+  .orange-gradient {
     background: linear-gradient(135deg, hsl(var(--tuv-blue-900)) 0%, hsl(var(--tuv-blue-600)) 50%, hsl(var(--tuv-blue-400)) 100%);
   }
 
-  .lavender-soft-gradient {
+  .orange-soft-gradient {
     background: linear-gradient(135deg, hsl(var(--tuv-lavender-pale)) 0%, hsl(var(--tuv-lavender-light)) 100%);
   }
 
-  .lavender-border {
+  .orange-border {
     border-color: hsl(var(--tuv-blue-600));
   }
 
-  .lavender-shadow {
-    box-shadow: 0 4px 14px 0 rgba(203, 148, 247, 0.15);
+  .orange-shadow {
+    box-shadow: 0 4px 14px 0 rgba(232, 111, 51, 0.15);
   }
 
-  .lavender-glow {
-    box-shadow: 0 0 20px rgba(203, 148, 247, 0.3);
+  .orange-glow {
+    box-shadow: 0 0 20px rgba(232, 111, 51, 0.3);
   }
 
   /* Animations */
@@ -411,15 +411,29 @@
       transform: translateX(0);
     }
     100% {
-      transform: translateX(-50%);
+      transform: translateX(-33.333%);
+    }
+  }
+
+  @keyframes marquee-right {
+    0% {
+      transform: translateX(-33.333%);
+    }
+    100% {
+      transform: translateX(0);
     }
   }
 
   .animate-marquee {
-    animation: marquee 15s linear infinite;
+    animation: marquee 60s linear infinite;
   }
 
-  .animate-marquee:hover {
+  .animate-marquee-right {
+    animation: marquee-right 60s linear infinite;
+  }
+
+  .animate-marquee:hover,
+  .animate-marquee-right:hover {
     animation-play-state: paused;
   }
 
@@ -451,7 +465,7 @@
 
   /* Rich effects */
   .hover-royal-glow:hover {
-    box-shadow: 0 18px 45px -18px rgba(139, 92, 246, 0.35), 0 10px 18px -14px rgba(0,0,0,0.25);
+    box-shadow: 0 18px 45px -18px rgba(232, 111, 51, 0.35), 0 10px 18px -14px rgba(0,0,0,0.25);
   }
 
   .hover-raise:hover {
@@ -495,7 +509,7 @@
 
   .divider-gradient {
     height: 1px;
-    background: linear-gradient(90deg, rgba(155,109,198,0) 0%, rgba(155,109,198,0.6) 50%, rgba(155,109,198,0) 100%);
+    background: linear-gradient(90deg, rgba(232,111,51,0) 0%, rgba(232,111,51,0.6) 50%, rgba(232,111,51,0) 100%);
   }
 }
 
@@ -508,28 +522,28 @@
     text-wrap: pretty;
   }
 
-  /* Lavender Theme Utilities */
-  .bg-lavender-gradient {
+  /* Orange Theme Utilities */
+  .bg-orange-gradient {
     background: linear-gradient(135deg, hsl(var(--tuv-blue-900)) 0%, hsl(var(--tuv-blue-600)) 50%, hsl(var(--tuv-blue-400)) 100%);
   }
 
-  .bg-lavender-soft {
+  .bg-orange-soft {
     background: hsl(var(--tuv-lavender-pale));
   }
 
-  .text-lavender {
+  .text-orange {
     color: hsl(var(--tuv-blue-600));
   }
 
-  .text-lavender-dark {
+  .text-orange-dark {
     color: hsl(var(--tuv-blue-900));
   }
 
-  .border-lavender {
+  .border-orange {
     border-color: hsl(var(--tuv-blue-600));
   }
 
-  .hover-lavender {
+  .hover-orange {
     @apply hover:bg-tuv-lavender-50 hover:text-tuv-lavender-700;
   }
 
@@ -543,8 +557,8 @@
     .btn-primary:hover,
     .btn-secondary:hover,
     .btn-accent:hover,
-    .btn-lavender:hover,
-    .btn-lavender-outline:hover {
+    .btn-orange:hover,
+    .btn-orange-outline:hover {
       transition: none !important;
       transform: none !important;
       box-shadow: none !important;

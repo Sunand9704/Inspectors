@@ -22,7 +22,9 @@ export default function Clients() {
         setLoading(true);
         const { data } = await apiClient.get('/api/clients/images');
         if (!mounted) return;
-        setImages(data?.data || []);
+        const clientImages = data?.data || [];
+        console.log(`Clients page: Loaded ${clientImages.length} client images (total: ${data?.total}, active: ${data?.active})`);
+        setImages(clientImages);
         setError(null);
       } catch (e: any) {
         if (!mounted) return;

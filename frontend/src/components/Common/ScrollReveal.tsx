@@ -16,8 +16,8 @@ const TEXT_SELECTORS = [
   "main .card-hover",
   "main .card-service",
   "main .card-industry",
-  "main .card-lavender",
-  "main .card-lavender-soft",
+  "main .card-orange",
+  "main .card-orange-soft",
 ];
 
 export function ScrollReveal() {

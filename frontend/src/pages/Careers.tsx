@@ -18,7 +18,8 @@ import {
   TrendingUp,
   Award,
   Coffee,
-  Briefcase
+  Briefcase,
+  Calendar
 } from 'lucide-react';
 
 export default function Careers() {
@@ -224,19 +225,27 @@ export default function Careers() {
                   <div className="bg-white border border-border rounded-lg p-4 hover:bg-tuv-gray-50 transition-colors">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold text-primary hover:underline">{job.title}</h3>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="hidden sm:flex items-center space-x-2">
-                          <Briefcase className="h-4 w-4" />
-                          <span>{job.department}</span>
+                      <div className="flex flex-col items-end gap-2">
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <div className="hidden sm:flex items-center space-x-2">
+                            <Briefcase className="h-4 w-4" />
+                            <span>{job.department}</span>
+                          </div>
+                          <div className="hidden sm:flex items-center space-x-2">
+                            <MapPin className="h-4 w-4" />
+                            <span>{job.location}</span>
+                          </div>
+                          <div className="hidden sm:flex items-center space-x-2">
+                            <Clock className="h-4 w-4" />
+                            <span>{job.type}</span>
+                          </div>
                         </div>
-                        <div className="hidden sm:flex items-center space-x-2">
-                          <MapPin className="h-4 w-4" />
-                          <span>{job.location}</span>
-                        </div>
-                        <div className="hidden sm:flex items-center space-x-2">
-                          <Clock className="h-4 w-4" />
-                          <span>{job.type}</span>
-                        </div>
+                        {job.createdAt && (
+                          <div className="flex items-center space-x-2 text-xs text-muted-foreground">
+                            <Calendar className="h-3.5 w-3.5" />
+                            <span>{formatDate(job.createdAt)}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

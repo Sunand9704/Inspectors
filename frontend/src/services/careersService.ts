@@ -17,6 +17,8 @@ export type CareerDto = {
 	postedAt: string;
 	closingAt?: string;
 	applicationUrl?: string;
+	createdAt?: string;
+	updatedAt?: string;
 	translations?: Map<string, {
 		title?: string;
 		description?: string;

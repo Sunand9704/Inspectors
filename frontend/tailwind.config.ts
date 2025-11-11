@@ -56,7 +56,7 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				// TÜV SÜD Brand Colors - Lavender Theme
+				// TÜV SÜD Brand Colors - Orange Theme
 				'tuv-lavender': {
 					50: 'hsl(var(--tuv-blue-50))',
 					100: 'hsl(var(--tuv-blue-100))',

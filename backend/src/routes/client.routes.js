@@ -26,8 +26,31 @@ const upload = multer({
 // GET /api/clients/images
 router.get('/clients/images', async (req, res) => {
   try {
-    const images = await ClientImage.find({ isActive: true }).sort({ createdAt: -1 }).lean();
-    res.json({ success: true, data: images });
+    // Check if we should include inactive clients (for admin or debugging)
+    const includeInactive = req.query.includeInactive === 'true';
+    
+    // Build query filter
+    const filter = includeInactive ? {} : { isActive: true };
+    
+    // Fetch all client images without any limit
+    // Using batchSize to ensure we get all documents in one go
+    const images = await ClientImage.find(filter)
+      .sort({ createdAt: -1 })
+      .lean()
+      .batchSize(1000); // Set large batch size to fetch all at once
+    
+    const totalCount = await ClientImage.countDocuments(filter);
+    const activeCount = await ClientImage.countDocuments({ isActive: true });
+    
+    logger.info(`Fetched ${images.length} client images (active: ${activeCount}, total: ${totalCount})`);
+    
+    res.json({ 
+      success: true, 
+      data: images,
+      count: images.length,
+      total: totalCount,
+      active: activeCount
+    });
   } catch (err) {
     logger.error('Error fetching client images:', err);
     res.status(500).json({ success: false, error: err.message });
