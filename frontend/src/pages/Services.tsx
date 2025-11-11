@@ -140,7 +140,7 @@ export default function Services() {
         </div>
       </section>
 
-      <ClientMarquee />
+      <ClientMarquee direction="left" />
 
       {/* All Services */}
       <section className="section" id="services">
@@ -168,7 +168,7 @@ export default function Services() {
       </section>
 
       {/* Client Marquee */}
-      <ClientMarquee />
+      <ClientMarquee direction="right" />
      
     </div>
   );

@@ -74,7 +74,7 @@ export function Navbar() {
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4" />
-                <span>Support@cbm360tiv.com</span>
+                <span>Inspector360@gmail.com</span>
               </div>
             </div>
             <div className="flex items-center space-x-4">
