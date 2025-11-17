@@ -1,7 +1,4 @@
 
-
-
-
 const translations = {
     en: {
       navbar: {
@@ -238,24 +235,19 @@ const translations = {
       },
       industryStats: [
         {
-          number: "72+",
+          number: "70+",
           label: "Countries Served",
           description: "Global presence with local expertise"
         },
         {
-          number: "7,000+",
-          label: "Experts Worldwide",
+          number: "10,000+",
+          label: "Expertise Supply Worldwide",
           description: "Highly qualified professionals"
         },
         {
-          number: "25+",
-          label: "Testing Laboratories",
-          description: "State-of-the-art facilities"
-        },
-        {
-          number: "33",
-          label: "Years of Excellence",
-          description: "Trusted since 1866"
+          number: "2012",
+          label: "Established",
+          description: "Trusted partner since 2012"
         }
       ],
     },
@@ -495,24 +487,19 @@ const translations = {
       },
       industryStats: [
         {
-          number: "72+",
+          number: "70+",
           label: "Pays Desservis",
           description: "Présence mondiale avec expertise locale"
         },
         {
-          number: "7,000+",
-          label: "Experts dans le Monde",
+          number: "10 000+",
+          label: "Expertise fournie dans le monde",
           description: "Professionnels hautement qualifiés"
         },
         {
-          number: "25+",
-          label: "Laboratoires de Test",
-          description: "Installations de pointe"
-        },
-        {
-          number: "33",
-          label: "Années d'Excellence",
-          description: "De confiance depuis 1866"
+          number: "2012",
+          label: "Depuis 2012",
+          description: "Partenaire de confiance depuis 2012"
         }
       ],
     },
@@ -752,24 +739,19 @@ const translations = {
       },
       industryStats: [
         {
-          number: "72+",
+          number: "70+",
           label: "Países Atendidos",
           description: "Presença global com expertise local"
         },
         {
-          number: "7,000+",
-          label: "Especialistas no Mundo",
+          number: "10.000+",
+          label: "Expertise fornecida no mundo",
           description: "Profissionais altamente qualificados"
         },
         {
-          number: "25+",
-          label: "Laboratórios de Teste",
-          description: "Instalações de última geração"
-        },
-        {
-          number: "33",
-          label: "Anos de Excelência",
-          description: "Confiável desde 1866"
+          number: "2012",
+          label: "Desde 2012",
+          description: "Parceiro de confiança desde 2012"
         }
       ],
     },
@@ -1009,24 +991,19 @@ const translations = {
       },
       industryStats: [
         {
-          number: "72+",
+          number: "70+",
           label: "Países Atendidos",
           description: "Presencia global con experiencia local"
         },
         {
-          number: "7,000+",
-          label: "Expertos en el Mundo",
+          number: "10,000+",
+          label: "Suministro de experiencia mundial",
           description: "Profesionales altamente calificados"
         },
         {
-          number: "25+",
-          label: "Laboratorios de Prueba",
-          description: "Instalaciones de vanguardia"
-        },
-        {
-          number: "33",
-          label: "Años de Excelencia",
-          description: "Confiable desde 1866"
+          number: "2012",
+          label: "Desde 2012",
+          description: "Socio de confianza desde 2012"
         }
       ],
     },
@@ -1266,24 +1243,19 @@ const translations = {
       },
       industryStats: [
         {
-          number: "72+",
-          label: "Обслуживаемые Страны",
+          number: "70+",
+          label: "Обслуживаемые страны",
           description: "Глобальное присутствие с местной экспертизой"
         },
         {
-          number: "7,000+",
-          label: "Экспертов по Миру",
+          number: "10 000+",
+          label: "Поставка экспертизы по всему миру",
           description: "Высококвалифицированные специалисты"
         },
         {
-          number: "25+",
-          label: "Испытательных Лабораторий",
-          description: "Современные объекты"
-        },
-        {
-          number: "33",
-          label: "Лет Совершенства",
-          description: "Доверие с 1866 года"
+          number: "2012",
+          label: "С 2012 года",
+          description: "Надежный партнер с 2012 года"
         }
       ],
     },
@@ -1523,24 +1495,19 @@ const translations = {
       },
       industryStats: [
         {
-          number: "72+",
+          number: "70+",
           label: "服务国家",
           description: "拥有本地专业知识的全球影响力"
         },
         {
-          number: "7,000+",
-          label: "全球专家",
+          number: "10,000+",
+          label: "全球专业能力供应",
           description: "高素质的专业人员"
         },
         {
-          number: "25+",
-          label: "测试实验室",
-          description: "最先进的设施"
-        },
-        {
-          number: "33",
-          label: "多年的卓越成就",
-          description: "自 1866 年以来值得信赖"
+          number: "2012",
+          label: "成立年份",
+          description: "自 2012 年以来值得信赖"
         }
       ],
     },

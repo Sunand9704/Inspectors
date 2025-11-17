@@ -17,12 +17,16 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { fetchContactOffices, sendContactInquiry } from '@/services/contactOffices';
+import { getPageWithSections } from '@/utils/api';
 import { useToast } from '@/hooks/use-toast';
+import { footerIndustryItems, footerServiceItems } from '@/data/footerLists';
+type ServiceOption = { label: string; value: string; link?: string };
 
 // Fetching offices data from database via API
 
 export default function Contact() {
   const [groups, setGroups] = useState<{ region_name: string; offices: any[] }[]>([]);
+  const [serviceOptions, setServiceOptions] = useState<ServiceOption[]>(footerServiceItems);
   const { toast } = useToast();
 
   const [form, setForm] = useState({
@@ -58,6 +62,39 @@ export default function Contact() {
         console.error('Error fetching contact offices:', error);
         setGroups([]);
       });
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      try {
+        const page = await getPageWithSections('services');
+        if (!isMounted) return;
+        const sections = page.sections || [];
+        const toSlug = (text: string) =>
+          String(text)
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .trim()
+            .replace(/\s+/g, '-');
+        const mapped = sections.slice(0, 7).map((section) => {
+          const slug = section.sectionId || toSlug(section.title);
+          return {
+            label: section.title,
+            value: slug,
+            link: `/services/${slug}`,
+          };
+        });
+        if (mapped.length > 0) {
+          setServiceOptions(mapped);
+        }
+      } catch (error) {
+        console.error('Failed to fetch services list for contact form', error);
+      }
+    })();
+    return () => {
+      isMounted = false;
+    };
   }, []);
   return (
     <div>
@@ -270,15 +307,11 @@ export default function Contact() {
                         <SelectValue placeholder="Select Industry" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="automotive">Automotive</SelectItem>
-                        <SelectItem value="healthcare">Healthcare & Medical</SelectItem>
-                        <SelectItem value="energy">Energy & Utilities</SelectItem>
-                        <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                        <SelectItem value="construction">Construction</SelectItem>
-                        <SelectItem value="food">Food & Agriculture</SelectItem>
-                        <SelectItem value="aerospace">Aerospace & Defense</SelectItem>
-                        <SelectItem value="technology">Technology & Electronics</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        {footerIndustryItems.map((industry) => (
+                          <SelectItem key={industry.value} value={industry.value}>
+                            {industry.label}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -289,12 +322,11 @@ export default function Contact() {
                         <SelectValue placeholder="Select Service" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="testing">Testing & Inspection</SelectItem>
-                        <SelectItem value="certification">Certification Services</SelectItem>
-                        <SelectItem value="consulting">Consulting & Advisory</SelectItem>
-                        <SelectItem value="training">Training & Education</SelectItem>
-                        <SelectItem value="digital">Digital Solutions</SelectItem>
-                        <SelectItem value="other">Other Services</SelectItem>
+                        {serviceOptions.map((service) => (
+                          <SelectItem key={service.value} value={service.value}>
+                            {service.label}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -344,7 +376,7 @@ export default function Contact() {
                     <p className="text-muted-foreground mb-2">
                       Speak with our customer service team
                     </p>
-                    <p className="font-medium text-primary">+1 (800) 000-0000</p>
+                    <p className="font-medium text-primary">+44 7934 980214</p>
                     <p className="text-sm text-muted-foreground">Mon-Fri: 8:00 AM - 6:00 PM EST</p>
                   </div>
                 </div>
@@ -358,7 +390,7 @@ export default function Contact() {
                     <p className="text-muted-foreground mb-2">
                       Send detailed inquiries and documentation
                     </p>
-                    <p className="font-medium text-primary">contact@cbm.com</p>
+                    <p className="font-medium text-primary">contact@inspectors360.com</p>
                     <p className="text-sm text-muted-foreground">Response within 24 hours</p>
                   </div>
                 </div>

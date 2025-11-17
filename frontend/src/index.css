@@ -7,21 +7,22 @@
 
 @layer base {
   :root {
-    /* Core Brand Colors - Orange Theme (Rebased to #E86F33) */
-    /* Base HEX: #E86F33 -> hsl(20, 80%, 56%) */
-    --tuv-blue-900: 20 80% 35%;
-    --tuv-blue-800: 20 80% 40%;
-    --tuv-blue-700: 20 80% 45%;
-    --tuv-blue-600: 20 80% 50%;
-    --tuv-blue-500: 20 80% 55%;
-    --tuv-blue-400: 20 80% 60%; /* ≈ #E86F33 */
-    --tuv-blue-100: 20 50% 95%;
-    --tuv-blue-50: 20 30% 98%;
+    /* Core Brand Colors - Orange Theme (matched to #E86F33) */
+    --tuv-blue-50: 20 95% 98%;
+    --tuv-blue-100: 20 92% 94%;
+    --tuv-blue-200: 20 88% 88%;
+    --tuv-blue-300: 20 86% 78%;
+    --tuv-blue-400: 20 85% 68%;
+    --tuv-blue-500: 20 84% 56%; /* #E86F33 */
+    --tuv-blue-600: 20 84% 48%;
+    --tuv-blue-700: 20 84% 42%;
+    --tuv-blue-800: 20 84% 36%;
+    --tuv-blue-900: 20 84% 30%;
 
     /* Additional Orange Accent Colors (derived from base) */
-    --tuv-lavender-light: 20 60% 90%;
-    --tuv-lavender-pale: 20 40% 95%;
-    --tuv-lavender-deep: 20 85% 30%;
+    --tuv-lavender-light: 20 90% 96%;
+    --tuv-lavender-pale: 20 95% 98%;
+    --tuv-lavender-deep: 20 84% 34%;
     
     --tuv-red: 350 85% 50%;            /* #e30613 - Accent Red */
     --tuv-red-light: 350 70% 95%;     /* #fef2f3 */
@@ -45,9 +46,9 @@
     --popover: 0 0% 100%;
     --popover-foreground: var(--tuv-gray-900);
     
-    --primary: var(--tuv-blue-900);
+    --primary: var(--tuv-blue-500);
     --primary-foreground: 0 0% 100%;
-    --primary-hover: var(--tuv-blue-800);
+    --primary-hover: var(--tuv-blue-600);
     
     --secondary: var(--tuv-gray-100);
     --secondary-foreground: var(--tuv-gray-900);
@@ -62,7 +63,7 @@
     
     --border: var(--tuv-gray-200);
     --input: var(--tuv-gray-200);
-    --ring: var(--tuv-blue-600);
+    --ring: var(--tuv-blue-500);
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -328,7 +329,7 @@
 
   /* Hero Section */
   .hero-gradient {
-    background: linear-gradient(135deg, hsl(var(--tuv-blue-900)) 0%, hsl(var(--tuv-blue-700)) 100%);
+    background: linear-gradient(135deg, hsl(var(--tuv-blue-700)) 0%, hsl(var(--tuv-blue-500)) 100%);
   }
 
   .parallax-hero {
@@ -343,7 +344,7 @@
 
   /* Orange Theme Specific Styles */
   .orange-gradient {
-    background: linear-gradient(135deg, hsl(var(--tuv-blue-900)) 0%, hsl(var(--tuv-blue-600)) 50%, hsl(var(--tuv-blue-400)) 100%);
+    background: linear-gradient(135deg, hsl(var(--tuv-blue-700)) 0%, hsl(var(--tuv-blue-500)) 50%, hsl(var(--tuv-blue-400)) 100%);
   }
 
   .orange-soft-gradient {

@@ -81,23 +81,18 @@ export const industries = [
 
 export const industryStats = [
   {
-    number: "150+",
+    number: "70+",
     label: "Countries Served",
     description: "Global presence with local expertise"
   },
   {
-    number: "25,000+",
-    label: "Experts Worldwide",
+    number: "10,000+",
+    label: "Expertise Supply Worldwide",
     description: "Highly qualified professionals"
   },
   {
-    number: "1,000+",
-    label: "Testing Laboratories",
-    description: "State-of-the-art facilities"
-  },
-  {
-    number: "150",
-    label: "Years of Excellence",
-    description: "Trusted since 1866"
+    number: "2012",
+    label: "Established",
+    description: "Trusted partner since 2012"
   }
 ];

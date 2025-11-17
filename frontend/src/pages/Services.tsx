@@ -11,6 +11,7 @@ import { ArrowRight, CheckCircle, Users, Award, Globe, Search, Settings, Shield,
 import { useTranslation } from '@/contexts/TranslationContext';
 import { useEffect, useState } from 'react';
 import { getPageWithSections, SectionDto } from '@/utils/api';
+import { industryStats as fallbackIndustryStats } from '@/data/industries';
 
 export default function Services() {
   const { translations } = useTranslation();
@@ -81,8 +82,8 @@ export default function Services() {
     return () => { isMounted = false; };
   }, []);
 
-  // Get industry stats from API or fallback to static data
-  const industryStats = translations?.industryStats || [];
+  // Force new industry stats values regardless of backend translations
+  const industryStats = fallbackIndustryStats;
 
   return (
     <div>

@@ -208,6 +208,10 @@ export default function About() {
     return mainSection?.bodyText ? parseContentToBlocks(mainSection.bodyText) : [];
   }, [mainSection]);
 
+  const heroImage = mainSection?.images?.[0];
+  const midImage = mainSection?.images && mainSection.images[1];
+  const hasHeadingBlock = useMemo(() => blocks.some((b) => b.type === 'h1'), [blocks]);
+
   if (loading) {
   return (
       <div className="container-responsive py-16">
@@ -244,43 +248,60 @@ export default function About() {
 
       <div className="container-responsive py-12">
         <article className="prose max-w-none">
-        {(!blocks.some(b => b.type === 'h1')) && (
-          <h1 className="text-3xl lg:text-5xl font-bold mb-2">{page?.title || aboutTranslations?.title || 'About'}</h1>
+        {!hasHeadingBlock && (
+          <>
+            <h1 className="text-3xl lg:text-5xl font-bold mb-4">{page?.title || aboutTranslations?.title || 'About'}</h1>
+            {heroImage && (
+              <div className="mb-8 max-w-3xl mx-auto">
+                <img
+                  src={heroImage}
+                  alt="About hero image"
+                  className="w-full h-auto object-contain"
+                  loading="eager"
+                />
+              </div>
+            )}
+          </>
         )}
-         <p className="text-sm md:text-base text-muted-foreground mb-4">Established year: 2012</p>
-        {/* Hero banner after first heading */}
-        {mainSection?.images && mainSection.images[0] && (
-          <div className="mb-8 max-w-3xl mx-auto">
-            <img
-              src={mainSection.images[0]}
-              alt="About hero image"
-              className="w-full h-auto object-contain"
-              loading="eager"
-            />
-          </div>
-        )}
+        <p className="text-sm md:text-base text-muted-foreground mb-4">Established year: 2012</p>
         {page?.description && (
           <p className="text-lg text-muted-foreground mb-8">{page.description}</p>
         )}
         <div className="space-y-2">
           {(() => {
             const insertIndex = Math.floor(blocks.length / 2);
-            const midImage = mainSection?.images && mainSection.images[1];
-            return blocks.map((b, i) => (
-              <div key={i}>
-                {midImage && i === insertIndex && (
-                  <div className="my-8">
-                    <img
-                      src={midImage}
-                      alt="About mid content image"
-                      className="w-full h-48 md:h-60 object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                )}
-                {b.content}
-              </div>
-            ));
+            let heroInserted = !hasHeadingBlock || !heroImage;
+            return blocks.map((b, i) => {
+              const shouldInsertHero = heroImage && hasHeadingBlock && !heroInserted && b.type === 'h1';
+              if (shouldInsertHero) {
+                heroInserted = true;
+              }
+              return (
+                <div key={i}>
+                  {b.content}
+                  {shouldInsertHero && (
+                    <div className="mb-8 max-w-3xl mx-auto">
+                      <img
+                        src={heroImage}
+                        alt="About hero image"
+                        className="w-full h-auto object-contain"
+                        loading="eager"
+                      />
+                    </div>
+                  )}
+                  {midImage && i === insertIndex && (
+                    <div className="my-8">
+                      <img
+                        src={midImage}
+                        alt="About mid content image"
+                        className="w-full h-48 md:h-60 object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            });
           })()}
         </div>
         </article>
