@@ -70,6 +70,7 @@ export interface StaticTranslations {
     number: string;
     label: string;
     description: string;
+    startYear?: number;
   }>;
 }
 

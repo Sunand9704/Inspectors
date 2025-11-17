@@ -20,6 +20,7 @@ export interface Blog {
   viewCount: number;
   metaDescription?: string;
   readingTime?: number;
+  pdfUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -40,6 +41,7 @@ export interface CreateBlogData {
   isFeatured?: boolean;
   metaDescription?: string;
   slug?: string;
+  pdfUrl?: string;
 }
 
 export interface UpdateBlogData extends Partial<CreateBlogData> {
@@ -145,19 +147,24 @@ class BlogService {
   }
 
   // Create new blog
-  async createBlog(blogData: CreateBlogData, featuredImageFile?: File): Promise<BlogResponse> {
-    if (featuredImageFile) {
+  async createBlog(blogData: CreateBlogData, featuredImageFile?: File, pdfFile?: File): Promise<BlogResponse> {
+    if (featuredImageFile || pdfFile) {
       const formData = new FormData();
       Object.entries(blogData).forEach(([key, value]) => {
         if (key === 'images' && Array.isArray(value)) {
           formData.append(key, JSON.stringify(value));
         } else if (key === 'tags' && Array.isArray(value)) {
           formData.append(key, JSON.stringify(value));
-        } else {
+        } else if (value !== undefined && value !== null) {
           formData.append(key, value as string);
         }
       });
-      formData.append('featuredImageFile', featuredImageFile);
+      if (featuredImageFile) {
+        formData.append('featuredImageFile', featuredImageFile);
+      }
+      if (pdfFile) {
+        formData.append('pdfFile', pdfFile);
+      }
       
       return this.request<BlogResponse>('', {
         method: 'POST',
@@ -173,11 +180,11 @@ class BlogService {
   }
 
   // Update blog
-  async updateBlog(id: string, blogData: Partial<CreateBlogData>, featuredImageFile?: File): Promise<BlogResponse> {
-    if (featuredImageFile) {
+  async updateBlog(id: string, blogData: Partial<CreateBlogData>, featuredImageFile?: File, pdfFile?: File): Promise<BlogResponse> {
+    if (featuredImageFile || pdfFile) {
       const formData = new FormData();
       Object.entries(blogData).forEach(([key, value]) => {
-        if (value !== undefined) {
+        if (value !== undefined && value !== null) {
           if (key === 'images' && Array.isArray(value)) {
             formData.append(key, JSON.stringify(value));
           } else if (key === 'tags' && Array.isArray(value)) {
@@ -187,7 +194,12 @@ class BlogService {
           }
         }
       });
-      formData.append('featuredImageFile', featuredImageFile);
+      if (featuredImageFile) {
+        formData.append('featuredImageFile', featuredImageFile);
+      }
+      if (pdfFile) {
+        formData.append('pdfFile', pdfFile);
+      }
       
       return this.request<BlogResponse>(`/${id}`, {
         method: 'PUT',

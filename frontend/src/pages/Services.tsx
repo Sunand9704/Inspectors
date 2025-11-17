@@ -98,7 +98,7 @@ export default function Services() {
         }}
         secondaryCTA={{
           text: hero?.secondaryCTAText || "Get Quote",
-          href: "/contact"
+          href: "/contact#contact-form"
         }}
         autoPlaySeconds={7}
         videoUrls={[
@@ -116,12 +116,22 @@ export default function Services() {
       {/* Trust Indicators */}
       <section className="section bg-white">
         <div className="container-responsive">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center max-w-5xl mx-auto">
             {industryStats.map((stat, index) => {
-              const raw = String(stat.number).replace(/\+/g, '').replace(/,/g, '');
+              const yearsCompleted = stat.startYear
+                ? Math.max(new Date().getFullYear() - stat.startYear, 0)
+                : null;
+              const displayNumber = yearsCompleted !== null
+                ? yearsCompleted.toString()
+                : stat.number;
+              const raw = String(displayNumber).replace(/\+/g, '').replace(/,/g, '');
               const isNumeric = /^\d+$/.test(raw);
               const end = isNumeric ? parseInt(raw, 10) : 0;
-              const suffix = String(stat.number).includes('+') ? '+' : '';
+              const suffix = yearsCompleted !== null
+                ? ''
+                : String(stat.number).includes('+')
+                  ? '+'
+                  : '';
               return (
               <div key={index} className="text-center animate-fade-in-up">
                 <CountUp

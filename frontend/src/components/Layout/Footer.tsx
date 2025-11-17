@@ -47,8 +47,17 @@ export function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Company Info */}
             <div className="lg:col-span-1">
-              <div className="inline-block mb-6">
+              <div className="inline-flex flex-col gap-3 mb-6">
                 <Logo height={38} withLink />
+                <div className="w-full max-w-[11.5rem]">
+                  <div className="flex items-center text-orange font-semibold uppercase tracking-[0.35em] text-[0.5rem] whitespace-nowrap">
+                    <span className="shrink-0">Equipmente</span>
+                    <span className="mx-2 flex-1 h-px bg-orange/40" aria-hidden="true" />
+                    <span className="shrink-0">Expertis</span>
+                    <span className="mx-2 flex-1 h-px bg-orange/40" aria-hidden="true" />
+                    <span className="shrink-0">Experience</span>
+                  </div>
+                </div>
               </div>
               <p className="text-tuv-gray-400 mb-6 leading-relaxed">
                 Trusted provider of skilled manpower, recruitment, and staffing solutions and equipments across industries. Dedicated to quality, reliability, and operational excellence. Committed to empowering businesses with the right talent — ensuring growth, safety, and performance worldwide.

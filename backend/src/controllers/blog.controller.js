@@ -276,13 +276,14 @@ const createBlog = async (req, res) => {
     const blogData = req.body;
 
     // Handle uploaded featured image
-    if (req.file) {
+    if (req.files && req.files.featuredImageFile && req.files.featuredImageFile[0]) {
       try {
+        const file = req.files.featuredImageFile[0];
         // Generate a unique public ID for the blog image
         const timestamp = Date.now();
         const publicId = `blog-${timestamp}`;
         
-        const uploadResult = await cloudinaryService.uploadFromBuffer(req.file.buffer, {
+        const uploadResult = await cloudinaryService.uploadFromBuffer(file.buffer, {
           folder: 'cbm/blog/featured-images',
           public_id: publicId,
           transformation: [
@@ -296,6 +297,27 @@ const createBlog = async (req, res) => {
         console.error('Image upload error:', uploadError);
         // If Cloudinary upload fails, keep the existing image URL or empty
         console.warn('Cloudinary upload failed, using provided image URL or empty');
+      }
+    }
+
+    // Handle uploaded PDF file
+    if (req.files && req.files.pdfFile && req.files.pdfFile[0]) {
+      try {
+        const file = req.files.pdfFile[0];
+        const timestamp = Date.now();
+        const publicId = `blog-pdf-${timestamp}`;
+        
+        const uploadResult = await cloudinaryService.uploadFromBuffer(file.buffer, {
+          folder: 'cbm/blog/pdfs',
+          public_id: publicId,
+          resource_type: 'raw', // PDFs should be uploaded as raw files
+          tags: ['blog', 'pdf', 'cbm']
+        });
+        
+        blogData.pdfUrl = uploadResult.url;
+      } catch (uploadError) {
+        console.error('PDF upload error:', uploadError);
+        console.warn('Cloudinary PDF upload failed');
       }
     }
 
@@ -365,13 +387,14 @@ const updateBlog = async (req, res) => {
     });
 
     // Handle uploaded featured image
-    if (req.file) {
+    if (req.files && req.files.featuredImageFile && req.files.featuredImageFile[0]) {
       try {
+        const file = req.files.featuredImageFile[0];
         // Generate a unique public ID for the blog image
         const timestamp = Date.now();
         const publicId = `blog-${timestamp}`;
         
-        const uploadResult = await cloudinaryService.uploadFromBuffer(req.file.buffer, {
+        const uploadResult = await cloudinaryService.uploadFromBuffer(file.buffer, {
           folder: 'cbm/blog/featured-images',
           public_id: publicId,
           transformation: [
@@ -385,6 +408,27 @@ const updateBlog = async (req, res) => {
         console.error('Image upload error:', uploadError);
         // If Cloudinary upload fails, keep the existing image URL or empty
         console.warn('Cloudinary upload failed, using provided image URL or empty');
+      }
+    }
+
+    // Handle uploaded PDF file
+    if (req.files && req.files.pdfFile && req.files.pdfFile[0]) {
+      try {
+        const file = req.files.pdfFile[0];
+        const timestamp = Date.now();
+        const publicId = `blog-pdf-${timestamp}`;
+        
+        const uploadResult = await cloudinaryService.uploadFromBuffer(file.buffer, {
+          folder: 'cbm/blog/pdfs',
+          public_id: publicId,
+          resource_type: 'raw', // PDFs should be uploaded as raw files
+          tags: ['blog', 'pdf', 'cbm']
+        });
+        
+        updateData.pdfUrl = uploadResult.url;
+      } catch (uploadError) {
+        console.error('PDF upload error:', uploadError);
+        console.warn('Cloudinary PDF upload failed');
       }
     }
 

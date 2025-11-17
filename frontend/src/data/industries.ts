@@ -92,7 +92,8 @@ export const industryStats = [
   },
   {
     number: "2012",
-    label: "Established",
-    description: "Trusted partner since 2012"
+    label: "Years of Excellence",
+    description: "Trusted partner since 2012",
+    startYear: 2012
   }
 ];
