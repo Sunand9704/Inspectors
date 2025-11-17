@@ -3,7 +3,7 @@ import { Blog, CreateBlogData, UpdateBlogData } from '../services/blogService';
 
 interface BlogFormProps {
   blog?: Blog;
-  onSave: (blogData: CreateBlogData | UpdateBlogData, featuredImageFile?: File) => Promise<void>;
+  onSave: (blogData: CreateBlogData | UpdateBlogData, featuredImageFile?: File, pdfFile?: File) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
 }
@@ -27,6 +27,8 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [featuredImageFile, setFeaturedImageFile] = useState<File | null>(null);
   const [featuredImagePreview, setFeaturedImagePreview] = useState<string>('');
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [pdfFileName, setPdfFileName] = useState<string>('');
 
   useEffect(() => {
     console.log('BlogForm useEffect triggered:', { blog, blogId: blog?._id });
@@ -42,13 +44,16 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
         isPublished: blog.isPublished ?? true,
         isFeatured: blog.isFeatured ?? false,
         metaDescription: blog.metaDescription || '',
-        slug: blog.slug || ''
+        slug: blog.slug || '',
+        pdfUrl: blog.pdfUrl || ''
       };
       
       console.log('Setting form data for edit mode:', initialFormData);
       setFormData(initialFormData);
       setFeaturedImagePreview(blog.featuredImage || '');
       setFeaturedImageFile(null); // Reset file when editing
+      setPdfFile(null);
+      setPdfFileName(blog.pdfUrl ? 'Current PDF attached' : '');
     } else {
       console.log('Resetting form data for create mode');
       setFormData({
@@ -65,6 +70,8 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
       });
       setFeaturedImagePreview('');
       setFeaturedImageFile(null);
+      setPdfFile(null);
+      setPdfFileName('');
     }
     
     // Clear any existing errors when form data changes
@@ -153,6 +160,18 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
         setFeaturedImagePreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.type === 'application/pdf') {
+        setPdfFile(file);
+        setPdfFileName(file.name);
+      } else {
+        alert('Please select a PDF file');
+      }
     }
   };
 
@@ -263,10 +282,10 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
       };
       
       console.log('Submitting data:', submitData);
-      console.log('Calling onSave with:', { submitData, featuredImageFile, isEditMode: !!blog });
+      console.log('Calling onSave with:', { submitData, featuredImageFile, pdfFile, isEditMode: !!blog });
       
-      // Pass the file to the onSave function (convert null to undefined)
-      await onSave(submitData, featuredImageFile || undefined);
+      // Pass the files to the onSave function (convert null to undefined)
+      await onSave(submitData, featuredImageFile || undefined, pdfFile || undefined);
       console.log('Blog saved successfully');
     } catch (error) {
       console.error('Error saving blog:', error);
@@ -650,6 +669,68 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
               </button>
             </div>
           ))}
+        </div>
+
+        {/* PDF Upload */}
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '6px' }}>
+            PDF Document (Optional)
+          </label>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <input
+              type="file"
+              accept="application/pdf"
+              onChange={handlePdfChange}
+              id="pdf-input"
+              style={{ display: 'none' }}
+            />
+            <label
+              htmlFor="pdf-input"
+              style={{
+                padding: '10px 20px',
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '14px',
+                cursor: 'pointer',
+                display: 'inline-block'
+              }}
+            >
+              {pdfFile ? 'Change PDF' : 'Upload PDF'}
+            </label>
+            {pdfFileName && (
+              <span style={{ fontSize: '14px', color: '#6b7280' }}>
+                {pdfFileName}
+              </span>
+            )}
+            {blog?.pdfUrl && !pdfFile && (
+              <span style={{ fontSize: '14px', color: '#6b7280' }}>
+                Current: PDF attached
+              </span>
+            )}
+            {(pdfFile || blog?.pdfUrl) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setPdfFile(null);
+                  setPdfFileName('');
+                  setFormData(prev => ({ ...prev, pdfUrl: '' }));
+                }}
+                style={{
+                  padding: '6px 12px',
+                  backgroundColor: '#ef4444',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  cursor: 'pointer'
+                }}
+              >
+                Remove PDF
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Meta Description */}

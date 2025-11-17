@@ -87,6 +87,10 @@ const BlogSchema = new mongoose.Schema(
     readingTime: { 
       type: Number, 
       default: 5 // in minutes
+    },
+    pdfUrl: {
+      type: String,
+      trim: true
     }
   },
   { 

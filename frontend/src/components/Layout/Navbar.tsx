@@ -47,6 +47,8 @@ export function Navbar() {
   const getNavigationItems = () => {
     if (!translations) return [];
     
+    const getQuoteLabel = (translations.navbar as any).getQuote || 'Get Quote';
+
     return [
       { name: translations.navbar.services, href: '/services' },
       { name: translations.navbar.industries, href: '/industries' },
@@ -55,7 +57,7 @@ export function Navbar() {
       { name: (translations.navbar as any).vacancies || (translations.navbar as any).careers || 'Vacancies', href: '/vacancies' },
       // Some locales may not have "blog"
       { name: (translations.navbar as any).blog || 'Blog', href: '/blog' },
-      { name: translations.navbar.contact, href: '/contact' },
+      { name: getQuoteLabel, href: '/contact#contact-form' },
     ];
   };
 
@@ -150,14 +152,9 @@ export function Navbar() {
 
             {/* CTA Button */}
             <div className="hidden lg:flex items-center space-x-4">
-              {/* <Button variant="outline" size="sm" asChild>
-                <Link to="/contact">
-                  {translations?.navbar.getQuote || 'Get Quote'}
-                </Link>
-              </Button> */}
               <Button className="btn-primary" asChild>
-                <Link to="/contact#contact-form">
-                  {translations?.navbar.contactUs || 'Get Quote'}
+                <Link to="/contact">
+                  {translations?.navbar.contactUs || 'Contact Us'}
                 </Link>
               </Button>
             </div>
@@ -228,14 +225,9 @@ export function Navbar() {
                   </div>
                   
                   <div className="flex flex-col space-y-2">
-                    <Button variant="outline" asChild>
-                      <Link to="/contact" onClick={() => setIsOpen(false)}>
-                        {translations?.navbar.getQuote || 'Get Quote'}
-                      </Link>
-                    </Button>
                     <Button className="btn-primary" asChild>
                       <Link to="/contact#contact-form" onClick={() => setIsOpen(false)}>
-                        {translations?.navbar.contactUs || 'Contact Us'}
+                        {translations?.navbar.getQuote || 'Get Quote'}
                       </Link>
                     </Button>
                   </div>

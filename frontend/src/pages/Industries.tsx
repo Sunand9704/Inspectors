@@ -123,17 +123,21 @@ export default function Industries() {
             <div className="bg-tuv-gray-50 rounded-2xl p-8">
               <h3 className="text-xl font-bold mb-6">Industry Insights</h3>
               <div className="space-y-6">
-                {industryStats.map((stat, index) => (
-                  <div key={index} className="flex items-center space-x-4">
-                    <div className="text-2xl font-bold text-primary">
-                      {stat.number}
+                {industryStats.map((stat, index) => {
+                  const displayNumber = stat.startYear
+                    ? Math.max(new Date().getFullYear() - stat.startYear, 0).toString()
+                    : stat.number;
+                  return (
+                    <div key={index} className="flex items-center justify-center space-x-4 text-center">
+                      <div className="text-2xl font-bold text-primary">
+                        {displayNumber}
+                      </div>
+                      <div>
+                        <div className="font-medium">{stat.label}</div>
+                        <div className="text-sm text-muted-foreground">{stat.description}</div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="font-medium">{stat.label}</div>
-                      <div className="text-sm text-muted-foreground">{stat.description}</div>
-                    </div>
-                  </div>
-                ))}
+                )})}
               </div>
             </div>
           </div>

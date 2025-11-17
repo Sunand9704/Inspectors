@@ -6,7 +6,8 @@ import { useState, useEffect } from 'react';
 import { 
   ChevronDown,
   ChevronUp,
-  Loader2
+  Loader2,
+  Download
 } from 'lucide-react';
 import { getBlogs, getBlogTags, getBlogById, BlogPostDto } from '@/services/blogService';
 import { useTranslation } from '@/contexts/TranslationContext';
@@ -248,7 +249,7 @@ export default function Blog() {
                       )}
                       
                       {/* Toggle Button and Actions */}
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between gap-4">
                         <Button 
                           variant="outline" 
                             onClick={() => toggleExpanded(post._id)}
@@ -267,6 +268,24 @@ export default function Blog() {
                           )}
                         </Button>
                         
+                        {post.pdfUrl && (
+                          <Button 
+                            variant="outline"
+                            className="flex items-center space-x-2"
+                            onClick={() => {
+                              const link = document.createElement('a');
+                              link.href = post.pdfUrl!;
+                              link.download = `${post.title.replace(/[^a-z0-9]/gi, '_')}.pdf`;
+                              link.target = '_blank';
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                            }}
+                          >
+                            <Download className="h-4 w-4" />
+                            <span>Download PDF</span>
+                          </Button>
+                        )}
                       </div>
                       
                       {/* Expanded Content */}

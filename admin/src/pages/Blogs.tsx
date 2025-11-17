@@ -45,7 +45,7 @@ export default function Blogs() {
     loadBlogs();
   }, [currentPage, searchTerm]);
 
-  const handleCreateBlog = async (blogData: CreateBlogData | UpdateBlogData, featuredImageFile?: File) => {
+  const handleCreateBlog = async (blogData: CreateBlogData | UpdateBlogData, featuredImageFile?: File, pdfFile?: File) => {
     try {
       setFormLoading(true);
       // Ensure all required fields are present for CreateBlogData
@@ -59,9 +59,10 @@ export default function Blogs() {
         isPublished: blogData.isPublished,
         isFeatured: blogData.isFeatured,
         metaDescription: blogData.metaDescription,
-        slug: blogData.slug
+        slug: blogData.slug,
+        pdfUrl: blogData.pdfUrl
       };
-      await blogService.createBlog(createData, featuredImageFile);
+      await blogService.createBlog(createData, featuredImageFile, pdfFile);
       setViewMode('list');
       loadBlogs();
     } catch (err) {
@@ -71,7 +72,7 @@ export default function Blogs() {
     }
   };
 
-  const handleUpdateBlog = async (blogData: UpdateBlogData, featuredImageFile?: File) => {
+  const handleUpdateBlog = async (blogData: UpdateBlogData, featuredImageFile?: File, pdfFile?: File) => {
     try {
       setFormLoading(true);
       
@@ -83,7 +84,7 @@ export default function Blogs() {
       console.log('Updating blog with ID:', selectedBlog._id);
       console.log('Update data:', blogData);
       
-      await blogService.updateBlog(selectedBlog._id, blogData, featuredImageFile);
+      await blogService.updateBlog(selectedBlog._id, blogData, featuredImageFile, pdfFile);
       setViewMode('list');
       setSelectedBlog(null);
       loadBlogs();

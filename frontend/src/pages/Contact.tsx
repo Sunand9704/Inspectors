@@ -96,6 +96,20 @@ export default function Contact() {
       isMounted = false;
     };
   }, []);
+
+  // Scroll to hash anchor on mount (e.g., when navigating from "Get Quote" button)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, []);
   return (
     <div>
       {/* Hero Section */}

@@ -20,6 +20,7 @@ export type BlogPostDto = {
   slug: string;
   metaDescription?: string;
   readingTime: number;
+  pdfUrl?: string;
   formattedPublishedAt: string;
   createdAt: string;
   updatedAt: string;

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
@@ -93,21 +94,33 @@ export function VideoHero({
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {primaryCTA && (
               <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-4" asChild>
-                <a href={primaryCTA.href}>
-                  {primaryCTA.text}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </a>
+                {primaryCTA.href.startsWith('/') ? (
+                  <Link to={primaryCTA.href}>
+                    {primaryCTA.text}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                ) : (
+                  <a href={primaryCTA.href}>
+                    {primaryCTA.text}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </a>
+                )}
               </Button>
             )}
             {secondaryCTA && (
               <Button 
                 size="lg" 
-                variant="outline" 
-                className="border-white text-white hover:bg-white hover:text-primary text-lg px-8 py-4" asChild
+                className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-4" asChild
               >
-                <a href={secondaryCTA.href}>
-                  {secondaryCTA.text}
-                </a>
+                {secondaryCTA.href.startsWith('/') ? (
+                  <Link to={secondaryCTA.href}>
+                    {secondaryCTA.text}
+                  </Link>
+                ) : (
+                  <a href={secondaryCTA.href}>
+                    {secondaryCTA.text}
+                  </a>
+                )}
               </Button>
             )}
           </div>
