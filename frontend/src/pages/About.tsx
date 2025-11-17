@@ -263,7 +263,7 @@ export default function About() {
             )}
           </>
         )}
-        <p className="text-sm md:text-base text-muted-foreground mb-4">Established year: 2012</p>
+        
         {page?.description && (
           <p className="text-lg text-muted-foreground mb-8">{page.description}</p>
         )}
