@@ -13,6 +13,7 @@ import {
 import Logo from '@/components/Common/Logo';
 import { useEffect, useState } from 'react';
 import { getPageWithSections, type SectionDto } from '@/utils/api';
+import { footerIndustryItems, footerServiceItems } from '@/data/footerLists';
 
 export function Footer() {
   const [servicesList, setServicesList] = useState<{ title: string; link: string }[]>([]);
@@ -50,7 +51,7 @@ export function Footer() {
                 <Logo height={38} withLink />
               </div>
               <p className="text-tuv-gray-400 mb-6 leading-relaxed">
-                Leading provider of testing, inspection, certification, and advisory services. Committed to safety, security, and sustainability worldwide.
+                Trusted provider of skilled manpower, recruitment, and staffing solutions and equipments across industries. Dedicated to quality, reliability, and operational excellence. Committed to empowering businesses with the right talent — ensuring growth, safety, and performance worldwide.
               </p>
               <div className="flex space-x-4">
                 <a href="#" className="text-tuv-gray-400 hover:text-white transition-colors">
@@ -74,14 +75,10 @@ export function Footer() {
                 Services
               </h3>
               <ul className="space-y-4">
-                {(servicesList.length > 0 ? servicesList : [
-                  { title: 'Testing & Certification', link: '/services/testing-certification' },
-                  { title: 'Inspection Services', link: '/services/inspection-services' },
-                  { title: 'Audit & Assessment', link: '/services/audit-assessment' },
-                  { title: 'Training & Education', link: '/services/training-education' },
-                  { title: 'Digital Solutions', link: '/services/digital-solutions' },
-                  { title: 'Consulting Services', link: '/services/consulting-services' },
-                ]).map((service, index) => (
+                {(servicesList.length > 0 ? servicesList : footerServiceItems.map(({ label, link }) => ({
+                  title: label,
+                  link,
+                }))).map((service, index) => (
                   <li key={index}>
                     <Link 
                       to={service.link} 
@@ -101,26 +98,14 @@ export function Footer() {
                 Industries
               </h3>
               <ul className="space-y-4">
-                {[
-                  'Mining & Mental',
-                  'Oil and Gas',
-                  'Marine',
-                  'Energy & Utilities',
-                  'Healthcare & Medical',
-                  'Automotive',
-                  'Construction',
-                  'Manufacturing',
-                  'Aerospace',
-                  'Food & Agriculture',
-                  'Defence'
-                ].map((industry, index) => (
+                {footerIndustryItems.map((industry, index) => (
                   <li key={index}>
                     <Link 
-                      to="/industries" 
+                      to={industry.link} 
                       className="text-tuv-gray-400 hover:text-white transition-colors flex items-center group"
                     >
                       <ArrowRight className="h-3 w-3 mr-2 opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-x-2 group-hover:translate-x-0" />
-                      {industry}
+                      {industry.label}
                     </Link>
                   </li>
                 ))}
