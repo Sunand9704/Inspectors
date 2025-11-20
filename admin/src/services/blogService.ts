@@ -148,6 +148,13 @@ class BlogService {
 
   // Create new blog
   async createBlog(blogData: CreateBlogData, featuredImageFile?: File, pdfFile?: File): Promise<BlogResponse> {
+    console.log('createBlog called with:', {
+      hasFeaturedImage: !!featuredImageFile,
+      hasPdf: !!pdfFile,
+      pdfFileName: pdfFile?.name,
+      pdfFileSize: pdfFile?.size
+    });
+
     if (featuredImageFile || pdfFile) {
       const formData = new FormData();
       Object.entries(blogData).forEach(([key, value]) => {
@@ -160,11 +167,16 @@ class BlogService {
         }
       });
       if (featuredImageFile) {
-        formData.append('featuredImageFile', featuredImageFile);
+        console.log('Appending featuredImageFile:', featuredImageFile.name, featuredImageFile.size);
+      formData.append('featuredImageFile', featuredImageFile);
       }
       if (pdfFile) {
+        console.log('Appending pdfFile:', pdfFile.name, pdfFile.size, pdfFile.type);
         formData.append('pdfFile', pdfFile);
       }
+      
+      // Log FormData contents (for debugging)
+      console.log('FormData prepared with files');
       
       return this.request<BlogResponse>('', {
         method: 'POST',
@@ -181,6 +193,15 @@ class BlogService {
 
   // Update blog
   async updateBlog(id: string, blogData: Partial<CreateBlogData>, featuredImageFile?: File, pdfFile?: File): Promise<BlogResponse> {
+    console.log('updateBlog called with:', {
+      id,
+      hasFeaturedImage: !!featuredImageFile,
+      hasPdf: !!pdfFile,
+      pdfFileName: pdfFile?.name,
+      pdfFileSize: pdfFile?.size,
+      pdfFileType: pdfFile?.type
+    });
+
     if (featuredImageFile || pdfFile) {
       const formData = new FormData();
       Object.entries(blogData).forEach(([key, value]) => {
@@ -195,11 +216,16 @@ class BlogService {
         }
       });
       if (featuredImageFile) {
-        formData.append('featuredImageFile', featuredImageFile);
+        console.log('Appending featuredImageFile:', featuredImageFile.name, featuredImageFile.size);
+      formData.append('featuredImageFile', featuredImageFile);
       }
       if (pdfFile) {
+        console.log('Appending pdfFile:', pdfFile.name, pdfFile.size, pdfFile.type);
         formData.append('pdfFile', pdfFile);
       }
+      
+      // Log FormData contents (for debugging)
+      console.log('FormData prepared with files for update');
       
       return this.request<BlogResponse>(`/${id}`, {
         method: 'PUT',

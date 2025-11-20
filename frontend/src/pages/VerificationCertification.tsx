@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getPageWithSections, SectionDto } from '@/utils/api';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { Loading } from '@/components/Common/Loading';
 
 export default function VerificationCertification() {
   const navigate = useNavigate();
@@ -67,12 +68,7 @@ export default function VerificationCertification() {
 
           <div className="mt-6 text-center">
             {loading ? (
-              <div className="animate-pulse">
-                <div className="h-10 bg-gray-200 rounded mb-3 mx-auto max-w-md"></div>
-                <div className="h-6 bg-gray-200 rounded mb-2 mx-auto max-w-4xl"></div>
-                <div className="h-6 bg-gray-200 rounded mb-2 mx-auto max-w-4xl"></div>
-                <div className="h-6 bg-gray-200 rounded mx-auto max-w-3xl"></div>
-              </div>
+              <Loading size="md" message="Loading content..." />
             ) : (
               <>
                 <h1 className="text-3xl lg:text-4xl font-bold mb-3">

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { getPageWithSections, PageDto } from '@/utils/api';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { Loading } from '@/components/Common/Loading';
 
 export default function About() {
   const { currentLanguage, translations } = useTranslation();
@@ -213,10 +214,13 @@ export default function About() {
   const hasHeadingBlock = useMemo(() => blocks.some((b) => b.type === 'h1'), [blocks]);
 
   if (loading) {
-  return (
+    return (
       <div className="container-responsive py-16">
-        <p>{aboutTranslations?.loading || "Loading..."}</p>
-              </div>
+        <Loading 
+          size="lg" 
+          message={aboutTranslations?.loading || "Loading..."} 
+        />
+      </div>
     );
   }
 

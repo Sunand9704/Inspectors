@@ -47,15 +47,19 @@ export function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Company Info */}
             <div className="lg:col-span-1">
-              <div className="inline-flex flex-col gap-3 mb-6">
-                <Logo height={38} withLink />
-                <div className="w-full max-w-[11.5rem]">
-                  <div className="flex items-center text-orange font-semibold uppercase tracking-[0.35em] text-[0.5rem] whitespace-nowrap">
-                    <span className="shrink-0">Equipmente</span>
-                    <span className="mx-2 flex-1 h-px bg-orange/40" aria-hidden="true" />
-                    <span className="shrink-0">Expertis</span>
-                    <span className="mx-2 flex-1 h-px bg-orange/40" aria-hidden="true" />
-                    <span className="shrink-0">Experience</span>
+              <div className="inline-flex flex-col gap-2 mb-6">
+                <div className="relative w-full">
+                  <Logo height={38} withLink />
+                  {/* Taglines aligned under INS, SPEC, TORS - matching exact logo layout */}
+                  <div className="mt-2.5 relative w-full" style={{ maxWidth: '280px' }}>
+                    <div className="flex items-start text-orange font-semibold uppercase text-[0.7rem] leading-tight" style={{ 
+                      fontFamily: 'inherit',
+                      letterSpacing: '0.02em'
+                    }}>
+                      <span className="inline-block" style={{ width: '30%', textAlign: 'left' }}>Expertis</span>
+                      <span className="inline-block" style={{ width: '40%', textAlign: 'center' }}>Equipment</span>
+                      <span className="inline-block" style={{ width: '30%', textAlign: 'right' }}>Experience</span>
+                    </div>
                   </div>
                 </div>
               </div>

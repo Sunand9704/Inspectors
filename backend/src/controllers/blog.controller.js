@@ -1,5 +1,8 @@
 const Blog = require('../models/Blog');
 const cloudinaryService = require('../services/cloudinary');
+const fs = require('fs');
+const path = require('path');
+const { uploadsDir } = require('../utils/paths');
 
 // Get all published blogs with pagination and filtering
 const getAllBlogs = async (req, res) => {
@@ -269,11 +272,19 @@ const createBlog = async (req, res) => {
   try {
     console.log('Create blog request received:', {
       body: req.body,
-      file: req.file ? 'File present' : 'No file',
+      files: req.files ? Object.keys(req.files) : 'No files',
+      fileCount: req.files ? Object.values(req.files).flat().length : 0,
       headers: req.headers
     });
     
     const blogData = req.body;
+    
+    // If we're uploading a new PDF file, remove any pdfUrl from form data
+    // (it will be set after Cloudinary upload)
+    if (req.files && req.files.pdfFile && req.files.pdfFile[0]) {
+      delete blogData.pdfUrl;
+      console.log('Removed pdfUrl from blogData (will be set after upload)');
+    }
 
     // Handle uploaded featured image
     if (req.files && req.files.featuredImageFile && req.files.featuredImageFile[0]) {
@@ -300,24 +311,49 @@ const createBlog = async (req, res) => {
       }
     }
 
-    // Handle uploaded PDF file
+    // Handle uploaded PDF file - Store locally to avoid Cloudinary size limits
     if (req.files && req.files.pdfFile && req.files.pdfFile[0]) {
       try {
         const file = req.files.pdfFile[0];
-        const timestamp = Date.now();
-        const publicId = `blog-pdf-${timestamp}`;
-        
-        const uploadResult = await cloudinaryService.uploadFromBuffer(file.buffer, {
-          folder: 'cbm/blog/pdfs',
-          public_id: publicId,
-          resource_type: 'raw', // PDFs should be uploaded as raw files
-          tags: ['blog', 'pdf', 'cbm']
+        console.log('PDF file received:', {
+          originalname: file.originalname,
+          mimetype: file.mimetype,
+          size: file.size,
+          fieldname: file.fieldname
         });
         
-        blogData.pdfUrl = uploadResult.url;
+        // Create blog/pdfs directory if it doesn't exist
+        const blogPdfDir = path.join(uploadsDir, 'blog', 'pdfs');
+        if (!fs.existsSync(blogPdfDir)) {
+          fs.mkdirSync(blogPdfDir, { recursive: true });
+        }
+        
+        // Generate unique filename
+        const timestamp = Date.now();
+        const sanitizedOriginalName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const extension = path.extname(sanitizedOriginalName) || '.pdf';
+        const baseName = path.basename(sanitizedOriginalName, extension);
+        const fileName = `${baseName}-${timestamp}${extension}`;
+        const filePath = path.join(blogPdfDir, fileName);
+        
+        // Save file to disk
+        fs.writeFileSync(filePath, file.buffer);
+        console.log('PDF saved locally:', filePath);
+        
+        // Create URL path (relative to /uploads)
+        const relativePath = path.relative(uploadsDir, filePath).replace(/\\/g, '/');
+        const pdfUrl = `/uploads/${relativePath}`;
+        
+        console.log('PDF URL created:', pdfUrl);
+        blogData.pdfUrl = pdfUrl;
       } catch (uploadError) {
-        console.error('PDF upload error:', uploadError);
-        console.warn('Cloudinary PDF upload failed');
+        console.error('PDF save error:', uploadError);
+        console.error('PDF save error details:', {
+          message: uploadError.message,
+          stack: uploadError.stack
+        });
+        // Don't fail the entire request if PDF save fails
+        console.warn('PDF save failed, continuing without PDF');
       }
     }
 
@@ -362,13 +398,21 @@ const updateBlog = async (req, res) => {
     console.log('Update blog request received:', {
       id: req.params.id,
       body: req.body,
-      file: req.file ? 'File present' : 'No file',
+      files: req.files ? Object.keys(req.files) : 'No files',
+      fileCount: req.files ? Object.values(req.files).flat().length : 0,
       headers: req.headers,
       contentType: req.headers['content-type']
     });
     
     const { id } = req.params;
     const updateData = req.body;
+    
+    // If we're uploading a new PDF file, remove any pdfUrl from form data
+    // (it will be set after Cloudinary upload)
+    if (req.files && req.files.pdfFile && req.files.pdfFile[0]) {
+      delete updateData.pdfUrl;
+      console.log('Removed pdfUrl from updateData (will be set after upload)');
+    }
     
     // Check if blog exists
     const existingBlog = await Blog.findById(id);
@@ -411,25 +455,58 @@ const updateBlog = async (req, res) => {
       }
     }
 
-    // Handle uploaded PDF file
+    // Handle uploaded PDF file - Store locally to avoid Cloudinary size limits
     if (req.files && req.files.pdfFile && req.files.pdfFile[0]) {
       try {
         const file = req.files.pdfFile[0];
-        const timestamp = Date.now();
-        const publicId = `blog-pdf-${timestamp}`;
-        
-        const uploadResult = await cloudinaryService.uploadFromBuffer(file.buffer, {
-          folder: 'cbm/blog/pdfs',
-          public_id: publicId,
-          resource_type: 'raw', // PDFs should be uploaded as raw files
-          tags: ['blog', 'pdf', 'cbm']
+        console.log('PDF file received (update):', {
+          originalname: file.originalname,
+          mimetype: file.mimetype,
+          size: file.size,
+          fieldname: file.fieldname,
+          bufferLength: file.buffer ? file.buffer.length : 'no buffer'
         });
         
-        updateData.pdfUrl = uploadResult.url;
+        // Create blog/pdfs directory if it doesn't exist
+        const blogPdfDir = path.join(uploadsDir, 'blog', 'pdfs');
+        if (!fs.existsSync(blogPdfDir)) {
+          fs.mkdirSync(blogPdfDir, { recursive: true });
+        }
+        
+        // Generate unique filename
+        const timestamp = Date.now();
+        const sanitizedOriginalName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const extension = path.extname(sanitizedOriginalName) || '.pdf';
+        const baseName = path.basename(sanitizedOriginalName, extension);
+        const fileName = `${baseName}-${timestamp}${extension}`;
+        const filePath = path.join(blogPdfDir, fileName);
+        
+        // Save file to disk
+        fs.writeFileSync(filePath, file.buffer);
+        console.log('PDF saved locally:', filePath);
+        
+        // Create URL path (relative to /uploads)
+        const relativePath = path.relative(uploadsDir, filePath).replace(/\\/g, '/');
+        const pdfUrl = `/uploads/${relativePath}`;
+        
+        console.log('PDF URL created:', pdfUrl);
+        updateData.pdfUrl = pdfUrl;
       } catch (uploadError) {
-        console.error('PDF upload error:', uploadError);
-        console.warn('Cloudinary PDF upload failed');
+        console.error('PDF save error (update):', uploadError);
+        console.error('PDF save error details:', {
+          message: uploadError.message,
+          stack: uploadError.stack,
+          name: uploadError.name
+        });
+        // Don't fail the entire request if PDF save fails
+        console.warn('PDF save failed, continuing without PDF');
       }
+    } else {
+      console.log('No PDF file in request:', {
+        hasFiles: !!req.files,
+        hasPdfFile: !!(req.files && req.files.pdfFile),
+        hasPdfFileArray: !!(req.files && req.files.pdfFile && req.files.pdfFile[0])
+      });
     }
 
     // Parse JSON fields if they exist
@@ -450,13 +527,23 @@ const updateBlog = async (req, res) => {
       }
     }
 
-    console.log('Updating blog with data:', updateData);
+    console.log('Updating blog with data:', {
+      ...updateData,
+      pdfUrl: updateData.pdfUrl || 'NOT SET'
+    });
+    console.log('PDF URL in updateData:', updateData.pdfUrl);
     
     const blog = await Blog.findByIdAndUpdate(
       id,
       updateData,
       { new: true, runValidators: true }
     );
+    
+    console.log('Blog after update:', {
+      id: blog?._id,
+      title: blog?.title,
+      pdfUrl: blog?.pdfUrl || 'NOT SET IN DATABASE'
+    });
 
     if (!blog) {
       console.log('Blog not found with ID:', id);

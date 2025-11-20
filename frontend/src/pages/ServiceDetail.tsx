@@ -4,6 +4,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { Button } from '@/components/ui/button';
 import { SectionDto, getPageWithSections } from '@/utils/api';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { Loading } from '@/components/Common/Loading';
 
 // Props interface for ServiceDetail
 interface ServiceDetailProps {
@@ -239,23 +240,34 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
   // Get section data from props or location state
   const initialSection = sectionData || (location.state as any)?.sectionData || null;
   const [section, setSection] = useState<SectionDto | null>(initialSection);
+  const [loading, setLoading] = useState<boolean>(!initialSection && !!slug);
 
   // Fallback fetch: when opened via /services/:slug, load the correct page (service type) and find the section
   useEffect(() => {
     const toSlug = (text: string) => String(text).toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
     let isMounted = true;
     const load = async () => {
-      if (section || !slug) return;
+      if (section || !slug) {
+        if (isMounted) setLoading(false);
+        return;
+      }
       try {
+        if (isMounted) setLoading(true);
         // Determine which page to load: use the current service type if available; otherwise fallback to 'services'
         const pageSlug = currentServiceType || 'services';
         const page = await getPageWithSections(pageSlug, undefined, currentLanguage);
         const match = (page.sections || []).find((s) =>
           s.sectionId === slug || toSlug(s.title) === String(slug).toLowerCase()
         );
-        if (isMounted) setSection(match || null);
+        if (isMounted) {
+          setSection(match || null);
+          setLoading(false);
+        }
       } catch {
-        if (isMounted) setSection(null);
+        if (isMounted) {
+          setSection(null);
+          setLoading(false);
+        }
       }
     };
     load();
@@ -275,6 +287,18 @@ export default function ServiceDetail({ sectionData, serviceType, serviceDisplay
   // Validation
   // In the simplified 7-services setup, allow direct /services/:slug access as well
 
+  // Show loading state while fetching
+  if (loading) {
+    return (
+      <div className="section">
+        <div className="container-responsive">
+          <Loading size="md" message={`Loading ${displayName} details...`} />
+        </div>
+      </div>
+    );
+  }
+
+  // Show not found only after loading is complete
   if (!section) {
     return (
       <div className="section">

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { getCareerById, CareerDto } from '@/services/careersService';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { JobApplicationDialog } from '@/components/Common/JobApplicationDialog';
+import { Loading } from '@/components/Common/Loading';
 import { 
   MapPin, 
   Clock, 
@@ -84,9 +85,8 @@ export default function CareerDetail() {
   if (loading) {
     return (
       <section className="section">
-        <div className="container-responsive text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading career details...</p>
+        <div className="container-responsive">
+          <Loading size="md" message="Loading career details..." />
         </div>
       </section>
     );

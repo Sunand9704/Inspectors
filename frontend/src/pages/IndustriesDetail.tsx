@@ -4,6 +4,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { Button } from '@/components/ui/button';
 import { getPageWithSections, PageDto, SectionDto } from '@/utils/api';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { Loading } from '@/components/Common/Loading';
 
 export default function IndustriesDetail() {
   const { slug } = useParams();
@@ -53,9 +54,8 @@ export default function IndustriesDetail() {
   if (loading) {
     return (
       <section className="section">
-        <div className="container-responsive text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading industry details...</p>
+        <div className="container-responsive">
+          <Loading size="md" message="Loading industry details..." />
         </div>
       </section>
     );
