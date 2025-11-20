@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { listCareers, CareerDto } from '@/services/careersService';
 import { useTranslation } from '@/contexts/TranslationContext';
+import { Loading } from '@/components/Common/Loading';
 import { 
   ArrowRight, 
   Users, 
@@ -211,9 +212,10 @@ export default function Careers() {
           </div>
           
           {loading && (
-            <div className="text-center text-muted-foreground">
-              {translations?.pages?.careers?.currentOpenings?.loadingText || 'Loading careers...'}
-            </div>
+            <Loading 
+              size="md" 
+              message={translations?.pages?.careers?.currentOpenings?.loadingText || 'Loading careers...'} 
+            />
           )}
           {error && (
             <div className="text-center text-destructive">{error}</div>

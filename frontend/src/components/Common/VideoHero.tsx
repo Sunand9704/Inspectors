@@ -29,6 +29,8 @@ export function VideoHero({
   videoUrls,
   autoPlaySeconds = 5,
 }: VideoHeroProps) {
+  // Use single video if only one provided, otherwise use carousel
+  const isSingleVideo = videoUrls && videoUrls.length === 1;
   const [api, setApi] = React.useState<CarouselApi | null>(null);
 
   React.useEffect(() => {
@@ -44,34 +46,54 @@ export function VideoHero({
 
     return () => window.clearInterval(id);
   }, [api, autoPlaySeconds, videoUrls]);
+
   return (
-    <section className="relative overflow-hidden">
-      {/* Video Carousel Background */}
+    <section className="relative overflow-hidden min-h-[120vh] lg:min-h-[100vh]">
+      {/* Video Background - Single or Carousel */}
       <div className="absolute inset-0">
-        <Carousel className="h-full" opts={{ loop: true }} setApi={setApi}>
-          <CarouselContent className="h-full">
-            {videoUrls.map((url, idx) => (
-              <CarouselItem key={idx} className="h-[80vh] lg:h-[90vh] p-0">
-                <div className="relative h-full w-full">
-                  <video
-                    className="h-full w-full object-cover"
-                    src={url}
-                    playsInline
-                    autoPlay
-                    muted
-                    loop
-                    controls={false}
-                    preload="metadata"
-                  />
-                  {/* Gradient overlay for readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/20" />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white" />
-          <CarouselNext className="right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white" />
-        </Carousel>
+        {isSingleVideo ? (
+          // Single video (no carousel) - Full height to show complete video
+          <div className="relative h-[120vh] lg:h-[100vh] w-full">
+            <video
+              className="h-full w-full object-cover bg-black"
+              src={videoUrls[0]}
+              playsInline
+              autoPlay
+              muted
+              loop
+              controls={false}
+              preload="auto"
+            />
+            {/* Gradient overlay for readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/20" />
+          </div>
+        ) : (
+          // Multiple videos carousel
+          <Carousel className="h-full" opts={{ loop: true }} setApi={setApi}>
+            <CarouselContent className="h-full">
+              {videoUrls.map((url, idx) => (
+                <CarouselItem key={idx} className="h-[80vh] lg:h-[90vh] p-0">
+                  <div className="relative h-full w-full">
+                    <video
+                      className="h-full w-full object-cover"
+                      src={url}
+                      playsInline
+                      autoPlay
+                      muted
+                      loop
+                      controls={false}
+                      preload="metadata"
+                    />
+                    {/* Gradient overlay for readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/20" />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white" />
+            <CarouselNext className="right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white" />
+          </Carousel>
+        )}
       </div>
 
       {/* Content Overlay */}
@@ -127,14 +149,13 @@ export function VideoHero({
         </div>
       </div>
 
-      {/* Decorative Bottom Wave for continuity with existing design */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg className="w-full h-12 text-background" viewBox="0 0 1200 120" preserveAspectRatio="none">
-          <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" fill="currentColor"></path>
+      {/* Decorative Bottom Wave - Pronounced undulating wave */}
+      <div className="absolute bottom-0 left-0 right-0 z-10">
+        <svg className="w-full h-24 lg:h-32 text-background" viewBox="0 0 1200 240" preserveAspectRatio="none">
+          <path d="M0,240 Q200,100 400,140 Q600,180 800,120 Q1000,60 1200,100 L1200,240 Z" fill="currentColor"></path>
         </svg>
       </div>
     </section>
   );
 }
-
 

@@ -53,28 +53,47 @@ class CloudinaryService {
   }
 
   /**
-   * Upload image from buffer (for multer memory storage)
-   * @param {Buffer} buffer - Image buffer
+   * Upload image or file from buffer (for multer memory storage)
+   * @param {Buffer} buffer - File buffer
    * @param {Object} options - Upload options
    * @returns {Promise<Object>} Upload result with URL and public_id
    */
   async uploadFromBuffer(buffer, options = {}) {
     try {
-      const result = await cloudinary.uploader.upload(
-        `data:image/jpeg;base64,${buffer.toString('base64')}`,
-        {
-          folder: options.folder || 'cbm/contact-offices',
-          public_id: options.public_id,
-          resource_type: 'auto',
-          transformation: options.transformation || [
-            { quality: 'auto:good' },
-            { fetch_format: 'auto' }
-          ],
-          tags: options.tags || ['contact-offices', 'cbm']
-        }
-      );
+      // Determine resource type and data URI format
+      const resourceType = options.resource_type || 'auto';
+      let dataUri;
+      
+      if (resourceType === 'raw') {
+        // For raw files (PDFs, etc.), use application/octet-stream or the specific MIME type
+        const mimeType = options.mimeType || 'application/pdf';
+        dataUri = `data:${mimeType};base64,${buffer.toString('base64')}`;
+      } else {
+        // For images, use image data URI
+        const imageType = options.imageType || 'image/jpeg';
+        dataUri = `data:${imageType};base64,${buffer.toString('base64')}`;
+      }
 
-      logger.info(`Image uploaded from buffer successfully: ${result.secure_url}`);
+      const uploadOptions = {
+        folder: options.folder || 'cbm/contact-offices',
+        public_id: options.public_id,
+        resource_type: resourceType,
+        tags: options.tags || ['contact-offices', 'cbm']
+      };
+
+      // Only add transformation for images
+      if (resourceType !== 'raw' && options.transformation) {
+        uploadOptions.transformation = options.transformation;
+      } else if (resourceType !== 'raw') {
+        uploadOptions.transformation = [
+          { quality: 'auto:good' },
+          { fetch_format: 'auto' }
+        ];
+      }
+
+      const result = await cloudinary.uploader.upload(dataUri, uploadOptions);
+
+      logger.info(`File uploaded from buffer successfully: ${result.secure_url} (type: ${resourceType})`);
       
       return {
         success: true,
@@ -86,8 +105,8 @@ class CloudinaryService {
         size: result.bytes
       };
     } catch (error) {
-      logger.error(`Image upload from buffer failed: ${error.message}`);
-      throw new Error(`Image upload from buffer failed: ${error.message}`);
+      logger.error(`File upload from buffer failed: ${error.message}`);
+      throw new Error(`File upload from buffer failed: ${error.message}`);
     }
   }
 

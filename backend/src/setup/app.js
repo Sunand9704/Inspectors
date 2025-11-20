@@ -64,8 +64,8 @@ function createApp() {
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   }));
   app.use(compression());
-  app.use(express.json({ limit: '10mb' }));
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json({ limit: '100mb' })); // Increased for large PDF uploads
+  app.use(express.urlencoded({ extended: true, limit: '100mb' })); // Increased for large file uploads
 
   // Logging: METHOD PATH STATUS(response code colored) DURATION
   const colorizeStatus = (status) => {
@@ -86,8 +86,21 @@ function createApp() {
   const limiter = rateLimit({ windowMs: 60 * 1000, max: 120 });
   app.use('/api', limiter);
 
-  // Static: serve uploaded images
-  app.use('/uploads', express.static(uploadsDir));
+  // Static: serve uploaded files (images, PDFs, and videos)
+  app.use('/uploads', express.static(uploadsDir, {
+    setHeaders: (res, filePath) => {
+      // Force download for PDF files
+      if (filePath.endsWith('.pdf')) {
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${path.basename(filePath)}"`);
+      }
+      // Set proper headers for video files
+      if (filePath.endsWith('.mp4')) {
+        res.setHeader('Content-Type', 'video/mp4');
+        res.setHeader('Accept-Ranges', 'bytes');
+      }
+    }
+  }));
 
   // Routes
   app.get('/health', (req, res) => res.json({ ok: true }));
@@ -109,6 +122,11 @@ function createApp() {
 
   return app;
 }
+
+module.exports = { createApp };
+
+
+
 
 module.exports = { createApp };
 

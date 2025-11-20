@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '@/utils/api';
+import { Loading } from './Loading';
 
 type ClientImage = {
   _id: string;
@@ -44,7 +45,7 @@ export function ClientMarquee({ direction = 'left' }: ClientMarqueeProps) {
     return (
       <section className="section bg-gray-50">
         <div className="container-responsive">
-          <div className="text-center text-muted-foreground">Loading client images...</div>
+          <Loading size="md" message="Loading client images..." />
         </div>
       </section>
     );

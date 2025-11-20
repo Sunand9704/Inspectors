@@ -102,14 +102,8 @@ export default function Services() {
         }}
         autoPlaySeconds={7}
         videoUrls={[
-          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
-          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-          'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
+          // Replace this URL with your cloud video URL
+          'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4' // e.g., 'https://your-bucket.s3.amazonaws.com/video.mp4'
         ]}
       />
 

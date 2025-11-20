@@ -16,16 +16,14 @@ const {
 // Create upload middleware for blog files using memory storage for Cloudinary
 const upload = multer({
   storage: multer.memoryStorage(), // Store in memory for Cloudinary upload
-  limits: {
-    fileSize: 50 * 1024 * 1024, // 50MB limit (for PDFs)
-  },
+  // No file size limit - removed as requested
   fileFilter: (req, file, cb) => {
     // Allow images for featuredImageFile
     if (file.fieldname === 'featuredImageFile') {
-      const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-      if (allowedMimes.includes(file.mimetype)) {
-        cb(null, true);
-      } else {
+    const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
         cb(new Error('Invalid file type. Only images are allowed for featured image.'), false);
       }
     }
@@ -51,15 +49,36 @@ router.get('/search', searchBlogs);
 router.get('/tag/:tag', getBlogsByTag);
 router.get('/:id', getBlogById);
 
+// Error handling middleware for multer
+const handleMulterError = (err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    console.error('Multer error:', err);
+    return res.status(400).json({
+      success: false,
+      message: `Upload error: ${err.message}`,
+      error: err.code
+    });
+  }
+  if (err) {
+    console.error('Upload error:', err);
+    return res.status(400).json({
+      success: false,
+      message: err.message || 'File upload failed',
+      error: err.message
+    });
+  }
+  next();
+};
+
 // Admin routes (you can add authentication middleware here)
 router.post('/', upload.fields([
   { name: 'featuredImageFile', maxCount: 1 },
   { name: 'pdfFile', maxCount: 1 }
-]), createBlog);
+]), handleMulterError, createBlog);
 router.put('/:id', upload.fields([
   { name: 'featuredImageFile', maxCount: 1 },
   { name: 'pdfFile', maxCount: 1 }
-]), updateBlog);
+]), handleMulterError, updateBlog);
 router.delete('/:id', deleteBlog);
 
 module.exports = router;
