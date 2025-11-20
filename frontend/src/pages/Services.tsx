@@ -14,9 +14,159 @@ import { getPageWithSections, SectionDto } from '@/utils/api';
 import { industryStats as fallbackIndustryStats } from '@/data/industries';
 
 export default function Services() {
-  const { translations } = useTranslation();
+  const { translations, currentLanguage } = useTranslation();
   const hero = translations?.pages?.services?.hero;
   const servicesOverview = (translations as any)?.pages?.services?.servicesOverview;
+
+  // Hero slide titles & descriptions for all languages
+  const heroSlidesByLanguage: Record<
+    string,
+    Array<{ title: string; description: string }>
+  > = {
+    en: [
+      {
+        title: hero?.title || 'Leading Testing, Inspection & Certification Services',
+        description:
+          hero?.description ||
+          'Ensuring safety, security, and sustainability across industries with comprehensive testing, inspection, certification, and advisory services.',
+      },
+      {
+        title: "Expert's",
+        description:
+          'We believe inspection is more than compliance—it is the backbone of safety, reliability, and operational success. By combining expert people, precision tools, and strong global support, we ensure our clients achieve excellence in every project.',
+      },
+      {
+        title: 'Equipment',
+        description:
+          'We provide a complete range of Mechanical, Electrical, Instrumentation, NDT, and Safety equipment, along with certified tools for inspections, audits, and industrial operations. Our services also cover import and export of specialized equipment and reliable working tools for Oil & Gas, Mining, FPSO/FSO, and Industrial projects worldwide.',
+      },
+      {
+        title: 'Experience',
+        description:
+          "INSPECTORS 360 is a trusted global partner in recruitment, contract staffing, payroll, HR, and technical support for the world’s most demanding industries.",
+      },
+    ],
+    fr: [
+      {
+        title: hero?.title || 'Services de tests, d’inspection et de certification de premier plan',
+        description:
+          hero?.description ||
+          'Nous garantissons la sécurité, la fiabilité et la durabilité des industries grâce à des services complets de tests, d’inspection, de certification et de conseil.',
+      },
+      {
+        title: 'Expertise',
+        description:
+          "Nous pensons que l’inspection va bien au-delà de la conformité : elle est la colonne vertébrale de la sécurité, de la fiabilité et de la performance opérationnelle. En combinant des experts qualifiés, des outils de précision et un solide soutien mondial, nous permettons à nos clients d’atteindre l’excellence sur chaque projet.",
+      },
+      {
+        title: 'Équipement',
+        description:
+          "Nous fournissons une gamme complète d’équipements mécaniques, électriques, d’instrumentation, de CND et de sécurité, ainsi que des outils certifiés pour les inspections, audits et opérations industrielles. Nos services couvrent également l’importation et l’exportation d’équipements spécialisés et d’outils de travail fiables pour les projets pétroliers et gaziers, miniers, FPSO/FSO et industriels dans le monde entier.",
+      },
+      {
+        title: 'Expérience',
+        description:
+          "INSPECTORS 360 est un partenaire mondial de confiance pour le recrutement, l’intérim, la paie, les ressources humaines et le support technique dans les industries les plus exigeantes au monde.",
+      },
+    ],
+    pt: [
+      {
+        title: hero?.title || 'Líder em serviços de teste, inspeção e certificação',
+        description:
+          hero?.description ||
+          'Garantimos segurança, confiabilidade e sustentabilidade em diversos setores com serviços completos de teste, inspeção, certificação e consultoria.',
+      },
+      {
+        title: 'Especialistas',
+        description:
+          'Acreditamos que a inspeção é mais do que conformidade — é a espinha dorsal da segurança, confiabilidade e sucesso operacional. Combinando profissionais experientes, ferramentas de precisão e forte suporte global, garantimos que nossos clientes alcancem excelência em cada projeto.',
+      },
+      {
+        title: 'Equipamentos',
+        description:
+          'Oferecemos uma linha completa de equipamentos mecânicos, elétricos, de instrumentação, END e segurança, juntamente com ferramentas certificadas para inspeções, auditorias e operações industriais. Nossos serviços também abrangem importação e exportação de equipamentos especializados e ferramentas de trabalho confiáveis para projetos de Óleo & Gás, Mineração, FPSO/FSO e indústrias em todo o mundo.',
+      },
+      {
+        title: 'Experiência',
+        description:
+          'A INSPECTORS 360 é uma parceira global confiável em recrutamento, contratação temporária, folha de pagamento, RH e suporte técnico para as indústrias mais exigentes do mundo.',
+      },
+    ],
+    es: [
+      {
+        title: hero?.title || 'Líder en servicios de prueba, inspección y certificación',
+        description:
+          hero?.description ||
+          'Garantizamos la seguridad, la fiabilidad y la sostenibilidad en múltiples sectores con servicios integrales de prueba, inspección, certificación y consultoría.',
+      },
+      {
+        title: 'Expertos',
+        description:
+          'Creemos que la inspección es más que cumplimiento: es la base de la seguridad, la fiabilidad y el éxito operativo. Al combinar personal experto, herramientas de precisión y un sólido apoyo global, ayudamos a nuestros clientes a lograr la excelencia en cada proyecto.',
+      },
+      {
+        title: 'Equipos',
+        description:
+          'Proporcionamos una gama completa de equipos mecánicos, eléctricos, de instrumentación, END y de seguridad, junto con herramientas certificadas para inspecciones, auditorías y operaciones industriales. Nuestros servicios también incluyen la importación y exportación de equipos especializados y herramientas de trabajo fiables para proyectos de petróleo y gas, minería, FPSO/FSO e industriales en todo el mundo.',
+      },
+      {
+        title: 'Experiencia',
+        description:
+          'INSPECTORS 360 es un socio global de confianza en reclutamiento, contratación temporal, nómina, RR. HH. y soporte técnico para las industrias más exigentes del mundo.',
+      },
+    ],
+    ru: [
+      {
+        title: hero?.title || 'Лидер в области испытаний, инспекции и сертификации',
+        description:
+          hero?.description ||
+          'Мы обеспечиваем безопасность, надежность и устойчивое развитие отраслей благодаря комплексным услугам по испытаниям, инспекции, сертификации и консультированию.',
+      },
+      {
+        title: 'Эксперты',
+        description:
+          'Мы считаем, что инспекция — это не только соответствие требованиям, но и основа безопасности, надежности и операционного успеха. Объединяя опытных специалистов, точные инструменты и сильную глобальную поддержку, мы помогаем нашим клиентам достигать высокого качества на каждом проекте.',
+      },
+      {
+        title: 'Оборудование',
+        description:
+          'Мы предоставляем полный спектр механического, электрического, контрольно‑измерительного, НК и защитного оборудования, а также сертифицированные инструменты для инспекций, аудитов и промышленных операций. Наши услуги включают импорт и экспорт специализированного оборудования и надежных рабочих инструментов для проектов в нефтегазовой отрасли, горнодобывающей промышленности, FPSO/FSO и других промышленных объектов по всему миру.',
+      },
+      {
+        title: 'Опыт',
+        description:
+          'INSPECTORS 360 — надежный глобальный партнер по подбору персонала, контрактному найму, расчету заработной платы, HR‑сопровождению и технической поддержке для самых требовательных отраслей мира.',
+      },
+    ],
+    zh: [
+      {
+        title: hero?.title || '领先的测试、检验与认证服务',
+        description:
+          hero?.description ||
+          '我们通过全面的测试、检验、认证和咨询服务，帮助各行业提升安全性、可靠性和可持续发展能力。',
+      },
+      {
+        title: '专家',
+        description:
+          '我们认为检验不仅仅是合规要求，而是保障安全、可靠性和运营成功的基础。通过结合专业人才、精准工具以及全球支持网络，我们帮助客户在每一个项目中实现卓越表现。',
+      },
+      {
+        title: '设备',
+        description:
+          '我们提供全系列的机械、电气、仪表、无损检测和安全设备，以及经过认证的工具，用于各类检验、审核和工业运营。我们的服务还涵盖专业设备和可靠工器具的进出口，适用于全球油气、矿业、FPSO/FSO以及各类工业项目。',
+      },
+      {
+        title: '经验',
+        description:
+          'INSPECTORS 360 是全球值得信赖的合作伙伴，提供招聘、合同用工、薪资管理、人力资源以及技术支持服务，服务于全球最具挑战性的行业。',
+      },
+    ],
+  };
+
+  const heroSlides =
+    heroSlidesByLanguage[currentLanguage] || heroSlidesByLanguage.en;
+  const heroSlideTitles = heroSlides.map((s) => s.title);
+  const heroSlideDescriptions = heroSlides.map((s) => s.description);
 
   // Icon mapping for services
   const iconMap = {
@@ -89,9 +239,11 @@ export default function Services() {
     <div>
       {/* Video Hero Section */}
       <VideoHero
-        title={hero?.title || "Leading Testing, Inspection & Certification Services"}
+        title={heroSlides[0]?.title || hero?.title || "Leading Testing, Inspection & Certification Services"}
         subtitle={hero?.subtitle || "Trusted Worldwide"}
-        description={hero?.description || "Ensuring safety, security, and sustainability across industries with comprehensive testing, inspection, certification, and advisory services."}
+        description={heroSlides[0]?.description || hero?.description || "Ensuring safety, security, and sustainability across industries with comprehensive testing, inspection, certification, and advisory services."}
+        slideTitles={heroSlideTitles}
+        slideDescriptions={heroSlideDescriptions}
         primaryCTA={{
           text: hero?.primaryCTAText || "Explore Services",
           href: "#services"
@@ -102,8 +254,11 @@ export default function Services() {
         }}
         autoPlaySeconds={7}
         videoUrls={[
-          // Replace this URL with your cloud video URL
-          'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4' // e.g., 'https://your-bucket.s3.amazonaws.com/video.mp4'
+          // First video is the current one; the rest can be replaced with new URLs later
+          'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4',
         ]}
       />
 

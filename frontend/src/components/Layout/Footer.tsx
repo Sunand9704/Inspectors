@@ -56,7 +56,7 @@ export function Footer() {
                       fontFamily: 'inherit',
                       letterSpacing: '0.02em'
                     }}>
-                      <span className="inline-block" style={{ width: '30%', textAlign: 'left' }}>Expertis</span>
+                      <span className="inline-block" style={{ width: '30%', textAlign: 'left' }}>Expert's</span>
                       <span className="inline-block" style={{ width: '40%', textAlign: 'center' }}>Equipment</span>
                       <span className="inline-block" style={{ width: '30%', textAlign: 'right' }}>Experience</span>
                     </div>
