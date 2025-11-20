@@ -8,6 +8,8 @@ interface VideoHeroProps {
   title: string;
   subtitle?: string;
   description: string;
+  slideTitles?: string[];
+  slideDescriptions?: string[];
   primaryCTA?: {
     text: string;
     href: string;
@@ -24,6 +26,8 @@ export function VideoHero({
   title,
   subtitle,
   description,
+  slideTitles,
+  slideDescriptions,
   primaryCTA,
   secondaryCTA,
   videoUrls,
@@ -32,6 +36,7 @@ export function VideoHero({
   // Use single video if only one provided, otherwise use carousel
   const isSingleVideo = videoUrls && videoUrls.length === 1;
   const [api, setApi] = React.useState<CarouselApi | null>(null);
+  const [currentIndex, setCurrentIndex] = React.useState(0);
 
   React.useEffect(() => {
     if (!api || !videoUrls || videoUrls.length <= 1) return;
@@ -46,6 +51,37 @@ export function VideoHero({
 
     return () => window.clearInterval(id);
   }, [api, autoPlaySeconds, videoUrls]);
+
+  // Track current slide index so we can change title/description per slide
+  React.useEffect(() => {
+    if (!api || !videoUrls || videoUrls.length <= 1) return;
+
+    const onSelect = () => {
+      try {
+        const snap = api.selectedScrollSnap();
+        setCurrentIndex(snap ?? 0);
+      } catch {
+        setCurrentIndex(0);
+      }
+    };
+
+    onSelect();
+    api.on('select', onSelect);
+
+    return () => {
+      api.off('select', onSelect);
+    };
+  }, [api, videoUrls]);
+
+  const activeTitle =
+    slideTitles && slideTitles.length > 0
+      ? slideTitles[Math.min(currentIndex, slideTitles.length - 1)]
+      : title;
+
+  const activeDescription =
+    slideDescriptions && slideDescriptions.length > 0
+      ? slideDescriptions[Math.min(currentIndex, slideDescriptions.length - 1)]
+      : description;
 
   return (
     <section className="relative overflow-hidden min-h-[120vh] lg:min-h-[100vh]">
@@ -106,11 +142,11 @@ export function VideoHero({
           )}
 
           <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-balance">
-            {title}
+            {activeTitle}
           </h1>
 
           <p className="text-xl lg:text-2xl text-white/90 mb-10 text-pretty max-w-3xl mx-auto">
-            {description}
+            {activeDescription}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

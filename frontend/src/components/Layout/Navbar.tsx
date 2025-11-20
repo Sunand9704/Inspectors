@@ -57,7 +57,7 @@ export function Navbar() {
       { name: (translations.navbar as any).vacancies || (translations.navbar as any).careers || 'Vacancies', href: '/vacancies' },
       // Some locales may not have "blog"
       { name: (translations.navbar as any).blog || 'Blog', href: '/blog' },
-      { name: getQuoteLabel, href: '/contact#contact-form' },
+      { name: getQuoteLabel, href: '/contact#contact-form', isButton: true },
     ];
   };
 
@@ -137,17 +137,29 @@ export function Navbar() {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-8">
-              {navigation.map((item, index) => (
-                <NavLink
-                  key={index}
-                  to={item.href}
-                  className={({ isActive }) =>
-                    `nav-link ${isActive ? 'nav-link-active' : ''}`
-                  }
-                >
-                  {item.name}
-                </NavLink>
-              ))}
+              {navigation.map((item, index) => {
+                const isButton = (item as any).isButton;
+                if (isButton) {
+                  return (
+                    <Button key={index} className="btn-primary" asChild>
+                      <Link to={item.href}>
+                        {item.name}
+                      </Link>
+                    </Button>
+                  );
+                }
+                return (
+                  <NavLink
+                    key={index}
+                    to={item.href}
+                    className={({ isActive }) =>
+                      `nav-link ${isActive ? 'nav-link-active' : ''}`
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                );
+              })}
             </div>
 
             {/* CTA Button */}
