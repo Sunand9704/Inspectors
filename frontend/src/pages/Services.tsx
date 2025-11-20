@@ -255,7 +255,7 @@ export default function Services() {
         autoPlaySeconds={7}
         videoUrls={[
           // First video is the current one; the rest can be replaced with new URLs later
-          'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1763629708/first_video_m6exmg.mp4',
           'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4',
           'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4',
           'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4',
