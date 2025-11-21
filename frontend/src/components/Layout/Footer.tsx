@@ -70,13 +70,13 @@ export function Footer() {
                 <a href="#" className="text-tuv-gray-400 hover:text-white transition-colors">
                   <Linkedin className="h-5 w-5" />
                 </a>
-                <a href="#" className="text-tuv-gray-400 hover:text-white transition-colors">
+                <a href="https://x.com/Inspectors360" className="text-tuv-gray-400 hover:text-white transition-colors">
                   <Twitter className="h-5 w-5" />
                 </a>
                 <a href="#" className="text-tuv-gray-400 hover:text-white transition-colors">
                   <Facebook className="h-5 w-5" />
                 </a>
-                <a href="#" className="text-tuv-gray-400 hover:text-white transition-colors">
+                <a href="https://www.youtube.com/channel/UCpc1DphEdy5h2S1RRoFhMFQ" className="text-tuv-gray-400 hover:text-white transition-colors">
                   <Youtube className="h-5 w-5" />
                 </a>
               </div>
