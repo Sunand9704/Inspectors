@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiBaseURL = "https://inspectors.onrender.com";
+const apiBaseURL = "https://api2.brelis.in" || "https://inspectors.onrender.com";
 
 export const api = axios.create({
   baseURL: apiBaseURL,
