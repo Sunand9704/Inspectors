@@ -3,7 +3,7 @@ const envBaseUrl = (import.meta as any)?.env?.VITE_API_BASE_URL as string | unde
 
 
 // Use frontend env var if provided; otherwise default to local backend that points to your new DB
-const renderurl = "https://inspectors.onrender.com";
+const renderurl = "https://api2.brelis.in";
 const local = "http://localhost:8000";
 
 // For development, use localhost. Change to true to use Render.com
