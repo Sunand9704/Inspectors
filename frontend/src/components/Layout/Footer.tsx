@@ -134,7 +134,8 @@ export function Footer() {
                 <div className="flex items-start space-x-3">
                   <MapPin className="h-5 w-5 text-tuv-gray-400 mt-1 flex-shrink-0" />
                   <div className="text-tuv-gray-400">
-                    <p>77 Denyer St, London SW3 2NY, UK</p>
+                    <p className="font-semibold text-white mb-1">INSPECTORS 360 -UK</p>
+                    <p>77 Denyer St, London SW3 2NY, United Kingdom</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">

@@ -256,9 +256,9 @@ export default function Services() {
         videoUrls={[
           // First video is the current one; the rest can be replaced with new URLs later
           'https://res.cloudinary.com/docyipoze/video/upload/v1763629708/first_video_m6exmg.mp4',
-          'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4',
-          'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4',
-          'https://res.cloudinary.com/docyipoze/video/upload/v1763607541/video_20251118_014949_edit_1_1_1_bt1c7g.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1763745859/second_igtujy.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1763746701/third_iwvcry.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1763747142/fourth_vbh63c.mp4',
         ]}
       />
 
