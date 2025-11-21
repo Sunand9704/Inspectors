@@ -277,7 +277,7 @@ export default function Blog() {
                                 let pdfUrl = post.pdfUrl!;
                                 if (pdfUrl.startsWith('/uploads/')) {
                                   // For local files, prepend the backend base URL
-                                  const backendUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+                                  const backendUrl = import.meta.env.VITE_API_BASE_URL || "https://api2.brelis.in" || 'http://localhost:8000';
                                   pdfUrl = `${backendUrl}${pdfUrl}`;
                                 }
                                 
