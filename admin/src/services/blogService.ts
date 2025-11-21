@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://api2.brelis.in/api';
+import { api } from '@/lib/api';
 
 export interface Blog {
   _id: string;
@@ -69,29 +69,37 @@ export interface BlogResponse {
 }
 
 class BlogService {
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const url = `${API_BASE_URL}/blogs${endpoint}`;
-    
-    const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-      ...options,
-    };
-
+  private async request<T>(endpoint: string, options: any = {}): Promise<T> {
     try {
-      const response = await fetch(url, config);
+      const url = `/api/blogs${endpoint}`;
+      const method = options.method || 'GET';
       
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      // Handle FormData differently from JSON
+      const isFormData = options.body instanceof FormData;
+      const config: any = {
+        method,
+        url,
+        params: options.params,
+      };
+      
+      if (isFormData) {
+        config.data = options.body;
+        // Don't set Content-Type for FormData - let axios set it with boundary
+        config.headers = options.headers || {};
+      } else {
+        config.data = options.body;
+        config.headers = {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        };
       }
-
-      return await response.json();
-    } catch (error) {
+      
+      const { data } = await api.request(config);
+      return data as T;
+    } catch (error: any) {
       console.error('Blog service error:', error);
-      throw error;
+      const errorMessage = error?.response?.data?.message || error?.message || `HTTP error! status: ${error?.response?.status}`;
+      throw new Error(errorMessage);
     }
   }
 
@@ -106,19 +114,20 @@ class BlogService {
     sortOrder?: 'asc' | 'desc';
     includeUnpublished?: boolean;
   } = {}): Promise<BlogListResponse> {
-    const searchParams = new URLSearchParams();
+    const queryParams: any = {};
     
-    if (params.page) searchParams.append('page', params.page.toString());
-    if (params.limit) searchParams.append('limit', params.limit.toString());
-    if (params.featured !== undefined) searchParams.append('featured', params.featured.toString());
-    if (params.tag) searchParams.append('tag', params.tag);
-    if (params.search) searchParams.append('search', params.search);
-    if (params.sortBy) searchParams.append('sortBy', params.sortBy);
-    if (params.sortOrder) searchParams.append('sortOrder', params.sortOrder);
-    if (params.includeUnpublished) searchParams.append('includeUnpublished', 'true');
+    if (params.page) queryParams.page = params.page.toString();
+    if (params.limit) queryParams.limit = params.limit.toString();
+    if (params.featured !== undefined) queryParams.featured = params.featured.toString();
+    if (params.tag) queryParams.tag = params.tag;
+    if (params.search) queryParams.search = params.search;
+    if (params.sortBy) queryParams.sortBy = params.sortBy;
+    if (params.sortOrder) queryParams.sortOrder = params.sortOrder;
+    if (params.includeUnpublished) queryParams.includeUnpublished = 'true';
 
-    const queryString = searchParams.toString();
-    return this.request<BlogListResponse>(`?${queryString}`);
+    return this.request<BlogListResponse>('', {
+      params: queryParams,
+    });
   }
 
   // Get single blog by ID
@@ -128,17 +137,23 @@ class BlogService {
 
   // Get featured blogs
   async getFeaturedBlogs(limit: number = 5): Promise<BlogResponse> {
-    return this.request<BlogResponse>(`/featured?limit=${limit}`);
+    return this.request<BlogResponse>('/featured', {
+      params: { limit: limit.toString() },
+    });
   }
 
   // Get blogs by tag
   async getBlogsByTag(tag: string, page: number = 1, limit: number = 10): Promise<BlogListResponse> {
-    return this.request<BlogListResponse>(`/tag/${encodeURIComponent(tag)}?page=${page}&limit=${limit}`);
+    return this.request<BlogListResponse>(`/tag/${encodeURIComponent(tag)}`, {
+      params: { page: page.toString(), limit: limit.toString() },
+    });
   }
 
   // Search blogs
   async searchBlogs(query: string, page: number = 1, limit: number = 10): Promise<BlogListResponse> {
-    return this.request<BlogListResponse>(`/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`);
+    return this.request<BlogListResponse>('/search', {
+      params: { q: query, page: page.toString(), limit: limit.toString() },
+    });
   }
 
   // Get all tags
@@ -181,12 +196,13 @@ class BlogService {
       return this.request<BlogResponse>('', {
         method: 'POST',
         body: formData,
-        headers: {} // Remove Content-Type header to let browser set it with boundary
+        headers: {} // Remove Content-Type header to let browser set it with boundary for FormData
       });
     } else {
       return this.request<BlogResponse>('', {
         method: 'POST',
-        body: JSON.stringify(blogData),
+        body: blogData,
+        headers: { 'Content-Type': 'application/json' },
       });
     }
   }
@@ -230,12 +246,13 @@ class BlogService {
       return this.request<BlogResponse>(`/${id}`, {
         method: 'PUT',
         body: formData,
-        headers: {} // Remove Content-Type header to let browser set it with boundary
+        headers: {} // Remove Content-Type header to let browser set it with boundary for FormData
       });
     } else {
       return this.request<BlogResponse>(`/${id}`, {
         method: 'PUT',
-        body: JSON.stringify(blogData),
+        body: blogData,
+        headers: { 'Content-Type': 'application/json' },
       });
     }
   }
@@ -267,8 +284,19 @@ class BlogService {
     if (params.sortBy) searchParams.append('sortBy', params.sortBy);
     if (params.sortOrder) searchParams.append('sortOrder', params.sortOrder);
 
-    const queryString = searchParams.toString();
-    return this.request<BlogListResponse>(`/admin?${queryString}`);
+    const queryParams: any = {};
+    if (params.page) queryParams.page = params.page.toString();
+    if (params.limit) queryParams.limit = params.limit.toString();
+    if (params.search) queryParams.search = params.search;
+    if (params.status && params.status !== 'all') {
+      queryParams.isPublished = params.status === 'published' ? 'true' : 'false';
+    }
+    if (params.sortBy) queryParams.sortBy = params.sortBy;
+    if (params.sortOrder) queryParams.sortOrder = params.sortOrder;
+
+    return this.request<BlogListResponse>('/admin', {
+      params: queryParams,
+    });
   }
 }
 

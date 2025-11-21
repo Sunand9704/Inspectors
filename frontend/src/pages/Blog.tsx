@@ -6,11 +6,13 @@ import { useState, useEffect } from 'react';
 import { 
   ChevronDown,
   ChevronUp,
-  Download
+  Download,
+  Loader2
 } from 'lucide-react';
 import { getBlogs, getBlogTags, getBlogById, BlogPostDto } from '@/services/blogService';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { Loading } from '@/components/Common/Loading';
+import { apiClient } from '@/utils/api';
 
 // State for blog data
 interface BlogState {
@@ -275,19 +277,26 @@ export default function Blog() {
                               try {
                                 // Handle both Cloudinary URLs and local /uploads/ paths
                                 let pdfUrl = post.pdfUrl!;
-                                if (pdfUrl.startsWith('/uploads/')) {
-                                  // For local files, prepend the backend base URL
-                                  const backendUrl = import.meta.env.VITE_API_BASE_URL || "https://api2.brelis.in" || 'http://localhost:8000';
-                                  pdfUrl = `${backendUrl}${pdfUrl}`;
+                                let response: any;
+                                
+                                if (pdfUrl.startsWith('http://') || pdfUrl.startsWith('https://')) {
+                                  // External URL (e.g., Cloudinary) - use fetch directly
+                                  const fetchResponse = await fetch(pdfUrl);
+                                  if (!fetchResponse.ok) {
+                                    throw new Error('Failed to download PDF');
+                                  }
+                                  response = { data: await fetchResponse.blob() };
+                                } else {
+                                  // Local path - use centralized API client
+                                  const apiResponse = await apiClient.get(pdfUrl, {
+                                    responseType: 'blob',
+                                  });
+                                  response = apiResponse;
                                 }
                                 
-                                // Fetch the PDF as a blob to force download
-                                const response = await fetch(pdfUrl);
-                                if (!response.ok) {
-                                  throw new Error('Failed to download PDF');
-                                }
-                                
-                                const blob = await response.blob();
+                                const blob = response.data instanceof Blob 
+                                  ? response.data 
+                                  : new Blob([response.data], { type: 'application/pdf' });
                                 const blobUrl = window.URL.createObjectURL(blob);
                                 
                                 // Create download link
