@@ -76,6 +76,11 @@ class BlogService {
       
       // Handle FormData differently from JSON
       const isFormData = options.body instanceof FormData;
+      console.log('=== BLOG SERVICE: request method ===');
+      console.log('Is FormData:', isFormData);
+      console.log('Method:', method);
+      console.log('URL:', url);
+      
       const config: any = {
         method,
         url,
@@ -83,21 +88,49 @@ class BlogService {
       };
       
       if (isFormData) {
+        console.log('=== Handling FormData request ===');
         config.data = options.body;
         // Don't set Content-Type for FormData - let axios set it with boundary
-        config.headers = options.headers || {};
+        config.headers = {
+          ...options.headers,
+        };
+        // Explicitly delete Content-Type to ensure browser sets it
+        if (config.headers) {
+          delete config.headers['Content-Type'];
+        }
+        console.log('FormData config headers:', config.headers);
+        
+        // Log FormData contents before sending
+        console.log('=== FormData contents before sending ===');
+        for (const [key, value] of (options.body as FormData).entries()) {
+          if (value instanceof File) {
+            console.log(`${key}:`, { name: value.name, size: value.size, type: value.type });
+          } else {
+            console.log(`${key}:`, value);
+          }
+        }
       } else {
+        console.log('=== Handling JSON request ===');
         config.data = options.body;
         config.headers = {
           'Content-Type': 'application/json',
           ...options.headers,
         };
+        console.log('JSON config:', { data: options.body, headers: config.headers });
       }
       
+      console.log('=== Sending request ===');
       const { data } = await api.request(config);
+      console.log('=== Request successful ===');
       return data as T;
     } catch (error: any) {
-      console.error('Blog service error:', error);
+      console.error('=== BLOG SERVICE ERROR ===');
+      console.error('Error details:', {
+        message: error?.message,
+        response: error?.response?.data,
+        status: error?.response?.status,
+        headers: error?.response?.headers
+      });
       const errorMessage = error?.response?.data?.message || error?.message || `HTTP error! status: ${error?.response?.status}`;
       throw new Error(errorMessage);
     }
@@ -163,35 +196,82 @@ class BlogService {
 
   // Create new blog
   async createBlog(blogData: CreateBlogData, featuredImageFile?: File, pdfFile?: File): Promise<BlogResponse> {
-    console.log('createBlog called with:', {
-      hasFeaturedImage: !!featuredImageFile,
+    console.log('=== BLOG SERVICE: createBlog called ===');
+    console.log('PDF File details:', {
       hasPdf: !!pdfFile,
       pdfFileName: pdfFile?.name,
-      pdfFileSize: pdfFile?.size
+      pdfFileSize: pdfFile?.size,
+      pdfFileType: pdfFile?.type,
+      pdfFileLastModified: pdfFile?.lastModified
     });
+    console.log('Featured Image File details:', {
+      hasFeaturedImage: !!featuredImageFile,
+      featuredImageFileName: featuredImageFile?.name,
+      featuredImageFileSize: featuredImageFile?.size
+    });
+    console.log('Blog Data keys:', Object.keys(blogData));
 
     if (featuredImageFile || pdfFile) {
+      console.log('=== Creating FormData ===');
       const formData = new FormData();
+      
+      // Append all blog data fields
       Object.entries(blogData).forEach(([key, value]) => {
         if (key === 'images' && Array.isArray(value)) {
           formData.append(key, JSON.stringify(value));
+          console.log(`Appended ${key} (array):`, JSON.stringify(value));
         } else if (key === 'tags' && Array.isArray(value)) {
           formData.append(key, JSON.stringify(value));
+          console.log(`Appended ${key} (array):`, JSON.stringify(value));
         } else if (value !== undefined && value !== null) {
           formData.append(key, value as string);
+          console.log(`Appended ${key}:`, value);
         }
       });
+      
       if (featuredImageFile) {
-        console.log('Appending featuredImageFile:', featuredImageFile.name, featuredImageFile.size);
-      formData.append('featuredImageFile', featuredImageFile);
-      }
-      if (pdfFile) {
-        console.log('Appending pdfFile:', pdfFile.name, pdfFile.size, pdfFile.type);
-        formData.append('pdfFile', pdfFile);
+        console.log('=== Appending featuredImageFile ===');
+        console.log('File details:', {
+          name: featuredImageFile.name,
+          size: featuredImageFile.size,
+          type: featuredImageFile.type
+        });
+        formData.append('featuredImageFile', featuredImageFile);
+        console.log('featuredImageFile appended successfully');
       }
       
-      // Log FormData contents (for debugging)
-      console.log('FormData prepared with files');
+      if (pdfFile) {
+        console.log('=== Appending pdfFile ===');
+        console.log('PDF File details:', {
+          name: pdfFile.name,
+          size: pdfFile.size,
+          type: pdfFile.type,
+          lastModified: pdfFile.lastModified
+        });
+        formData.append('pdfFile', pdfFile);
+        console.log('pdfFile appended successfully');
+        
+        // Verify it was appended
+        const pdfFileEntry = formData.get('pdfFile');
+        console.log('Verification - pdfFile in FormData:', pdfFileEntry instanceof File ? {
+          name: pdfFileEntry.name,
+          size: pdfFileEntry.size,
+          type: pdfFileEntry.type
+        } : 'NOT FOUND');
+      }
+      
+      // Log all FormData entries
+      console.log('=== FormData entries summary ===');
+      const entries: any[] = [];
+      for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          entries.push([key, { name: value.name, size: value.size, type: value.type }]);
+        } else {
+          entries.push([key, value]);
+        }
+      }
+      console.log('FormData entries:', entries);
+      console.log('=== Sending FormData request ===');
       
       return this.request<BlogResponse>('', {
         method: 'POST',
@@ -199,6 +279,7 @@ class BlogService {
         headers: {} // Remove Content-Type header to let browser set it with boundary for FormData
       });
     } else {
+      console.log('=== No files, sending JSON request ===');
       return this.request<BlogResponse>('', {
         method: 'POST',
         body: blogData,

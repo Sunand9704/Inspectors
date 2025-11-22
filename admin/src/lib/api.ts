@@ -1,18 +1,33 @@
 import axios from 'axios';
-
-// const apiBaseURL = "https://api2.brelis.in";
-const apiBaseURL = "http://localhost:8000";
+const envBaseUrl = import.meta.env.VITE_API_BASE_URL;
+const apiBaseURL = "https://api2.brelis.in";
 
 export const api = axios.create({
-  baseURL: apiBaseURL,
-  headers: { 'Content-Type': 'application/json' },
+ baseURL: envBaseUrl ? envBaseUrl : apiBaseURL,
+ headers: { 'Content-Type': 'application/json' },
 });
+
 
 api.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  
+  // For FormData requests, remove Content-Type header to let browser set it with boundary
+  if (config.data instanceof FormData) {
+    if (config.headers) {
+      delete config.headers['Content-Type'];
+    }
+    console.log('FormData detected in request interceptor, removed Content-Type header');
+    console.log('FormData entries:', Array.from(config.data.entries()).map(([key, value]) => {
+      if (value instanceof File) {
+        return [key, { name: value.name, size: value.size, type: value.type }];
+      }
+      return [key, value];
+    }));
+  }
+  
   // add start time
   (config as any).metadata = { startTime: (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now() };
   return config;
