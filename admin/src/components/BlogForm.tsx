@@ -165,13 +165,26 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
 
   const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    console.log('=== BLOG FORM: PDF file selected ===');
+    console.log('File details:', file ? {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      lastModified: file.lastModified
+    } : 'No file');
+    
     if (file) {
       if (file.type === 'application/pdf') {
+        console.log('PDF file is valid, setting state');
         setPdfFile(file);
         setPdfFileName(file.name);
+        console.log('PDF file state updated');
       } else {
+        console.warn('Invalid file type:', file.type);
         alert('Please select a PDF file');
       }
+    } else {
+      console.log('No file selected');
     }
   };
 
@@ -281,8 +294,18 @@ export default function BlogForm({ blog, onSave, onCancel, isLoading = false }: 
         featuredImage: featuredImageFile ? '' : formData.featuredImage
       };
       
-      console.log('Submitting data:', submitData);
-      console.log('Calling onSave with:', { submitData, featuredImageFile, pdfFile, isEditMode: !!blog });
+      console.log('=== BLOG FORM: Submitting form ===');
+      console.log('Submit data:', submitData);
+      console.log('Files to send:', {
+        hasFeaturedImage: !!featuredImageFile,
+        featuredImageFileName: featuredImageFile?.name,
+        hasPdf: !!pdfFile,
+        pdfFileName: pdfFile?.name,
+        pdfFileSize: pdfFile?.size,
+        pdfFileType: pdfFile?.type,
+        isEditMode: !!blog
+      });
+      console.log('Calling onSave with files');
       
       // Pass the files to the onSave function (convert null to undefined)
       await onSave(submitData, featuredImageFile || undefined, pdfFile || undefined);

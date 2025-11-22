@@ -10,7 +10,8 @@ const {
   getAllTags,
   createBlog,
   updateBlog,
-  deleteBlog
+  deleteBlog,
+  downloadPdf
 } = require('../controllers/blog.controller');
 
 // Create upload middleware for blog files using memory storage for Cloudinary
@@ -47,6 +48,7 @@ router.get('/featured', getFeaturedBlogs);
 router.get('/tags', getAllTags);
 router.get('/search', searchBlogs);
 router.get('/tag/:tag', getBlogsByTag);
+router.get('/:id/pdf', downloadPdf); // PDF download endpoint
 router.get('/:id', getBlogById);
 
 // Error handling middleware for multer
