@@ -12,7 +12,7 @@ const apiBaseURL = true ? renderurl : local;
 
 
 export const apiClient = axios.create({
-  baseURL: apiBaseURL,
+  baseURL: envBaseUrl ? envBaseUrl : apiBaseURL,
   withCredentials: false,
   // Don't set default Content-Type - let axios set it based on data type
 });
