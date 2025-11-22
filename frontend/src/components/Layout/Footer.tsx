@@ -5,18 +5,42 @@ import {
   Mail, 
   MapPin, 
   Linkedin, 
-  Twitter, 
   Facebook, 
   Youtube,
   ArrowRight
 } from 'lucide-react';
 import Logo from '@/components/Common/Logo';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getPageWithSections, type SectionDto } from '@/utils/api';
 import { footerIndustryItems, footerServiceItems } from '@/data/footerLists';
 
 export function Footer() {
+  const [logoWidth, setLogoWidth] = useState<number | null>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
   const [servicesList, setServicesList] = useState<{ title: string; link: string }[]>([]);
+
+  useEffect(() => {
+    const updateLogoWidth = () => {
+      if (logoRef.current) {
+        // Measure the full logo width including the 360° circle
+        const logoContainer = logoRef.current;
+        const fullWidth = logoContainer.offsetWidth;
+        setLogoWidth(fullWidth);
+      }
+    };
+
+    // Use a small delay to ensure logo is rendered
+    const timer = setTimeout(updateLogoWidth, 100);
+    // Also try after a longer delay to catch any async rendering
+    const timer2 = setTimeout(updateLogoWidth, 500);
+    updateLogoWidth();
+    window.addEventListener('resize', updateLogoWidth);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(timer2);
+      window.removeEventListener('resize', updateLogoWidth);
+    };
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -47,31 +71,43 @@ export function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Company Info */}
             <div className="lg:col-span-1">
-              <div className="inline-flex flex-col gap-2 mb-6">
-                <div className="relative w-full">
-                  <Logo height={38} withLink />
-                  {/* Taglines aligned under INS, SPEC, TORS - matching exact logo layout */}
-                  <div className="mt-2.5 relative w-full" style={{ maxWidth: '280px' }}>
-                    <div className="flex items-start text-orange font-semibold uppercase text-[0.7rem] leading-tight" style={{ 
-                      fontFamily: 'inherit',
-                      letterSpacing: '0.02em'
-                    }}>
-                      <span className="inline-block" style={{ width: '30%', textAlign: 'left' }}>Expert's</span>
-                      <span className="inline-block" style={{ width: '40%', textAlign: 'center' }}>Equipment</span>
-                      <span className="inline-block" style={{ width: '30%', textAlign: 'right' }}>Experience</span>
-                    </div>
+              <div className="flex flex-col items-center gap-2 mb-6">
+                <div className="relative inline-block">
+                  <div ref={logoRef} className="inline-block">
+                    <Logo height={38} withLink />
                   </div>
+                  {/* Taglines aligned under INS, SPEC, TORS - matching exact logo layout */}
+                  {logoWidth !== null && (
+                    <div className="mt-2.5 relative" style={{ width: `${logoWidth}px` }}>
+                      <div className="flex items-center justify-between text-orange font-semibold uppercase text-[0.7rem] leading-tight" style={{ 
+                        fontFamily: 'inherit',
+                        letterSpacing: '0.02em'
+                      }}>
+                        <span>Expert's</span>
+                        <span>Equipment</span>
+                        <span>Experience</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-              <p className="text-tuv-gray-400 mb-6 leading-relaxed">
-                Trusted provider of skilled manpower, recruitment, and staffing solutions and equipments across industries. Dedicated to quality, reliability, and operational excellence. Committed to empowering businesses with the right talent — ensuring growth, safety, and performance worldwide.
+              <p className="text-tuv-gray-400 mb-6 leading-relaxed text-center">
+                Trusted provider of skilled manpower,
+                recruitment, and staffing solutions and
+                equipment's across industries. Dedicated
+                to quality, reliability, and operational excellence.
+                Committed to empowering businesses with
+                the right talent - ensuring growth, safety, and
+                performance worldwide.
               </p>
               <div className="flex space-x-4">
                 <a href="#" className="text-tuv-gray-400 hover:text-white transition-colors">
                   <Linkedin className="h-5 w-5" />
                 </a>
                 <a href="https://x.com/Inspectors360" className="text-tuv-gray-400 hover:text-white transition-colors">
-                  <Twitter className="h-5 w-5" />
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-label="X (formerly Twitter)">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
                 </a>
                 <a href="#" className="text-tuv-gray-400 hover:text-white transition-colors">
                   <Facebook className="h-5 w-5" />

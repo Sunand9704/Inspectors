@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Menu, X, Phone, Mail, Globe, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -24,6 +24,8 @@ const languages = [
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [logoWidth, setLogoWidth] = useState<number | null>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
   const { 
     currentLanguage, 
     translations, 
@@ -31,6 +33,29 @@ export function Navbar() {
     error, 
     changeLanguage 
   } = useTranslation();
+
+  useEffect(() => {
+    const updateLogoWidth = () => {
+      if (logoRef.current) {
+        // Measure the full logo width including the 360° circle
+        const logoContainer = logoRef.current;
+        const fullWidth = logoContainer.offsetWidth;
+        setLogoWidth(fullWidth);
+      }
+    };
+
+    // Use a small delay to ensure logo is rendered
+    const timer = setTimeout(updateLogoWidth, 100);
+    // Also try after a longer delay to catch any async rendering
+    const timer2 = setTimeout(updateLogoWidth, 500);
+    updateLogoWidth();
+    window.addEventListener('resize', updateLogoWidth);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(timer2);
+      window.removeEventListener('resize', updateLogoWidth);
+    };
+  }, []);
 
   const selectedLanguage = languages.find(lang => lang.code === currentLanguage) || languages[0];
 
@@ -131,12 +156,31 @@ export function Navbar() {
       {/* Main Navigation */}
       <nav className="bg-white shadow-tuv-sm sticky top-0 z-50">
         <div className="container-responsive">
-          <div className="flex justify-between items-center h-16 lg:h-20">
-            {/* Logo */}
-            <Logo height={40} withLink />
+          <div className="flex justify-between items-start py-2 lg:py-3">
+            {/* Logo with Tags */}
+            <div className="inline-flex flex-col gap-2">
+              <div className="relative inline-block">
+                <div ref={logoRef} className="inline-block">
+                  <Logo height={40} withLink />
+                </div>
+                {/* Taglines aligned under INS, SPEC, TORS - matching exact logo layout */}
+                {logoWidth !== null && (
+                  <div className="mt-2.5 relative" style={{ width: `${logoWidth}px` }}>
+                    <div className="flex items-center justify-between text-orange font-semibold uppercase text-[0.7rem] leading-tight" style={{ 
+                      fontFamily: 'inherit',
+                      letterSpacing: '0.02em'
+                    }}>
+                      <span>Expert's</span>
+                      <span>Equipment</span>
+                      <span>Experience</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8">
+            <div className="hidden lg:flex items-center space-x-8 mt-1">
               {navigation.map((item, index) => {
                 const isButton = (item as any).isButton;
                 if (isButton) {
@@ -163,7 +207,7 @@ export function Navbar() {
             </div>
 
             {/* CTA Button */}
-            <div className="hidden lg:flex items-center space-x-4">
+            <div className="hidden lg:flex items-center space-x-4 mt-1">
               <Button className="btn-primary" asChild>
                 <Link to="/contact">
                   {translations?.navbar.contactUs || 'Contact Us'}

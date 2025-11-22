@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const apiBaseURL = "https://api2.brelis.in";
+// const apiBaseURL = "https://api2.brelis.in";
+const apiBaseURL = "http://localhost:8000";
 
 export const api = axios.create({
   baseURL: apiBaseURL,
