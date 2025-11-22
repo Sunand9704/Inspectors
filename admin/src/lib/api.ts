@@ -1,5 +1,5 @@
 import axios from 'axios';
-const envBaseUrl = (import.meta as any)?.env?.VITE_API_BASE_URL as string | undefined;
+const envBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const apiBaseURL = "https://api2.brelis.in";
 
 export const api = axios.create({
