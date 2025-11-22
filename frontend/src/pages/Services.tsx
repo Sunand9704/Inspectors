@@ -25,10 +25,10 @@ export default function Services() {
   > = {
     en: [
       {
-        title: hero?.title || 'Leading Testing, Inspection & Certification Services',
+        title: hero?.title || 'Inspectors 360°',
         description:
           hero?.description ||
-          'Ensuring safety, security, and sustainability across industries with comprehensive testing, inspection, certification, and advisory services.',
+          'We provide global workforce, staffing, and technical support solutions, delivering certified professionals and equipment to ensure safety, compliance, and performance across Oil & Gas, Mining, and Industrial sectors.',
       },
       {
         title: "Expert's",
@@ -239,9 +239,9 @@ export default function Services() {
     <div>
       {/* Video Hero Section */}
       <VideoHero
-        title={heroSlides[0]?.title || hero?.title || "Leading Testing, Inspection & Certification Services"}
+        title={heroSlides[0]?.title || hero?.title || "Inspectors 360°"}
         subtitle={hero?.subtitle || "Trusted Worldwide"}
-        description={heroSlides[0]?.description || hero?.description || "Ensuring safety, security, and sustainability across industries with comprehensive testing, inspection, certification, and advisory services."}
+        description={heroSlides[0]?.description || hero?.description || "We provide global workforce, staffing, and technical support solutions, delivering certified professionals and equipment to ensure safety, compliance, and performance across Oil & Gas, Mining, and Industrial sectors."}
         slideTitles={heroSlideTitles}
         slideDescriptions={heroSlideDescriptions}
         primaryCTA={{
@@ -252,7 +252,7 @@ export default function Services() {
           text: hero?.secondaryCTAText || "Get Quote",
           href: "/contact#contact-form"
         }}
-        autoPlaySeconds={7}
+        autoPlaySeconds={5}
         videoUrls={[
           // First video is the current one; the rest can be replaced with new URLs later
           'https://res.cloudinary.com/docyipoze/video/upload/v1763629708/first_video_m6exmg.mp4',
