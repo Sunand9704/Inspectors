@@ -275,43 +275,60 @@ export default function Blog() {
                             className="flex items-center space-x-2"
                             onClick={async () => {
                               try {
-                                // Handle both Cloudinary URLs and local /uploads/ paths
-                                let pdfUrl = post.pdfUrl!;
-                                let response: any;
+                                console.log('=== PDF Download Started ===');
+                                console.log('Blog ID:', post._id);
+                                console.log('Original PDF URL:', post.pdfUrl);
                                 
-                                if (pdfUrl.startsWith('http://') || pdfUrl.startsWith('https://')) {
-                                  // External URL (e.g., Cloudinary) - use fetch directly
-                                  const fetchResponse = await fetch(pdfUrl);
-                                  if (!fetchResponse.ok) {
-                                    throw new Error('Failed to download PDF');
-                                  }
-                                  response = { data: await fetchResponse.blob() };
-                                } else {
-                                  // Local path - use centralized API client
-                                  const apiResponse = await apiClient.get(pdfUrl, {
-                                    responseType: 'blob',
-                                  });
-                                  response = apiResponse;
-                                }
+                                // Use backend proxy endpoint for reliable PDF download
+                                const downloadUrl = `/api/blogs/${post._id}/pdf`;
+                                console.log('Using backend proxy endpoint:', downloadUrl);
                                 
-                                const blob = response.data instanceof Blob 
-                                  ? response.data 
-                                  : new Blob([response.data], { type: 'application/pdf' });
-                                const blobUrl = window.URL.createObjectURL(blob);
+                                // Fetch PDF from backend proxy
+                                const response = await apiClient.get(downloadUrl, {
+                                  responseType: 'blob',
+                                });
+                                
+                                console.log('PDF fetched from backend, size:', response.data.size);
                                 
                                 // Create download link
+                                const blobUrl = window.URL.createObjectURL(response.data);
+                                console.log('Blob URL created');
+                                
                                 const link = document.createElement('a');
                                 link.href = blobUrl;
                                 link.download = `${post.title.replace(/[^a-z0-9]/gi, '_')}.pdf`;
+                                link.style.display = 'none';
                                 document.body.appendChild(link);
+                                
+                                console.log('Triggering download...');
                                 link.click();
                                 
-                                // Cleanup
-                                document.body.removeChild(link);
-                                window.URL.revokeObjectURL(blobUrl);
+                                // Cleanup after a short delay
+                                setTimeout(() => {
+                                  document.body.removeChild(link);
+                                  window.URL.revokeObjectURL(blobUrl);
+                                  console.log('Download cleanup completed');
+                                }, 100);
+                                
+                                console.log('=== PDF Download Completed ===');
                               } catch (error) {
-                                console.error('Error downloading PDF:', error);
-                                alert('Failed to download PDF. Please try again.');
+                                console.error('=== PDF Download Error ===');
+                                console.error('Error details:', error);
+                                console.error('Error message:', error instanceof Error ? error.message : 'Unknown error');
+                                console.error('Error response:', (error as any)?.response?.data);
+                                
+                                // Fallback: try opening original URL in new window
+                                try {
+                                  console.log('Attempting fallback: opening PDF URL in new window');
+                                  if (post.pdfUrl) {
+                                    window.open(post.pdfUrl, '_blank');
+                                  } else {
+                                    alert('PDF not available for this blog post.');
+                                  }
+                                } catch (fallbackError) {
+                                  console.error('Fallback also failed:', fallbackError);
+                                  alert('Failed to download PDF. Please try again or contact support.');
+                                }
                               }
                             }}
                           >

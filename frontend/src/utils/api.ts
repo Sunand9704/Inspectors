@@ -10,12 +10,12 @@ const local = "http://localhost:8000";
 const USE_LOCAL = true; // Set to false for production
 const apiBaseURL = true ? renderurl : local;
 
-
 export const apiClient = axios.create({
   baseURL: envBaseUrl ? envBaseUrl : apiBaseURL,
   withCredentials: false,
   // Don't set default Content-Type - let axios set it based on data type
 });
+
 
 // Debug logging via interceptors
 apiClient.interceptors.request.use((config) => {

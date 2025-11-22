@@ -1,5 +1,6 @@
 const Blog = require('../models/Blog');
 const cloudinaryService = require('../services/cloudinary');
+const googleDriveService = require('../services/googleDrive');
 const fs = require('fs');
 const path = require('path');
 const { uploadsDir } = require('../utils/paths');
@@ -270,20 +271,37 @@ const getAllTags = async (req, res) => {
 // Create new blog (Admin only)
 const createBlog = async (req, res) => {
   try {
-    console.log('Create blog request received:', {
-      body: req.body,
-      files: req.files ? Object.keys(req.files) : 'No files',
-      fileCount: req.files ? Object.values(req.files).flat().length : 0,
-      headers: req.headers
+    console.log('=== BACKEND: Create blog request received ===');
+    console.log('Content-Type:', req.headers['content-type']);
+    console.log('Request body keys:', Object.keys(req.body));
+    console.log('Request body:', {
+      title: req.body.title,
+      excerpt: req.body.excerpt,
+      hasPdfUrl: !!req.body.pdfUrl,
+      pdfUrl: req.body.pdfUrl
     });
+    console.log('Files object:', req.files ? {
+      keys: Object.keys(req.files),
+      fileCount: Object.values(req.files).flat().length,
+      files: Object.entries(req.files).map(([key, files]) => [
+        key,
+        files.map(f => ({
+          fieldname: f.fieldname,
+          originalname: f.originalname,
+          mimetype: f.mimetype,
+          size: f.size,
+          bufferLength: f.buffer ? f.buffer.length : 0
+        }))
+      ])
+    } : 'No files');
     
     const blogData = req.body;
     
     // If we're uploading a new PDF file, remove any pdfUrl from form data
-    // (it will be set after Cloudinary upload)
+    // (it will be set after Google Drive upload)
     if (req.files && req.files.pdfFile && req.files.pdfFile[0]) {
       delete blogData.pdfUrl;
-      console.log('Removed pdfUrl from blogData (will be set after upload)');
+      console.log('=== Removed pdfUrl from blogData (will be set after Google Drive upload) ===');
     }
 
     // Handle uploaded featured image
@@ -311,21 +329,32 @@ const createBlog = async (req, res) => {
       }
     }
 
-    // Handle uploaded PDF file - Store locally to avoid Cloudinary size limits
+    // Handle uploaded PDF file - Upload to Google Drive
+    console.log('=== Checking for PDF file ===');
+    console.log('req.files exists:', !!req.files);
+    console.log('req.files.pdfFile exists:', !!(req.files && req.files.pdfFile));
+    console.log('req.files.pdfFile[0] exists:', !!(req.files && req.files.pdfFile && req.files.pdfFile[0]));
+    
     if (req.files && req.files.pdfFile && req.files.pdfFile[0]) {
       try {
         const file = req.files.pdfFile[0];
-        console.log('PDF file received:', {
+        console.log('=== PDF FILE FOUND - Starting upload process ===');
+        console.log('PDF file details:', {
+          fieldname: file.fieldname,
           originalname: file.originalname,
           mimetype: file.mimetype,
           size: file.size,
-          fieldname: file.fieldname
+          bufferExists: !!file.buffer,
+          bufferLength: file.buffer ? file.buffer.length : 0
         });
         
-        // Create blog/pdfs directory if it doesn't exist
-        const blogPdfDir = path.join(uploadsDir, 'blog', 'pdfs');
-        if (!fs.existsSync(blogPdfDir)) {
-          fs.mkdirSync(blogPdfDir, { recursive: true });
+        // Validate PDF file
+        if (!file.buffer || file.buffer.length === 0) {
+          throw new Error('PDF file buffer is empty');
+        }
+        
+        if (file.mimetype !== 'application/pdf') {
+          console.warn('Warning: File mimetype is not application/pdf:', file.mimetype);
         }
         
         // Generate unique filename
@@ -333,27 +362,36 @@ const createBlog = async (req, res) => {
         const sanitizedOriginalName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
         const extension = path.extname(sanitizedOriginalName) || '.pdf';
         const baseName = path.basename(sanitizedOriginalName, extension);
-        const fileName = `${baseName}-${timestamp}${extension}`;
-        const filePath = path.join(blogPdfDir, fileName);
+        const fileName = `blog-${baseName}-${timestamp}${extension}`;
+        console.log('Generated filename for Google Drive:', fileName);
         
-        // Save file to disk
-        fs.writeFileSync(filePath, file.buffer);
-        console.log('PDF saved locally:', filePath);
+        // Upload to Google Drive
+        console.log('=== Uploading PDF to Google Drive ===');
+        const uploadResult = await googleDriveService.uploadPdf(file.buffer, fileName);
         
-        // Create URL path (relative to /uploads)
-        const relativePath = path.relative(uploadsDir, filePath).replace(/\\/g, '/');
-        const pdfUrl = `/uploads/${relativePath}`;
-        
-        console.log('PDF URL created:', pdfUrl);
-        blogData.pdfUrl = pdfUrl;
-      } catch (uploadError) {
-        console.error('PDF save error:', uploadError);
-        console.error('PDF save error details:', {
-          message: uploadError.message,
-          stack: uploadError.stack
+        console.log('=== PDF uploaded to Google Drive successfully ===');
+        console.log('Upload result:', {
+          success: uploadResult.success,
+          fileId: uploadResult.fileId,
+          fileName: uploadResult.fileName,
+          downloadUrl: uploadResult.downloadUrl,
+          viewUrl: uploadResult.viewUrl
         });
-        // Don't fail the entire request if PDF save fails
-        console.warn('PDF save failed, continuing without PDF');
+        
+        blogData.pdfUrl = uploadResult.downloadUrl;
+        console.log('PDF URL set in blogData:', blogData.pdfUrl);
+      } catch (uploadError) {
+        console.error('=== PDF UPLOAD TO GOOGLE DRIVE ERROR ===');
+        console.error('Error message:', uploadError.message);
+        console.error('Error stack:', uploadError.stack);
+        console.error('Error name:', uploadError.name);
+        // Don't fail the entire request if PDF upload fails
+        console.warn('PDF upload to Google Drive failed, continuing without PDF');
+      }
+    } else {
+      console.log('=== No PDF file in request ===');
+      if (req.body.pdfUrl) {
+        console.log('Existing pdfUrl in body:', req.body.pdfUrl);
       }
     }
 
@@ -395,23 +433,39 @@ const createBlog = async (req, res) => {
 // Update blog (Admin only)
 const updateBlog = async (req, res) => {
   try {
-    console.log('Update blog request received:', {
-      id: req.params.id,
-      body: req.body,
-      files: req.files ? Object.keys(req.files) : 'No files',
-      fileCount: req.files ? Object.values(req.files).flat().length : 0,
-      headers: req.headers,
-      contentType: req.headers['content-type']
+    console.log('=== BACKEND: Update blog request received ===');
+    console.log('Blog ID:', req.params.id);
+    console.log('Content-Type:', req.headers['content-type']);
+    console.log('Request body keys:', Object.keys(req.body));
+    console.log('Request body:', {
+      title: req.body.title,
+      excerpt: req.body.excerpt,
+      hasPdfUrl: !!req.body.pdfUrl,
+      pdfUrl: req.body.pdfUrl
     });
+    console.log('Files object:', req.files ? {
+      keys: Object.keys(req.files),
+      fileCount: Object.values(req.files).flat().length,
+      files: Object.entries(req.files).map(([key, files]) => [
+        key,
+        files.map(f => ({
+          fieldname: f.fieldname,
+          originalname: f.originalname,
+          mimetype: f.mimetype,
+          size: f.size,
+          bufferLength: f.buffer ? f.buffer.length : 0
+        }))
+      ])
+    } : 'No files');
     
     const { id } = req.params;
     const updateData = req.body;
     
     // If we're uploading a new PDF file, remove any pdfUrl from form data
-    // (it will be set after Cloudinary upload)
+    // (it will be set after Google Drive upload)
     if (req.files && req.files.pdfFile && req.files.pdfFile[0]) {
       delete updateData.pdfUrl;
-      console.log('Removed pdfUrl from updateData (will be set after upload)');
+      console.log('=== Removed pdfUrl from updateData (will be set after Google Drive upload) ===');
     }
     
     // Check if blog exists
@@ -455,22 +509,32 @@ const updateBlog = async (req, res) => {
       }
     }
 
-    // Handle uploaded PDF file - Store locally to avoid Cloudinary size limits
+    // Handle uploaded PDF file - Upload to Google Drive
+    console.log('=== Checking for PDF file (update) ===');
+    console.log('req.files exists:', !!req.files);
+    console.log('req.files.pdfFile exists:', !!(req.files && req.files.pdfFile));
+    console.log('req.files.pdfFile[0] exists:', !!(req.files && req.files.pdfFile && req.files.pdfFile[0]));
+    
     if (req.files && req.files.pdfFile && req.files.pdfFile[0]) {
       try {
         const file = req.files.pdfFile[0];
-        console.log('PDF file received (update):', {
+        console.log('=== PDF FILE FOUND (update) - Starting upload process ===');
+        console.log('PDF file details:', {
+          fieldname: file.fieldname,
           originalname: file.originalname,
           mimetype: file.mimetype,
           size: file.size,
-          fieldname: file.fieldname,
-          bufferLength: file.buffer ? file.buffer.length : 'no buffer'
+          bufferExists: !!file.buffer,
+          bufferLength: file.buffer ? file.buffer.length : 0
         });
         
-        // Create blog/pdfs directory if it doesn't exist
-        const blogPdfDir = path.join(uploadsDir, 'blog', 'pdfs');
-        if (!fs.existsSync(blogPdfDir)) {
-          fs.mkdirSync(blogPdfDir, { recursive: true });
+        // Validate PDF file
+        if (!file.buffer || file.buffer.length === 0) {
+          throw new Error('PDF file buffer is empty');
+        }
+        
+        if (file.mimetype !== 'application/pdf') {
+          console.warn('Warning: File mimetype is not application/pdf:', file.mimetype);
         }
         
         // Generate unique filename
@@ -478,35 +542,37 @@ const updateBlog = async (req, res) => {
         const sanitizedOriginalName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
         const extension = path.extname(sanitizedOriginalName) || '.pdf';
         const baseName = path.basename(sanitizedOriginalName, extension);
-        const fileName = `${baseName}-${timestamp}${extension}`;
-        const filePath = path.join(blogPdfDir, fileName);
+        const fileName = `blog-${baseName}-${timestamp}${extension}`;
+        console.log('Generated filename for Google Drive (update):', fileName);
         
-        // Save file to disk
-        fs.writeFileSync(filePath, file.buffer);
-        console.log('PDF saved locally:', filePath);
+        // Upload to Google Drive
+        console.log('=== Uploading PDF to Google Drive (update) ===');
+        const uploadResult = await googleDriveService.uploadPdf(file.buffer, fileName);
         
-        // Create URL path (relative to /uploads)
-        const relativePath = path.relative(uploadsDir, filePath).replace(/\\/g, '/');
-        const pdfUrl = `/uploads/${relativePath}`;
-        
-        console.log('PDF URL created:', pdfUrl);
-        updateData.pdfUrl = pdfUrl;
-      } catch (uploadError) {
-        console.error('PDF save error (update):', uploadError);
-        console.error('PDF save error details:', {
-          message: uploadError.message,
-          stack: uploadError.stack,
-          name: uploadError.name
+        console.log('=== PDF uploaded to Google Drive successfully (update) ===');
+        console.log('Upload result:', {
+          success: uploadResult.success,
+          fileId: uploadResult.fileId,
+          fileName: uploadResult.fileName,
+          downloadUrl: uploadResult.downloadUrl,
+          viewUrl: uploadResult.viewUrl
         });
-        // Don't fail the entire request if PDF save fails
-        console.warn('PDF save failed, continuing without PDF');
+        
+        updateData.pdfUrl = uploadResult.downloadUrl;
+        console.log('PDF URL set in updateData:', updateData.pdfUrl);
+      } catch (uploadError) {
+        console.error('=== PDF UPLOAD TO GOOGLE DRIVE ERROR (update) ===');
+        console.error('Error message:', uploadError.message);
+        console.error('Error stack:', uploadError.stack);
+        console.error('Error name:', uploadError.name);
+        // Don't fail the entire request if PDF upload fails
+        console.warn('PDF upload to Google Drive failed, continuing without PDF');
       }
     } else {
-      console.log('No PDF file in request:', {
-        hasFiles: !!req.files,
-        hasPdfFile: !!(req.files && req.files.pdfFile),
-        hasPdfFileArray: !!(req.files && req.files.pdfFile && req.files.pdfFile[0])
-      });
+      console.log('=== No PDF file in request (update) ===');
+      if (req.body.pdfUrl) {
+        console.log('Existing pdfUrl in body:', req.body.pdfUrl);
+      }
     }
 
     // Parse JSON fields if they exist
@@ -569,6 +635,108 @@ const updateBlog = async (req, res) => {
   }
 };
 
+// Download PDF proxy endpoint
+const downloadPdf = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    console.log('=== PDF Download Request ===');
+    console.log('Blog ID:', id);
+    
+    const blog = await Blog.findById(id);
+    
+    if (!blog) {
+      console.log('Blog not found');
+      return res.status(404).json({
+        success: false,
+        message: 'Blog post not found'
+      });
+    }
+    
+    if (!blog.pdfUrl) {
+      console.log('No PDF URL in blog');
+      return res.status(404).json({
+        success: false,
+        message: 'PDF not available for this blog post'
+      });
+    }
+    
+    console.log('PDF URL:', blog.pdfUrl);
+    
+    // If it's a Google Drive URL, use Google Drive API to get the file
+    if (blog.pdfUrl.includes('drive.google.com')) {
+      console.log('Fetching PDF from Google Drive using API');
+      
+      // Extract file ID
+      const fileIdMatch = blog.pdfUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || 
+                         blog.pdfUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
+                         blog.pdfUrl.match(/\/open\?id=([a-zA-Z0-9_-]+)/);
+      
+      if (fileIdMatch && fileIdMatch[1]) {
+        const fileId = fileIdMatch[1];
+        console.log('Extracted file ID:', fileId);
+        
+        try {
+          // Use Google Drive API to get file content directly
+          const googleDriveService = require('../services/googleDrive');
+          
+          // Ensure we have access token
+          await googleDriveService.getAccessToken();
+          const drive = googleDriveService.getDrive();
+          
+          if (!drive) {
+            throw new Error('Google Drive service not initialized');
+          }
+          
+          // Get file metadata first
+          const fileMetadata = await drive.files.get({
+            fileId: fileId,
+            fields: 'id, name, mimeType'
+          });
+          
+          console.log('File metadata:', fileMetadata.data);
+          
+          // Get file content as stream
+          const fileStream = await drive.files.get(
+            { fileId: fileId, alt: 'media' },
+            { responseType: 'stream' }
+          );
+          
+          console.log('File stream obtained, piping to response');
+          
+          // Set response headers
+          res.setHeader('Content-Type', 'application/pdf');
+          res.setHeader('Content-Disposition', `attachment; filename="${blog.title.replace(/[^a-z0-9]/gi, '_')}.pdf"`);
+          
+          // Pipe the stream to response
+          fileStream.data.pipe(res);
+          return;
+        } catch (driveError) {
+          console.error('Google Drive API error:', driveError);
+          console.error('Error details:', {
+            message: driveError.message,
+            stack: driveError.stack
+          });
+          // Fallback to direct URL
+          console.log('Falling back to direct URL download');
+        }
+      }
+    }
+    
+    // For other URLs (Cloudinary, local), redirect
+    console.log('Redirecting to PDF URL');
+    res.redirect(blog.pdfUrl);
+    
+  } catch (error) {
+    console.error('PDF download error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error downloading PDF',
+      error: error.message
+    });
+  }
+};
+
 // Delete blog (Admin only)
 const deleteBlog = async (req, res) => {
   try {
@@ -605,5 +773,6 @@ module.exports = {
   getAllTags,
   createBlog,
   updateBlog,
-  deleteBlog
+  deleteBlog,
+  downloadPdf
 };
