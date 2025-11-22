@@ -3,8 +3,8 @@ const envBaseUrl = (import.meta as any)?.env?.VITE_API_BASE_URL as string | unde
 const apiBaseURL = "https://api2.brelis.in";
 
 export const api = axios.create({
-  baseURL: apiBaseURL,
-  headers: { 'Content-Type': 'application/json' },
+ baseURL: envBaseUrl ? envBaseUrl : apiBaseURL,
+ headers: { 'Content-Type': 'application/json' },
 });
 
 api.interceptors.request.use((config) => {
