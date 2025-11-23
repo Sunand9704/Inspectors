@@ -37,29 +37,65 @@ export function VideoHero({
   const isSingleVideo = videoUrls && videoUrls.length === 1;
   const [api, setApi] = React.useState<CarouselApi | null>(null);
   const [currentIndex, setCurrentIndex] = React.useState(0);
+  const videoRefs = React.useRef<(HTMLVideoElement | null)[]>([]);
+  const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
-  React.useEffect(() => {
+  // Handle video end - wait 3 seconds then move to next slide
+  const handleVideoEnd = React.useCallback((videoIndex: number) => {
     if (!api || !videoUrls || videoUrls.length <= 1) return;
+    
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
+    // Wait 3 seconds before moving to next slide
+    timeoutRef.current = setTimeout(() => {
+      const nextIndex = (videoIndex + 1) % videoUrls.length;
+      api.scrollTo(nextIndex);
+    }, 3000);
+  }, [api, videoUrls]);
 
-    const intervalMs = Math.max(2000, autoPlaySeconds * 1000);
-    const id = window.setInterval(() => {
-      api.scrollNext();
-    }, intervalMs);
+  // Clean up timeout on unmount
+  React.useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
-    return () => window.clearInterval(id);
-  }, [api, autoPlaySeconds, videoUrls]);
-
-  // Track current slide index so we can change title/description per slide
+  // Track current slide index and play video when slide changes
   React.useEffect(() => {
     if (!api || !videoUrls || videoUrls.length <= 1) return;
 
     const onSelect = () => {
       try {
         const snap = api.selectedScrollSnap();
-        setCurrentIndex(snap ?? 0);
+        const newIndex = snap ?? 0;
+        setCurrentIndex(newIndex);
+        
+        // Clear any pending auto-advance timeout when manually navigating
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+        
+        // Play the video for the current slide
+        const currentVideo = videoRefs.current[newIndex];
+        if (currentVideo) {
+          // Pause all videos first
+          videoRefs.current.forEach((video) => {
+            if (video) {
+              video.pause();
+            }
+          });
+          // Play the current video
+          currentVideo.currentTime = 0;
+          currentVideo.play().catch(() => {
+            // Ignore autoplay errors
+          });
+        }
       } catch {
         setCurrentIndex(0);
       }
@@ -111,14 +147,25 @@ export function VideoHero({
                 <CarouselItem key={idx} className="h-[80vh] lg:h-[90vh] p-0">
                   <div className="relative h-full w-full">
                     <video
+                      ref={(el) => {
+                        videoRefs.current[idx] = el;
+                      }}
                       className="h-full w-full object-cover"
                       src={url}
                       playsInline
-                      autoPlay
+                      autoPlay={idx === 0}
                       muted
-                      loop
                       controls={false}
                       preload="metadata"
+                      onEnded={() => handleVideoEnd(idx)}
+                      onPlay={() => {
+                        // Pause all other videos when one starts playing
+                        videoRefs.current.forEach((video, i) => {
+                          if (video && i !== idx) {
+                            video.pause();
+                          }
+                        });
+                      }}
                     />
                     {/* Gradient overlay for readability */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/20" />

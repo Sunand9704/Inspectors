@@ -1,6 +1,7 @@
 import axios from 'axios';
 const envBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const apiBaseURL = "https://api2.brelis.in";
+// const apiBaseURL = "http://localhost:8021";
 
 export const api = axios.create({
  baseURL: envBaseUrl ? envBaseUrl : apiBaseURL,

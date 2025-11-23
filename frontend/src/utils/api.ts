@@ -4,7 +4,7 @@ const envBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 // Use frontend env var if provided; otherwise default to local backend that points to your new DB
 const renderurl = "https://api2.brelis.in";
-const local = "http://localhost:8000";
+const local = "http://localhost:8021";
 
 // For development, use localhost. Change to true to use Render.com
 const USE_LOCAL = true; // Set to false for production

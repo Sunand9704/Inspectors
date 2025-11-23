@@ -14,13 +14,39 @@ import Logo from '@/components/Common/Logo';
 import { SITE_PHONE_DISPLAY } from '@/config/site';
 
 const languages = [
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
-  { code: 'pt', name: 'Português', flag: '🇵🇹' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-  { code: 'zh', name: '中文', flag: '🇨🇳' },
+  { code: 'en', name: 'English', countryCode: 'us' },
+  { code: 'fr', name: 'Français', countryCode: 'fr' },
+  { code: 'pt', name: 'Português', countryCode: 'pt' },
+  { code: 'es', name: 'Español', countryCode: 'es' },
+  { code: 'ru', name: 'Русский', countryCode: 'ru' },
+  { code: 'zh', name: '中文', countryCode: 'cn' },
 ];
+
+// Flag component with fallback to emoji
+const FlagIcon = ({ countryCode, className = "w-5 h-4" }: { countryCode: string; className?: string }) => {
+  const [imgError, setImgError] = useState(false);
+  const emojiMap: { [key: string]: string } = {
+    'us': '🇺🇸',
+    'fr': '🇫🇷',
+    'pt': '🇵🇹',
+    'es': '🇪🇸',
+    'ru': '🇷🇺',
+    'cn': '🇨🇳',
+  };
+
+  if (imgError) {
+    return <span className={className}>{emojiMap[countryCode] || '🏳️'}</span>;
+  }
+
+  return (
+    <img
+      src={`https://flagcdn.com/w20/${countryCode}.png`}
+      alt={`${countryCode} flag`}
+      className={className}
+      onError={() => setImgError(true)}
+    />
+  );
+};
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,8 +97,6 @@ export function Navbar() {
   // Get translated navigation items
   const getNavigationItems = () => {
     if (!translations) return [];
-    
-    const getQuoteLabel = (translations.navbar as any).getQuote || 'Get Quote';
 
     return [
       { name: translations.navbar.services, href: '/services' },
@@ -82,7 +106,6 @@ export function Navbar() {
       { name: (translations.navbar as any).vacancies || (translations.navbar as any).careers || 'Vacancies', href: '/vacancies' },
       // Some locales may not have "blog"
       { name: (translations.navbar as any).blog || 'Blog', href: '/blog' },
-      { name: getQuoteLabel, href: '/contact#contact-form', isButton: true },
     ];
   };
 
@@ -118,7 +141,7 @@ export function Navbar() {
                     disabled={isLoading}
                   >
                     <Globe className="h-4 w-4 mr-2" />
-                    <span className="mr-1">{selectedLanguage.flag}</span>
+                    <FlagIcon countryCode={selectedLanguage.countryCode} className="w-4 h-3 mr-1" />
                     <span className="text-xs">{selectedLanguage.code.toUpperCase()}</span>
                     {isLoading ? (
                       <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin ml-1" />
@@ -139,7 +162,8 @@ export function Navbar() {
                       }`}
                       disabled={isLoading}
                     >
-                      <span className="text-lg">{language.flag}</span>
+                      <FlagIcon countryCode={language.countryCode} className="w-5 h-4" />
+                      <span className="text-sm font-medium">{language.code.toUpperCase()}</span>
                       <span className="flex-1">{language.name}</span>
                       {selectedLanguage.code === language.code && (
                         <div className="w-2 h-2 bg-primary rounded-full" />
@@ -156,7 +180,7 @@ export function Navbar() {
       {/* Main Navigation */}
       <nav className="bg-white shadow-tuv-sm sticky top-0 z-50">
         <div className="container-responsive">
-          <div className="flex justify-between items-start py-2 lg:py-3">
+          <div className="relative flex items-center py-2 lg:py-3 min-h-[80px]">
             {/* Logo with Tags */}
             <div className="inline-flex flex-col gap-2">
               <div className="relative inline-block">
@@ -166,7 +190,7 @@ export function Navbar() {
                 {/* Taglines aligned under INS, SPEC, TORS - matching exact logo layout */}
                 {logoWidth !== null && (
                   <div className="mt-2.5 relative" style={{ width: `${logoWidth}px` }}>
-                    <div className="flex items-center justify-between text-orange font-semibold uppercase text-[0.7rem] leading-tight" style={{ 
+                    <div className="flex items-center justify-between text-black font-semibold uppercase text-[0.7rem] leading-tight" style={{ 
                       fontFamily: 'inherit',
                       letterSpacing: '0.02em'
                     }}>
@@ -179,38 +203,31 @@ export function Navbar() {
               </div>
             </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8 mt-1">
-              {navigation.map((item, index) => {
-                const isButton = (item as any).isButton;
-                if (isButton) {
-                  return (
-                    <Button key={index} className="btn-primary" asChild>
-                      <Link to={item.href}>
-                        {item.name}
-                      </Link>
-                    </Button>
-                  );
-                }
-                return (
-                  <NavLink
-                    key={index}
-                    to={item.href}
-                    className={({ isActive }) =>
-                      `nav-link ${isActive ? 'nav-link-active' : ''}`
-                    }
-                  >
-                    {item.name}
-                  </NavLink>
-                );
-              })}
+            {/* Desktop Navigation - Centered */}
+            <div className="hidden lg:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
+              {navigation.map((item, index) => (
+                <NavLink
+                  key={index}
+                  to={item.href}
+                  className={({ isActive }) =>
+                    `nav-link ${isActive ? 'nav-link-active' : ''}`
+                  }
+                >
+                  {item.name}
+                </NavLink>
+              ))}
             </div>
 
-            {/* CTA Button */}
-            <div className="hidden lg:flex items-center space-x-4 mt-1">
+            {/* CTA Buttons - Right side */}
+            <div className="hidden lg:flex items-center space-x-4 ml-auto">
               <Button className="btn-primary" asChild>
                 <Link to="/contact">
                   {translations?.navbar.contactUs || 'Contact Us'}
+                </Link>
+              </Button>
+              <Button className="btn-primary" asChild>
+                <Link to="/contact#contact-form">
+                  {translations?.navbar.getQuote || 'Get Quote'}
                 </Link>
               </Button>
             </div>
@@ -270,7 +287,8 @@ export function Navbar() {
                               : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                           } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
-                          <span className="text-lg">{language.flag}</span>
+                          <FlagIcon countryCode={language.countryCode} className="w-5 h-4" />
+                          <span className="text-xs font-medium">{language.code.toUpperCase()}</span>
                           <span className="text-sm font-medium">{language.name}</span>
                           {isLoading && selectedLanguage.code === language.code && (
                             <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
