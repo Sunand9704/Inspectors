@@ -38,37 +38,35 @@ function createApp() {
     next();
   });
 
-   const allowedOrigins = [
-      "http://localhost:8080", // React development server
+      const allowedOrigins = [
+      "http://localhost:8080",
       "http://localhost:8081",
-      "http://localhost:3000", // Fallback for development
-      "http://localhost:5175", // Vite development server
-     "https://inspectors-admin-pannel.onrender.com",
-     "https://inspectors-1.onrender.com",
+      "http://localhost:3000",
+      "http://localhost:5175",
+      "https://inspectors-admin-pannel.onrender.com",
+      "https://inspectors-1.onrender.com",
       "https://inspectors360.com",
-        "https://admin.inspectors360.com",
-        "https://www.inspectors360.com",
-      // Add your production frontend URL here
-      // "https://yourdomain.com",
-      // "https://www.yourdomain.com",
+      "https://www.inspectors360.com",
+      "https://admin.inspectors360.com"
     ];
   // Middlewares
   app.use(helmet());
+   app.use(compression());
+  app.use(express.json({ limit: '100mb' })); // Increased for large PDF uploads
+  app.use(express.urlencoded({ extended: true, limit: '100mb' })); // Increased for large file uploads
   app.use(cors({  origin: function (origin, callback) {
       // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
+     console.log("Request Origin:", origin); // DEBUG LOG
 
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
     },
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
   }));
-  app.use(compression());
-  app.use(express.json({ limit: '100mb' })); // Increased for large PDF uploads
-  app.use(express.urlencoded({ extended: true, limit: '100mb' })); // Increased for large file uploads
+ 
 
   // Logging: METHOD PATH STATUS(response code colored) DURATION
   const colorizeStatus = (status) => {
