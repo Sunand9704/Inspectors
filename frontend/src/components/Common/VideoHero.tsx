@@ -40,7 +40,7 @@ export function VideoHero({
   const videoRefs = React.useRef<(HTMLVideoElement | null)[]>([]);
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
-  // Handle video end - wait 3 seconds then move to next slide
+  // Handle video end - immediately move to next slide for seamless playback
   const handleVideoEnd = React.useCallback((videoIndex: number) => {
     if (!api || !videoUrls || videoUrls.length <= 1) return;
     
@@ -49,11 +49,9 @@ export function VideoHero({
       clearTimeout(timeoutRef.current);
     }
 
-    // Wait 3 seconds before moving to next slide
-    timeoutRef.current = setTimeout(() => {
-      const nextIndex = (videoIndex + 1) % videoUrls.length;
-      api.scrollTo(nextIndex);
-    }, 3000);
+    // Immediately move to next slide for seamless transition
+    const nextIndex = (videoIndex + 1) % videoUrls.length;
+    api.scrollTo(nextIndex);
   }, [api, videoUrls]);
 
   // Clean up timeout on unmount
@@ -90,11 +88,21 @@ export function VideoHero({
               video.pause();
             }
           });
-          // Play the current video
+          // Play the current video immediately for seamless transition
           currentVideo.currentTime = 0;
-          currentVideo.play().catch(() => {
-            // Ignore autoplay errors
-          });
+          // Ensure video is ready before playing
+          if (currentVideo.readyState >= 2) {
+            currentVideo.play().catch(() => {
+              // Ignore autoplay errors
+            });
+          } else {
+            // Wait for video to be ready if not loaded yet
+            currentVideo.addEventListener('loadeddata', () => {
+              currentVideo.play().catch(() => {
+                // Ignore autoplay errors
+              });
+            }, { once: true });
+          }
         }
       } catch {
         setCurrentIndex(0);
@@ -156,7 +164,7 @@ export function VideoHero({
                       autoPlay={idx === 0}
                       muted
                       controls={false}
-                      preload="metadata"
+                      preload="auto"
                       onEnded={() => handleVideoEnd(idx)}
                       onPlay={() => {
                         // Pause all other videos when one starts playing
