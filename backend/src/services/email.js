@@ -365,7 +365,134 @@ class EmailService {
           </div>
         </div>
       </body>
-      </html>
+      \u003c/html\u003e
+    `;
+  }
+
+  /**
+   * Send document verification request to admin
+   * @param {Object} verificationData - Document verification form data
+   * @param {Array} files - Array of file objects with buffer and filename
+   * @returns {Promise\u003cObject\u003e} Email send result
+   */
+  async sendDocumentVerification(verificationData, files = []) {
+    try {
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@cbm.com';
+
+      const emailContent = this.generateDocumentVerificationEmail(verificationData);
+
+      const attachments = files.map(file => ({
+        filename: file.filename,
+        content: file.buffer,
+        contentType: this.getContentType(file.filename)
+      }));
+
+      const mailOptions = {
+        from: `"CBM Document Verification" <${process.env.SMTP_USER}>`,
+        to: adminEmail,
+        replyTo: verificationData.email,
+        subject: `Document Verification Request from ${verificationData.firstName} ${verificationData.lastName}`,
+        html: emailContent,
+        attachments: attachments
+      };
+
+      const result = await this.transporter.sendMail(mailOptions);
+      logger.info('Document verification email sent successfully', {
+        messageId: result.messageId,
+        from: verificationData.email,
+        filesCount: files.length
+      });
+
+      return { success: true, messageId: result.messageId };
+    } catch (error) {
+      logger.error('Failed to send document verification email:', error);
+      throw new Error('Failed to send document verification email');
+    }
+  }
+
+  /**
+   * Generate HTML email content for document verification
+   * @param {Object} verificationData - Document verification form data
+   * @returns {string} HTML email content
+   */
+  generateDocumentVerificationEmail(verificationData) {
+    const safe = (v) => (v ? String(v) : '—');
+    return `
+      \u003c!DOCTYPE html\u003e
+      \u003chtml\u003e
+      \u003chead\u003e
+        \u003cmeta charset="utf-8"\u003e
+        \u003ctitle\u003eDocument Verification Request\u003c/title\u003e
+        \u003cstyle\u003e
+          body { font-family: Arial, sans-serif; line-height: 1.7; color: #0f172a; background: #f8fafc; }
+          .container { max-width: 680px; margin: 24px auto; padding: 0; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(2, 6, 23, 0.08); }
+          .header { background: linear-gradient(135deg, #9b8dbf, #8a7da8); color: #ffffff; padding: 28px 32px; }
+          .header h1 { margin: 0; font-size: 22px; letter-spacing: 0.3px; }
+          .meta { color: #e2e8f0; font-size: 13px; margin-top: 6px; }
+          .content { padding: 28px 32px; background: #ffffff; }
+          .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+          .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+          .card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px; }
+          .label { font-size: 12px; color: #475569; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+          .value { font-size: 15px; color: #0f172a; font-weight: 600; }
+          .message { background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #9b8dbf; border-radius: 8px; padding: 16px; white-space: pre-wrap; color: #0f172a; }
+          .footer { background: #f1f5f9; color: #475569; font-size: 12px; padding: 20px 28px; text-align: center; }
+          .badge { display: inline-block; background: #9b8dbf; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 8px; }
+        \u003c/style\u003e
+      \u003c/head\u003e
+      \u003cbody\u003e
+        \u003cdiv class="container"\u003e
+          \u003cdiv class="header"\u003e
+            \u003ch1\u003eDocument Verification Request\u003c/h1\u003e
+            \u003cdiv class="meta"\u003eSubmitted on ${new Date().toLocaleString()}\u003c/div\u003e
+            \u003cdiv class="badge"\u003eTrusted Compliance Desk\u003c/div\u003e
+          \u003c/div\u003e
+          \u003cdiv class="content"\u003e
+            \u003cdiv class="grid"\u003e
+              \u003cdiv class="row"\u003e
+                \u003cdiv class="card"\u003e
+                  \u003cdiv class="label"\u003eFirst Name\u003c/div\u003e
+                  \u003cdiv class="value"\u003e${safe(verificationData.firstName)}\u003c/div\u003e
+                \u003c/div\u003e
+                \u003cdiv class="card"\u003e
+                  \u003cdiv class="label"\u003eLast Name\u003c/div\u003e
+                  \u003cdiv class="value"\u003e${safe(verificationData.lastName)}\u003c/div\u003e
+                \u003c/div\u003e
+              \u003c/div\u003e
+              \u003cdiv class="row"\u003e
+                \u003cdiv class="card"\u003e
+                  \u003cdiv class="label"\u003eEmail\u003c/div\u003e
+                  \u003cdiv class="value"\u003e${safe(verificationData.email)}\u003c/div\u003e
+                \u003c/div\u003e
+                \u003cdiv class="card"\u003e
+                  \u003cdiv class="label"\u003eLocation\u003c/div\u003e
+                  \u003cdiv class="value"\u003e${safe(verificationData.location)}\u003c/div\u003e
+                \u003c/div\u003e
+              \u003c/div\u003e
+              \u003cdiv class="row"\u003e
+                \u003cdiv class="card"\u003e
+                  \u003cdiv class="label"\u003eCompany\u003c/div\u003e
+                  \u003cdiv class="value"\u003e${safe(verificationData.company)}\u003c/div\u003e
+                \u003c/div\u003e
+                \u003cdiv class="card"\u003e
+                  \u003cdiv class="label"\u003eJob Title\u003c/div\u003e
+                  \u003cdiv class="value"\u003e${safe(verificationData.jobTitle)}\u003c/div\u003e
+                \u003c/div\u003e
+              \u003c/div\u003e
+              ${verificationData.comments ? `
+              \u003cdiv\u003e
+                \u003cdiv class="label"\u003eComments / Reference\u003c/div\u003e
+                \u003cdiv class="message"\u003e${safe(verificationData.comments)}\u003c/div\u003e
+              \u003c/div\u003e
+              ` : ''}
+            \u003c/div\u003e
+          \u003c/div\u003e
+          \u003cdiv class="footer"\u003e
+            This verification request was submitted from the CBM Document Verification portal. Attached documents require validation. Please respond directly to the sender.
+          \u003c/div\u003e
+        \u003c/div\u003e
+      \u003c/body\u003e
+      \u003c/html\u003e
     `;
   }
 }

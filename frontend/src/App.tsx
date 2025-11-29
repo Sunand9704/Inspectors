@@ -24,6 +24,7 @@ import ServiceDetail from "./pages/ServiceDetail";
 import IndustriesDetail from "./pages/IndustriesDetail";
 import CareerDetail from "./pages/CareerDetail";
 import Clients from "./pages/Clients";
+import VerifyDocuments from "./pages/VerifyDocuments";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/verify-documents" element={<VerifyDocuments />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

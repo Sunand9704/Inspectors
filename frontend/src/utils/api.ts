@@ -7,7 +7,7 @@ const renderurl = "https://api2.brelis.in";
 const local = "http://localhost:8021";
 
 // For development, use localhost. Change to true to use Render.com
-const USE_LOCAL = true; // Set to false for production
+// const USE_LOCAL = true; // Set to false for production
 const apiBaseURL = true ? renderurl : local;
 
 export const apiClient = axios.create({
