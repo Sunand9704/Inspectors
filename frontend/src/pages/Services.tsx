@@ -254,11 +254,11 @@ export default function Services() {
         }}
         autoPlaySeconds={5}
         videoUrls={[
-          // First video is the current one; the rest can be replaced with new URLs later
-          'https://res.cloudinary.com/docyipoze/video/upload/v1763629708/first_video_m6exmg.mp4',
-          'https://res.cloudinary.com/docyipoze/video/upload/v1763745859/second_igtujy.mp4',
-          'https://res.cloudinary.com/docyipoze/video/upload/v1763746701/third_iwvcry.mp4',
-          'https://res.cloudinary.com/docyipoze/video/upload/v1763747142/fourth_vbh63c.mp4',
+          
+          'https://res.cloudinary.com/docyipoze/video/upload/v1764429118/1st_abw1bb.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1764429617/2nd_msjo0k.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1764429855/3rd_jjmph2.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1764429880/4th_gqov71.mp4',
         ]}
       />
 
