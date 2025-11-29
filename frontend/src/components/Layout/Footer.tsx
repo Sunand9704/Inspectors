@@ -101,7 +101,7 @@ export function Footer() {
                 performance worldwide.
               </p>
               <div className="flex space-x-4">
-                <a href="#" className="text-tuv-gray-400 hover:text-white transition-colors">
+                <a href="https://www.linkedin.com/company/109967214/admin/page-posts/published/" className="text-tuv-gray-400 hover:text-white transition-colors">
                   <Linkedin className="h-5 w-5" />
                 </a>
                 <a href="https://x.com/Inspectors360" className="text-tuv-gray-400 hover:text-white transition-colors">
