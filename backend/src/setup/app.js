@@ -19,6 +19,7 @@ const inquiryRoutes = require('../routes/inquiry.routes');
 const adminAuthRoutes = require('../routes/admin-auth.routes');
 const blogRoutes = require('../routes/blog.routes');
 const clientRoutes = require('../routes/client.routes');
+const verifyDocumentsRoutes = require('../routes/verify-documents.routes');
 
 
 function createApp() {
@@ -115,6 +116,7 @@ function createApp() {
   app.use('/api/admin/auth', adminAuthRoutes);
   app.use('/api/blogs', blogRoutes);
   app.use('/api', clientRoutes);
+  app.use('/api', verifyDocumentsRoutes);
 
 
   // 404 and error handler

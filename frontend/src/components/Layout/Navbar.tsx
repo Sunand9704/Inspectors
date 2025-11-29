@@ -230,6 +230,11 @@ export function Navbar() {
                   {translations?.navbar.getQuote || 'Get Quote'}
                 </Link>
               </Button>
+              <Button variant="outline" className="border-orange-500 text-orange-600 hover:bg-orange-50 hover:text-orange-700" asChild>
+                <Link to="/verify-documents">
+                  Verify Documents
+                </Link>
+              </Button>
             </div>
 
             {/* Mobile menu button */}
@@ -302,6 +307,11 @@ export function Navbar() {
                     <Button className="btn-primary" asChild>
                       <Link to="/contact#contact-form" onClick={() => setIsOpen(false)}>
                         {translations?.navbar.getQuote || 'Get Quote'}
+                      </Link>
+                    </Button>
+                    <Button variant="outline" className="border-orange-500 text-orange-600 hover:bg-orange-50 hover:text-orange-700" asChild>
+                      <Link to="/verify-documents" onClick={() => setIsOpen(false)}>
+                        Verify Documents
                       </Link>
                     </Button>
                   </div>

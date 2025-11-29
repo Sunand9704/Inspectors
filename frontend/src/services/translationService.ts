@@ -50,6 +50,161 @@ export interface StaticTranslations {
       loading: string;
       error: string;
     };
+    careers?: {
+      title: string;
+      description: string;
+      applyNow: string;
+      hiringProcess: {
+        title: string;
+        description: string;
+        steps: {
+          review: { title: string; description: string };
+          interview: { title: string; description: string };
+          assessment: { title: string; description: string };
+          final: { title: string; description: string };
+        };
+      };
+      currentOpenings: {
+        loadingText: string;
+        generalApplicationText: string;
+        submitGeneralApplication: string;
+      };
+      generalApplication: {
+        title: string;
+        personalInfo: {
+          title: string;
+          firstName: string;
+          lastName: string;
+          email: string;
+          phone: string;
+        };
+        positionInfo: {
+          title: string;
+          desiredPosition: string;
+          desiredPositionPlaceholder: string;
+          preferredDepartment: string;
+          preferredDepartmentPlaceholder: string;
+          departments: {
+            engineering: string;
+            healthcare: string;
+            technology: string;
+            manufacturing: string;
+            environmental: string;
+            sales: string;
+            marketing: string;
+            finance: string;
+            humanResources: string;
+            operations: string;
+            other: string;
+          };
+        };
+        experience: {
+          label: string;
+          placeholder: string;
+          options: {
+            zeroToOne: string;
+            twoToThree: string;
+            fourToFive: string;
+            sixToEight: string;
+            nineToTwelve: string;
+            thirteenPlus: string;
+          };
+        };
+        resume: {
+          label: string;
+          uploadText: string;
+          maxSize: string;
+          chooseFile: string;
+        };
+        coverLetter: {
+          label: string;
+          placeholder: string;
+        };
+        actions: {
+          reset: string;
+          submit: string;
+          submitting: string;
+        };
+        toasts: {
+          invalidFileType: string;
+          invalidFileTypeDesc: string;
+          fileTooLarge: string;
+          fileTooLargeDesc: string;
+          resumeRequired: string;
+          resumeRequiredDesc: string;
+          missingInfo: string;
+          missingInfoDesc: string;
+          invalidEmail: string;
+          invalidEmailDesc: string;
+          successTitle: string;
+          successDesc: string;
+          failureTitle: string;
+          failureDesc: string;
+        };
+      };
+    };
+    verifyDocuments?: {
+      hero: {
+        badge: string;
+        title: string;
+        description: string;
+        ctaButton: string;
+        securityNote: string;
+      };
+      form: {
+        title: string;
+        description: string;
+        labels: {
+          firstName: string;
+          lastName: string;
+          email: string;
+          location: string;
+          company: string;
+          jobTitle: string;
+          comments: string;
+        };
+        placeholders: {
+          firstName: string;
+          lastName: string;
+          email: string;
+          location: string;
+          company: string;
+          jobTitle: string;
+          comments: string;
+        };
+        upload: {
+          label: string;
+          dragDrop: string;
+          fileInfo: string;
+          selectFiles: string;
+          remove: string;
+        };
+        locations: Record<string, string>;
+        cta: {
+          submit: string;
+          submitting: string;
+        };
+      };
+      sidebar: {
+        whatNext: {
+          title: string;
+          steps: Array<{
+            number: string;
+            title: string;
+            description: string;
+          }>;
+        };
+        assistance: {
+          title: string;
+          description: string;
+        };
+      };
+      toast: {
+        invalidFiles: string;
+        success: string;
+        error: string;
+      };
+    };
   };
   services?: {
     completeServicePortfolio: {
@@ -97,7 +252,7 @@ class TranslationService {
   private readonly CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
   async getStaticTranslations(language: string): Promise<StaticTranslations> {
-    const cacheKey = `static_${language}`;
+    const cacheKey = `static_${language}_v2`;
     const cached = this.cache.get(cacheKey);
     
     // Check if cached data is still valid
@@ -136,7 +291,7 @@ class TranslationService {
       if (response.data.success) {
         // Cache all translations
         Object.entries(response.data.data.translations).forEach(([lang, translations]: [string, StaticTranslations]) => {
-          this.cache.set(`static_${lang}`, {
+          this.cache.set(`static_${lang}_v2`, {
             data: translations,
             timestamp: Date.now()
           });
@@ -157,7 +312,7 @@ class TranslationService {
   }
 
   getCachedTranslations(language: string): StaticTranslations | null {
-    const cached = this.cache.get(`static_${language}`);
+    const cached = this.cache.get(`static_${language}_v2`);
     if (cached && Date.now() - cached.timestamp < this.CACHE_DURATION) {
       return cached.data;
     }
