@@ -180,7 +180,7 @@ export function Navbar() {
       {/* Main Navigation */}
       <nav className="bg-white shadow-tuv-sm sticky top-0 z-50">
         <div className="container-responsive">
-          <div className="relative flex items-center py-2 lg:py-3 min-h-[80px]">
+          <div className="relative grid grid-cols-[auto,1fr,auto] items-center py-2 lg:py-3 min-h-[80px]">
             {/* Logo with Tags */}
             <div className="inline-flex flex-col gap-2">
               <div className="relative inline-block">
@@ -203,8 +203,8 @@ export function Navbar() {
               </div>
             </div>
 
-            {/* Desktop Navigation - Centered */}
-            <div className="hidden lg:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
+            {/* Desktop Navigation - Centered with even spacing between each item */}
+            <div className="hidden lg:flex items-center justify-center space-x-12">
               {navigation.map((item, index) => (
                 <NavLink
                   key={index}
@@ -219,7 +219,7 @@ export function Navbar() {
             </div>
 
             {/* CTA Buttons - Right side */}
-            <div className="hidden lg:flex items-center space-x-4 ml-auto">
+            <div className="hidden lg:flex items-center justify-end space-x-4">
               <Button className="btn-primary" asChild>
                 <Link to="/contact">
                   {translations?.navbar.contactUs || 'Contact Us'}
