@@ -271,7 +271,7 @@ export default function VerifyDocuments() {
                     onDrop={handleDrop}
                   >
                     <div className="flex flex-col items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
+                      <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-500">
                         <Upload className="w-5 h-5" />
                       </div>
                       <div>
@@ -286,11 +286,11 @@ export default function VerifyDocuments() {
                         accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                         onChange={handleFileSelect}
                       />
-                      <Button 
-                        type="button" 
-                        variant="outline" 
+                      <Button
+                        type="button"
+                        variant="outline"
                         onClick={() => document.getElementById('file-upload')?.click()}
-                        className="mt-2"
+                        className="mt-2 border-orange-500 text-orange-600 hover:bg-orange-50 hover:text-orange-700"
                       >
                         {t.form.upload.selectFiles}
                       </Button>
@@ -317,9 +317,9 @@ export default function VerifyDocuments() {
                   </div>
                 </div>
 
-                <Button 
-                  type="submit" 
-                  className="w-full bg-[#9b8dbf] hover:bg-[#8a7da8] text-white py-6 text-lg font-medium"
+                <Button
+                  type="submit"
+                  className="w-full btn-primary py-6 text-lg font-medium"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? t.form.cta.submitting : t.form.cta.submit}
@@ -353,7 +353,15 @@ export default function VerifyDocuments() {
             <div className="bg-gray-50 rounded-xl border border-gray-200 p-8">
               <h3 className="text-lg font-bold mb-4">{t.sidebar.assistance.title}</h3>
               <p className="text-sm text-gray-600 mb-4 leading-relaxed">
-                {t.sidebar.assistance.description}
+                Need quick assistance? Email{" "}
+                <a
+                  href="mailto:Contact@inspectors360.com"
+                  className="font-semibold text-orange-600 hover:underline"
+                >
+                  Contact@inspectors360.com
+                </a>{" "}
+                or call +44 7934 980214 mentioning "Verify Doc Portal" for
+                priority routing.
               </p>
             </div>
           </div>
