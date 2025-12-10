@@ -474,7 +474,7 @@ const translations = {
                 {
                   number: "2.",
                   title: "Confirmation email:",
-                  description: "You will receive a direct update from Support@cbm360tiv.com."
+                  description: "You will receive a direct update from Support@inspectors360.com."
                 },
                 {
                   number: "3.",
