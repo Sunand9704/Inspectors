@@ -474,7 +474,7 @@ const translations = {
                 {
                   number: "2.",
                   title: "Confirmation email:",
-                  description: "You will receive a direct update from Support@inspectors360.com."
+                  description: "You will receive a direct update from Contact@inspectors360.com."
                 },
                 {
                   number: "3.",
@@ -1069,7 +1069,7 @@ const translations = {
                 {
                   number: "2.",
                   title: "E-mail de confirmation :",
-                  description: "Vous recevrez une mise à jour directe de Support@cbm360tiv.com."
+                  description: "Vous recevrez une mise à jour directe de Contact@inspectors360.com."
                 },
                 {
                   number: "3.",
@@ -1664,7 +1664,7 @@ const translations = {
                 {
                   number: "2.",
                   title: "E-mail de confirmação:",
-                  description: "Você receberá uma atualização direta de Support@cbm360tiv.com."
+                  description: "Você receberá uma atualização direta de Contact@inspectors360.com."
                 },
                 {
                   number: "3.",
@@ -2259,7 +2259,7 @@ const translations = {
                 {
                   number: "2.",
                   title: "Correo de confirmación:",
-                  description: "Recibirá una actualización directa de Support@cbm360tiv.com."
+                  description: "Recibirá una actualización directa de Contact@inspectors360.com."
                 },
                 {
                   number: "3.",
@@ -2854,7 +2854,7 @@ const translations = {
                 {
                   number: "2.",
                   title: "Подтверждение по email:",
-                  description: "Вы получите прямое обновление от Support@cbm360tiv.com."
+                  description: "Вы получите прямое обновление от Contact@inspectors360.com."
                 },
                 {
                   number: "3.",
@@ -3449,7 +3449,7 @@ const translations = {
                 {
                   number: "2.",
                   title: "确认电子邮件：",
-                  description: "您将收到来自Support@cbm360tiv.com的直接更新。"
+                  description: "您将收到来自Contact@inspectors360.com的直接更新。"
                 },
                 {
                   number: "3.",
