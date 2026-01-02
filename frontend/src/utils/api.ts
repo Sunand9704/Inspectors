@@ -20,7 +20,7 @@ export const apiClient = axios.create({
 // Debug logging via interceptors
 apiClient.interceptors.request.use((config) => {
   const isFormData = config.data instanceof FormData;
-  
+
   // For FormData, axios will automatically set Content-Type with boundary
   // For other requests, set Content-Type to application/json
   if (!isFormData) {
@@ -32,7 +32,7 @@ apiClient.interceptors.request.use((config) => {
       config.headers['Content-Type'] = 'application/json';
     }
   }
-  
+
   // Log request info for debugging
   if (isFormData) {
     const formDataEntries: string[] = [];
@@ -61,7 +61,7 @@ apiClient.interceptors.request.use((config) => {
       params: config.params,
     });
   }
-  
+
   // performance timing start
   (config as any).metadata = { startTime: (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now() };
   return config;
@@ -187,7 +187,7 @@ export type JobApplicationData = {
 export async function submitJobApplication(applicationData: JobApplicationData, resumeFile: File): Promise<any> {
   // Create FormData object
   const formData = new FormData();
-  
+
   // Append all form fields explicitly (important for multer on backend)
   formData.append('firstName', applicationData.firstName);
   formData.append('lastName', applicationData.lastName);
@@ -197,19 +197,19 @@ export async function submitJobApplication(applicationData: JobApplicationData, 
   formData.append('department', applicationData.department);
   formData.append('experience', applicationData.experience);
   formData.append('coverLetter', applicationData.coverLetter);
-  
+
   // Append resume file - multer expects field name 'resume'
   formData.append('resume', resumeFile, resumeFile.name);
-  
+
   // Create an AbortController for timeout handling
   const controller = new AbortController();
   const timeoutId = setTimeout(() => {
     controller.abort();
   }, 30000); // 30 second timeout - fail fast
-  
+
   try {
     console.log('[submitJobApplication] Sending request to:', `${apiClient.defaults.baseURL}/api/careers/apply`);
-    
+
     // Axios automatically handles FormData and sets correct Content-Type
     // with multipart/form-data and boundary
     const response = await apiClient.post('/api/careers/apply', formData, {
@@ -224,16 +224,16 @@ export async function submitJobApplication(applicationData: JobApplicationData, 
         }
       },
     });
-    
+
     clearTimeout(timeoutId);
     console.log('[submitJobApplication] Success:', response.data);
     return response.data;
   } catch (error: any) {
     clearTimeout(timeoutId);
-    
+
     // Handle different error types
     let errorMessage = 'Failed to submit application. Please try again.';
-    
+
     if (error.code === 'ECONNABORTED' || error.message === 'canceled' || error.name === 'AbortError') {
       errorMessage = 'Request timed out. The server is taking too long to respond. Please check your connection and try again.';
     } else if (error.code === 'ERR_NETWORK' || error.message.includes('Network Error')) {
@@ -245,7 +245,7 @@ export async function submitJobApplication(applicationData: JobApplicationData, 
     } else if (error.response?.data?.message) {
       errorMessage = error.response.data.message;
     }
-    
+
     // Enhanced error logging for debugging
     const errorInfo = {
       message: error.message,
@@ -256,10 +256,10 @@ export async function submitJobApplication(applicationData: JobApplicationData, 
       responseData: error.response?.data,
       url: error.config?.url,
     };
-    
+
     console.error('[submitJobApplication] Error:', errorInfo);
     console.error('[submitJobApplication] Error message for user:', errorMessage);
-    
+
     // Create a user-friendly error
     const userError = new Error(errorMessage);
     (userError as any).response = error.response;

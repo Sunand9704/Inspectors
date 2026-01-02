@@ -43,7 +43,7 @@ export function VideoHero({
   // Handle video end - immediately move to next slide for seamless playback
   const handleVideoEnd = React.useCallback((videoIndex: number) => {
     if (!api || !videoUrls || videoUrls.length <= 1) return;
-    
+
     // Clear any existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -68,48 +68,43 @@ export function VideoHero({
     if (!api || !videoUrls || videoUrls.length <= 1) return;
 
     const onSelect = () => {
+      if (!api) return;
       try {
         const snap = api.selectedScrollSnap();
         const newIndex = snap ?? 0;
         setCurrentIndex(newIndex);
-        
-        // Clear any pending auto-advance timeout when manually navigating
+
+        // Clear timeout
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
           timeoutRef.current = null;
         }
-        
-        // Play the video for the current slide
-        const currentVideo = videoRefs.current[newIndex];
-        if (currentVideo) {
-          // Pause all videos first
-          videoRefs.current.forEach((video) => {
-            if (video) {
-              video.pause();
-            }
-          });
-          // Play the current video immediately for seamless transition
-          currentVideo.currentTime = 0;
-          // Ensure video is ready before playing
-          if (currentVideo.readyState >= 2) {
-            currentVideo.play().catch(() => {
-              // Ignore autoplay errors
-            });
-          } else {
-            // Wait for video to be ready if not loaded yet
-            currentVideo.addEventListener('loadeddata', () => {
-              currentVideo.play().catch(() => {
-                // Ignore autoplay errors
+
+        // Manage playback for all videos
+        videoRefs.current.forEach((video, index) => {
+          if (!video) return;
+
+          if (index === newIndex) {
+            // This is the active slide: ensure it plays
+            video.currentTime = 0;
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+              playPromise.catch((_error) => {
+                // Auto-play was prevented
               });
-            }, { once: true });
+            }
+          } else {
+            // Not active: pause and reset
+            video.pause();
+            video.currentTime = 0;
           }
-        }
-      } catch {
-        setCurrentIndex(0);
+        });
+      } catch (error) {
+        console.warn('Carousel navigation error:', error);
       }
     };
 
-    onSelect();
+    // Initialize logic
     api.on('select', onSelect);
 
     return () => {
@@ -221,8 +216,8 @@ export function VideoHero({
               </Button>
             )}
             {secondaryCTA && (
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-4" asChild
               >
                 {secondaryCTA.href.startsWith('/') ? (
