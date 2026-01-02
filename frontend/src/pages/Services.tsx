@@ -255,10 +255,10 @@ export default function Services() {
         autoPlaySeconds={5}
         videoUrls={[
           
-          'https://res.cloudinary.com/docyipoze/video/upload/v1764429118/1st_abw1bb.mp4',
-          'https://res.cloudinary.com/docyipoze/video/upload/v1764429617/2nd_msjo0k.mp4',
-          'https://res.cloudinary.com/docyipoze/video/upload/v1764429855/3rd_jjmph2.mp4',
-          'https://res.cloudinary.com/docyipoze/video/upload/v1764429880/4th_gqov71.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1767357838/WhatsApp_Video_2026-01-02_at_6.08.50_PM_1_e5zere.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1767357890/WhatsApp_Video_2026-01-02_at_6.08.51_PM_2_sk33dn.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1767357910/WhatsApp_Video_2026-01-02_at_6.08.51_PM_3_rra5na.mp4',
+          'https://res.cloudinary.com/docyipoze/video/upload/v1767357924/WhatsApp_Video_2026-01-02_at_6.08.51_PM_4_tfamgq.mp4',
         ]}
       />
 
