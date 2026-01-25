@@ -23,7 +23,7 @@ async function sendOtp(email) {
 
 	const html = `
 	  <div style="font-family: Arial, sans-serif;">
-	    <h2>CBM Admin Login Code</h2>
+	    <h2>Inspectors Admin Login Code</h2>
 	    <p>Your one-time verification code is:</p>
 	    <div style="font-size: 24px; font-weight: bold; letter-spacing: 4px;">${code}</div>
 	    <p>This code will expire in 5 minutes.</p>
@@ -32,9 +32,9 @@ async function sendOtp(email) {
 
 	try {
 		await emailService.transporter.sendMail({
-			from: `CBM Admin <${process.env.SMTP_USER}>`,
+			from: `Inspectors Admin <${process.env.SMTP_USER}>`,
 			to: email,
-			subject: 'Your CBM Admin OTP Code',
+			subject: 'Your Inspectors Admin OTP Code',
 			html,
 		});
 		logger.info('OTP email sent', { email });
