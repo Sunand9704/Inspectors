@@ -32,7 +32,30 @@ async function verifyOtpCode(req, res) {
 	}
 }
 
-module.exports = { requestOtp, verifyOtpCode };
+async function loginWithPassword(req, res) {
+	try {
+		const { email, password } = req.body;
+		const adminEmail = process.env.ADMIN_EMAIL;
+		const adminPassword = process.env.ADMIN_PASSWORD;
+
+		if (!adminEmail || !adminPassword) {
+			return res.status(500).json({ success: false, message: 'Admin credentials not configured' });
+		}
+
+		if (email !== adminEmail || password !== adminPassword) {
+			return res.status(401).json({ success: false, message: 'Invalid credentials' });
+		}
+
+		// Issue a simple stateless token (consistent with OTP login)
+		const token = Buffer.from(`${email}:${Date.now()}`).toString('base64');
+		return res.json({ success: true, data: { token } });
+	} catch (error) {
+		logger.error('loginWithPassword error:', error);
+		return res.status(500).json({ success: false, message: 'Login failed' });
+	}
+}
+
+module.exports = { requestOtp, verifyOtpCode, loginWithPassword };
 
 
 

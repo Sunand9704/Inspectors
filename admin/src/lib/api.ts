@@ -4,8 +4,8 @@ const apiBaseURL = "https://api2.brelis.in";
 // const apiBaseURL = "http://localhost:8021";
 
 export const api = axios.create({
- baseURL: envBaseUrl ? envBaseUrl : apiBaseURL,
- headers: { 'Content-Type': 'application/json' },
+  baseURL: envBaseUrl ? envBaseUrl : apiBaseURL,
+  headers: { 'Content-Type': 'application/json' },
 });
 
 
@@ -14,7 +14,7 @@ api.interceptors.request.use((config) => {
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  
+
   // For FormData requests, remove Content-Type header to let browser set it with boundary
   if (config.data instanceof FormData) {
     if (config.headers) {
@@ -28,7 +28,7 @@ api.interceptors.request.use((config) => {
       return [key, value];
     }));
   }
-  
+
   // add start time
   (config as any).metadata = { startTime: (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now() };
   return config;

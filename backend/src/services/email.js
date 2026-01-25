@@ -16,12 +16,12 @@ class EmailService {
    */
   async sendContactInquiry(inquiryData) {
     try {
-      const adminEmail = process.env.ADMIN_EMAIL || 'admin@cbm.com';
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@inspectors.com';
 
       const emailContent = this.generateContactEmail(inquiryData);
 
       const mailOptions = {
-        from: `"CBM Contact" <${process.env.SMTP_USER}>`,
+        from: `"Inspectors Contact" <${process.env.SMTP_USER}>`,
         to: adminEmail,
         replyTo: inquiryData.email,
         subject: `New Contact Inquiry from ${inquiryData.firstName} ${inquiryData.lastName} (${inquiryData.company})`,
@@ -125,7 +125,7 @@ class EmailService {
             </div>
           </div>
           <div class="footer">
-            This inquiry was submitted from the CBM website contact form. Please respond directly to the sender by replying to this email.
+            This inquiry was submitted from the Inspectors website contact form. Please respond directly to the sender by replying to this email.
           </div>
         </div>
       </body>
@@ -164,12 +164,12 @@ class EmailService {
    */
   async sendJobApplication(applicationData, resumeBuffer, resumeFileName) {
     try {
-      const adminEmail = process.env.ADMIN_EMAIL || 'admin@cbm.com';
-      
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@inspectors.com';
+
       const emailContent = this.generateApplicationEmail(applicationData);
-      
+
       const mailOptions = {
-        from: `"CBM Careers" <${process.env.SMTP_USER}>`,
+        from: `"Inspectors Careers" <${process.env.SMTP_USER}>`,
         to: adminEmail,
         subject: `New Job Application: ${applicationData.position}`,
         html: emailContent,
@@ -183,7 +183,7 @@ class EmailService {
       };
 
       const result = await this.transporter.sendMail(mailOptions);
-      logger.info('Job application email sent successfully', { 
+      logger.info('Job application email sent successfully', {
         messageId: result.messageId,
         position: applicationData.position,
         applicant: `${applicationData.firstName} ${applicationData.lastName}`
@@ -260,7 +260,7 @@ class EmailService {
           </div>
           
           <div class="footer">
-            <p>This application was submitted through the CBM Careers portal.</p>
+            <p>This application was submitted through the Inspectors Careers portal.</p>
             <p>Application received on: ${new Date().toLocaleString()}</p>
           </div>
         </div>
@@ -292,16 +292,16 @@ class EmailService {
   async sendApplicationConfirmation(applicationData) {
     try {
       const emailContent = this.generateConfirmationEmail(applicationData);
-      
+
       const mailOptions = {
-        from: `"CBM Careers" <${process.env.SMTP_USER}>`,
+        from: `"Inspectors Careers" <${process.env.SMTP_USER}>`,
         to: applicationData.email,
-        subject: 'Application Received - CBM Careers',
+        subject: 'Application Received - Inspectors Careers',
         html: emailContent
       };
 
       const result = await this.transporter.sendMail(mailOptions);
-      logger.info('Application confirmation email sent', { 
+      logger.info('Application confirmation email sent', {
         messageId: result.messageId,
         applicant: applicationData.email
       });
@@ -350,14 +350,14 @@ class EmailService {
           <div class="content">
             <p>Dear ${applicationData.firstName} ${applicationData.lastName},</p>
             
-            <p>Thank you for your interest in joining the CBM team! We have successfully received your application for the <strong>${applicationData.position}</strong> position.</p>
+            <p>Thank you for your interest in joining the Inspectors team! We have successfully received your application for the <strong>${applicationData.position}</strong> position.</p>
             
             <p>Our talent team will review your application and qualifications against the role requirements. You can expect to hear from us within 5-7 business days.</p>
             
             <p>If you have any questions about your application, please don't hesitate to contact our HR team.</p>
             
             <p>Best regards,<br>
-            The CBM Careers Team</p>
+            The Inspectors Careers Team</p>
           </div>
           
           <div class="footer">
@@ -377,7 +377,7 @@ class EmailService {
    */
   async sendDocumentVerification(verificationData, files = []) {
     try {
-      const adminEmail = process.env.ADMIN_EMAIL || 'admin@cbm.com';
+      const adminEmail = process.env.ADMIN_EMAIL || 'admin@inspectors.com';
 
       const emailContent = this.generateDocumentVerificationEmail(verificationData);
 
@@ -388,7 +388,7 @@ class EmailService {
       }));
 
       const mailOptions = {
-        from: `"CBM Document Verification" <${process.env.SMTP_USER}>`,
+        from: `"Inspectors Document Verification" <${process.env.SMTP_USER}>`,
         to: adminEmail,
         replyTo: verificationData.email,
         subject: `Document Verification Request from ${verificationData.firstName} ${verificationData.lastName}`,
@@ -488,7 +488,7 @@ class EmailService {
             \u003c/div\u003e
           \u003c/div\u003e
           \u003cdiv class="footer"\u003e
-            This verification request was submitted from the CBM Document Verification portal. Attached documents require validation. Please respond directly to the sender.
+            This verification request was submitted from the Inspectors Document Verification portal. Attached documents require validation. Please respond directly to the sender.
           \u003c/div\u003e
         \u003c/div\u003e
       \u003c/body\u003e
