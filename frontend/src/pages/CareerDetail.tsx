@@ -176,46 +176,23 @@ export default function CareerDetail() {
           </div>
 
           {/* Description */}
-          {career.description && (
+          {career.description && career.description.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4 text-black">Job Description</h2>
-              <div className="prose prose-lg max-w-none text-muted-foreground">
-                {career.description.split('\n').map((paragraph, index) => {
-                  const trimmed = paragraph.trim();
-                  // List of headers to style as Black
-                  const headers = [
-                    "Role Overview",
-                    "Key Responsibilities",
-                    "Education & Qualification",
-                    "Education",
-                    "Experience",
-                    "Skills & Competencies",
-                    "Professional Experience",
-                    "Technical skills",
-                    "Languages",
-                    "Language & Mobility",
-                    "What We Offer",
-                    "How to Apply",
-                    "Job Description" // In case it appears in text
-                  ];
-
-                  // Check if the paragraph matches a header (ignore casing and colon)
-                  const isHeader = headers.some(h =>
-                    trimmed.toLowerCase().replace(':', '') === h.toLowerCase().replace(':', '')
-                  );
-
-                  if (isHeader) {
-                    return (
-                      <h3 key={index} className="text-xl font-semibold mt-6 mb-3 text-black">
-                        {paragraph}
+              <div className="mb-8">
+                {career.description.map((section, index) => (
+                  <div key={index} className="mb-6">
+                    {section.heading && (
+                      <h3 className="text-xl font-semibold mt-4 mb-3 text-black">
+                        {section.heading}
                       </h3>
-                    );
-                  }
-
-                  return trimmed ? (
-                    <p key={index} className="mb-4 leading-relaxed">{paragraph}</p>
-                  ) : null;
-                })}
+                    )}
+                    {section.content && (
+                      <div className="text-muted-foreground text-base">
+                        <p className="whitespace-pre-line leading-tight">{section.content}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           )}

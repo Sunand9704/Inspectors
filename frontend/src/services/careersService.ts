@@ -7,7 +7,7 @@ export type CareerDto = {
 	location: string;
 	type: string;
 	level: string;
-	description: string;
+	description: { heading: string; content: string }[];
 	responsibilities?: string[];
 	requirements?: string[];
 	benefits?: string[];
@@ -21,7 +21,7 @@ export type CareerDto = {
 	updatedAt?: string;
 	translations?: Map<string, {
 		title?: string;
-		description?: string;
+		description?: { heading: string; content: string }[];
 		department?: string;
 		location?: string;
 		type?: string;
@@ -40,8 +40,8 @@ export async function listCareers(params?: Partial<Pick<CareerDto, 'department' 
 }
 
 export async function getCareerById(id: string, lang?: string): Promise<CareerDto> {
-	const { data } = await apiClient.get(`/api/careers/${id}`, { 
-		params: lang ? { lang } : {} 
+	const { data } = await apiClient.get(`/api/careers/${id}`, {
+		params: lang ? { lang } : {}
 	});
 	return data.data as CareerDto;
 }

@@ -16,7 +16,7 @@ interface JobApplicationDialogProps {
     location: string;
     type: string;
     level: string;
-    description: string;
+    description: any;
   };
   children: React.ReactNode;
 }
@@ -35,7 +35,7 @@ export function JobApplicationDialog({ job, children }: JobApplicationDialogProp
     experience: '',
     coverLetter: ''
   });
-  
+
   const { toast } = useToast();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +51,7 @@ export function JobApplicationDialog({ job, children }: JobApplicationDialogProp
         });
         return;
       }
-      
+
       // Validate file size (5MB)
       if (file.size > 5 * 1024 * 1024) {
         toast({
@@ -61,7 +61,7 @@ export function JobApplicationDialog({ job, children }: JobApplicationDialogProp
         });
         return;
       }
-      
+
       setResumeFile(file);
     }
   };
@@ -75,7 +75,7 @@ export function JobApplicationDialog({ job, children }: JobApplicationDialogProp
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!resumeFile) {
       toast({
         title: "Resume required",
@@ -88,7 +88,7 @@ export function JobApplicationDialog({ job, children }: JobApplicationDialogProp
     // Validate required fields
     const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'experience', 'coverLetter'];
     const missingFields = requiredFields.filter(field => !formData[field as keyof JobApplicationData]);
-    
+
     if (missingFields.length > 0) {
       toast({
         title: "Missing information",
@@ -110,18 +110,18 @@ export function JobApplicationDialog({ job, children }: JobApplicationDialogProp
     }
 
     setIsSubmitting(true);
-    
+
     try {
       console.log('Submitting application with data:', {
         ...formData,
         resumeFile: resumeFile.name,
         resumeSize: resumeFile.size
       });
-      
+
       const result = await submitJobApplication(formData, resumeFile);
-      
+
       console.log('Application submission result:', result);
-      
+
       if (result && result.success) {
         toast({
           title: "Application submitted!",
@@ -152,10 +152,10 @@ export function JobApplicationDialog({ job, children }: JobApplicationDialogProp
         status: error.response?.status,
         data: error.response?.data
       });
-      
+
       // Show user-friendly error message
       const errorMessage = error.message || error.response?.data?.message || "Failed to submit application. Please try again.";
-      
+
       toast({
         title: "Submission failed",
         description: errorMessage,
@@ -193,7 +193,7 @@ export function JobApplicationDialog({ job, children }: JobApplicationDialogProp
             Please fill out all required fields to submit your application.
           </DialogDescription>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Job Details */}
           <div className="bg-muted/50 p-4 rounded-lg">
