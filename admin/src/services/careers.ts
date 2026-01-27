@@ -7,7 +7,7 @@ export type Career = {
   location: string;
   type: string;
   level: string;
-  description: string;
+  description: { heading: string; content: string }[];
   isActive?: boolean;
 };
 

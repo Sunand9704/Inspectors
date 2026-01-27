@@ -11,7 +11,10 @@ const SupportedLanguages = ['en', 'fr', 'pt', 'es', 'ru', 'zh'];
 const CareerTranslationSchema = new mongoose.Schema(
   {
     title: { type: String },
-    description: { type: String },
+    description: [{
+      heading: { type: String },
+      content: { type: String }
+    }],
     department: { type: String },
     location: { type: String },
     type: { type: String },
@@ -32,7 +35,11 @@ const CareerSchema = new mongoose.Schema(
     location: { type: String, required: true, index: true },
     type: { type: String, enum: EmploymentTypes, default: 'Full-time', index: true },
     level: { type: String, enum: SeniorityLevels, required: true, index: true },
-    description: { type: String, required: true },
+    description: [{
+      heading: { type: String, required: true },
+      content: { type: String, required: true },
+      _id: false
+    }],
     responsibilities: [{ type: String }],
     requirements: [{ type: String }],
     benefits: [{ type: String }],
