@@ -6,10 +6,10 @@ import { getCareerById, CareerDto } from '@/services/careersService';
 import { useTranslation } from '@/contexts/TranslationContext';
 import { JobApplicationDialog } from '@/components/Common/JobApplicationDialog';
 import { Loading } from '@/components/Common/Loading';
-import { 
-  MapPin, 
-  Clock, 
-  Briefcase, 
+import {
+  MapPin,
+  Clock,
+  Briefcase,
   GraduationCap,
   ArrowLeft,
   CheckCircle2
@@ -129,17 +129,17 @@ export default function CareerDetail() {
         <div className="container-responsive max-w-5xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <Button 
-              variant="ghost" 
-              className="mb-6" 
+            <Button
+              variant="ghost"
+              className="mb-6"
               onClick={() => navigate('/careers')}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Careers
             </Button>
-            
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">{career.title}</h1>
-            
+
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 text-primary">{career.title}</h1>
+
             <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-6">
               <div className="flex items-center space-x-2">
                 <Briefcase className="h-4 w-4" />
@@ -178,13 +178,44 @@ export default function CareerDetail() {
           {/* Description */}
           {career.description && (
             <div className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Job Description</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-black">Job Description</h2>
               <div className="prose prose-lg max-w-none text-muted-foreground">
-                {career.description.split('\n').map((paragraph, index) => (
-                  paragraph.trim() ? (
+                {career.description.split('\n').map((paragraph, index) => {
+                  const trimmed = paragraph.trim();
+                  // List of headers to style as Black
+                  const headers = [
+                    "Role Overview",
+                    "Key Responsibilities",
+                    "Education & Qualification",
+                    "Education",
+                    "Experience",
+                    "Skills & Competencies",
+                    "Professional Experience",
+                    "Technical skills",
+                    "Languages",
+                    "Language & Mobility",
+                    "What We Offer",
+                    "How to Apply",
+                    "Job Description" // In case it appears in text
+                  ];
+
+                  // Check if the paragraph matches a header (ignore casing and colon)
+                  const isHeader = headers.some(h =>
+                    trimmed.toLowerCase().replace(':', '') === h.toLowerCase().replace(':', '')
+                  );
+
+                  if (isHeader) {
+                    return (
+                      <h3 key={index} className="text-xl font-semibold mt-6 mb-3 text-black">
+                        {paragraph}
+                      </h3>
+                    );
+                  }
+
+                  return trimmed ? (
                     <p key={index} className="mb-4 leading-relaxed">{paragraph}</p>
-                  ) : null
-                ))}
+                  ) : null;
+                })}
               </div>
             </div>
           )}
@@ -192,7 +223,7 @@ export default function CareerDetail() {
           {/* Responsibilities */}
           {career.responsibilities && career.responsibilities.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Key Responsibilities</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-black">Key Responsibilities</h2>
               <ul className="space-y-3">
                 {career.responsibilities.map((responsibility, index) => (
                   <li key={index} className="flex items-start space-x-3">
@@ -207,7 +238,7 @@ export default function CareerDetail() {
           {/* Requirements */}
           {career.requirements && career.requirements.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Requirements</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-black">Requirements</h2>
               <ul className="space-y-3">
                 {career.requirements.map((requirement, index) => (
                   <li key={index} className="flex items-start space-x-3">
@@ -222,7 +253,7 @@ export default function CareerDetail() {
           {/* Benefits */}
           {career.benefits && career.benefits.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Benefits</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-black">Benefits</h2>
               <ul className="space-y-3">
                 {career.benefits.map((benefit, index) => (
                   <li key={index} className="flex items-start space-x-3">
@@ -237,7 +268,7 @@ export default function CareerDetail() {
           {/* Work Arrangement */}
           {career.workArrangement && (
             <div className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Work Arrangement</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-black">Work Arrangement</h2>
               <p className="text-muted-foreground">{career.workArrangement}</p>
             </div>
           )}
@@ -245,7 +276,7 @@ export default function CareerDetail() {
           {/* Tags */}
           {career.tags && career.tags.length > 0 && (
             <div className="mb-8">
-              <h2 className="text-2xl font-semibold mb-4">Tags</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-black">Tags</h2>
               <div className="flex flex-wrap gap-2">
                 {career.tags.map((tag, index) => (
                   <span
